@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\RuanganBaca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class RuanganBacaController extends Api
+class RuanganBacaController extends Controller
 {
     public function index()
     {

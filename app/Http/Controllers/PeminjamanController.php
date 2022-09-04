@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Helper;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class PeminjamanController extends Api
+class PeminjamanController extends Controller
 {
     public function index()
     {
@@ -36,7 +36,7 @@ class PeminjamanController extends Api
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        if (Helper::cek_batasan_dokumen($request->dokumen_id) == False) {
+        if ($this->cek_batasan_dokumen($request->dokumen_id) == False) {
             return $this->errorResponse('Dokumen sudah penuh', 422);
         }
      

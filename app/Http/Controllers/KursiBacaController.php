@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KursiBacaResource;
@@ -8,7 +8,7 @@ use App\Models\KursiBaca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class KursiBacaController extends Api
+class KursiBacaController extends Controller
 {
     public function index()
     {

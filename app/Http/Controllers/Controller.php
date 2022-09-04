@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Peminjaman;
 use App\Models\User;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -54,5 +56,15 @@ class Controller extends BaseController
             $user = User::where('id' , $user->id)->with('vendor')->first();
         }
         return $user;
+    }
+
+    public static function cek_batasan_dokumen($id)
+    {
+        $peminjaman = Peminjaman::where('dokumen_id', $id)->where('status', 0)->get();
+        if ($peminjaman->count() > 0) {
+            return False;
+        } else{
+            return True;
+        }
     }
 }
