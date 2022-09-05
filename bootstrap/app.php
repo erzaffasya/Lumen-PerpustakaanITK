@@ -61,6 +61,7 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('jwt');
+$app->configure('cors');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -72,7 +73,8 @@ $app->configure('jwt');
 |
 */
 $app->middleware([
-    App\Http\Middleware\CorsMiddleware::class 
+    // App\Http\Middleware\CorsMiddleware::class,
+    Fruitcake\Cors\HandleCors::class,
 ]);
 
 $app->routeMiddleware([
@@ -94,6 +96,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*

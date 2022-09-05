@@ -94,11 +94,11 @@ class PeminjamanRuanganController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'PeminjamanRuangan Berhasil Dihapus']);
     }
 
-    public function RuanganKosong($ruangan, $tanggal)
+    public function RuanganKosong($ruang, $tanggal)
     {
         $dataKursiBaca = KursiBaca::select('kursi_baca.*', 'ruangan_baca.ruangan')
             ->join('ruangan_baca', 'kursi_baca.ruangan_baca_id', 'ruangan_baca.id')
-            ->where('kursi_baca.ruangan_baca_id', '=', $ruangan)
+            ->where('kursi_baca.ruangan_baca_id', '=', $ruang)
             ->get();
 
         if (count($dataKursiBaca) == 0) {

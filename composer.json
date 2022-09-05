@@ -10,6 +10,7 @@
     "type": "project",
     "require": {
         "php": "^8.0",
+        "fruitcake/laravel-cors": "^3.0",
         "irazasyed/larasupport": "^1.7",
         "laravel/lumen-framework": "^9.0",
         "league/flysystem": "*",
