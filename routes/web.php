@@ -15,25 +15,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+// $router->get('/', function () use ($router) {
+//     return $router->app->version();
+// });
 
-$router->get('user/{id}', 'UserController@show');
+// $router->get('user/{id}', 'UserController@show');
 
-$router->get('/', function () use ($router) {
-    echo "<center> Welcome </center>";
-});
+// $router->get('/', function () use ($router) {
+//     echo "<center> Welcome </center>";
+// });
 
-$router->get('/version', function () use ($router) {
-    return $router->app->version();
-});
-
+// $router->get('/version', function () use ($router) {
+//     return $router->app->version();
+// });
 Route::group(['prefix' => 'api'], function ($router) {
     Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
+    Route::get('logout', 'AuthController@logout');
+    Route::get('profile', 'AuthController@me');
     Route::post('refresh', 'AuthController@refresh');
-    Route::post('user-profile', 'AuthController@me');
+});
+Route::group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
     // Ruangan Baca 
     Route::get('ruangan-baca', 'RuanganBacaController@index');

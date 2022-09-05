@@ -12,6 +12,8 @@
         "php": "^8.0",
         "irazasyed/larasupport": "^1.7",
         "laravel/lumen-framework": "^9.0",
+        "league/flysystem": "*",
+        "spatie/laravel-google-calendar": "^3.5",
         "tymon/jwt-auth": "*"
     },
     "require-dev": {

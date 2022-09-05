@@ -68,7 +68,7 @@ class DokumenResource extends JsonResource
     public function FileSize($data)
     {
         if ($data) {
-            $fileSize = File::size(public_path($data));
+            $fileSize = File::size($data);
             return $this->FormatUkuranFile($fileSize);
         } else {
             $fileSize = null;
