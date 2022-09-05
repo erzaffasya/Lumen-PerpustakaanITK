@@ -79,6 +79,7 @@ Route::group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     Route::put('dokumen/{id}', 'DokumenController@update');
     Route::delete('dokumen/{id}', 'DokumenController@destroy');
 
+    Route::get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
     // Route::get('/dokumen/{id}/download', [DokumenController::class, 'download']);
     Route::get('/dokumen/{id}/view/{data}', 'DokumenController@view');
     // Route::get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
