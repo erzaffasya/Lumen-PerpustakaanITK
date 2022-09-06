@@ -21,73 +21,73 @@ use Illuminate\Support\Facades\Route;
 
 // $router->get('user/{id}', 'UserController@show');
 
-// $router->get('/', function () use ($router) {
-//     echo "<center> Welcome </center>";
-// });
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 
 // $router->get('/version', function () use ($router) {
 //     return $router->app->version();
 // });
-Route::group(['prefix' => 'api'], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::get('logout', 'AuthController@logout');
-    Route::get('profile', 'AuthController@me');
-    Route::post('refresh', 'AuthController@refresh');
+$router->group(['prefix' => 'api'], function ($router) {
+    $router->post('login', 'AuthController@login');
+    $router->get('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
+    $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
 });
-Route::group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
+    $router->get('profile', 'AuthController@me');
     // Ruangan Baca 
-    Route::get('ruangan-baca', 'RuanganBacaController@index');
-    Route::post('ruangan-baca', 'RuanganBacaController@store');
-    Route::get('ruangan-baca/{id}', 'RuanganBacaController@show');
-    Route::put('ruangan-baca/{id}', 'RuanganBacaController@update');
-    Route::delete('ruangan-baca/{id}', 'RuanganBacaController@destroy');
+    $router->get('ruangan-baca', 'RuanganBacaController@index');
+    $router->post('ruangan-baca', 'RuanganBacaController@store');
+    $router->get('ruangan-baca/{id}', 'RuanganBacaController@show');
+    $router->put('ruangan-baca/{id}', 'RuanganBacaController@update');
+    $router->delete('ruangan-baca/{id}', 'RuanganBacaController@destroy');
 
     // Kursi Baca 
-    Route::get('kursi-baca', 'KursiBacaController@index');
-    Route::post('kursi-baca', 'KursiBacaController@store');
-    Route::get('kursi-baca/{id}', 'KursiBacaController@show');
-    Route::put('kursi-baca/{id}', 'KursiBacaController@update');
-    Route::delete('kursi-baca/{id}', 'KursiBacaController@destroy');
+    $router->get('kursi-baca', 'KursiBacaController@index');
+    $router->post('kursi-baca', 'KursiBacaController@store');
+    $router->get('kursi-baca/{id}', 'KursiBacaController@show');
+    $router->put('kursi-baca/{id}', 'KursiBacaController@update');
+    $router->delete('kursi-baca/{id}', 'KursiBacaController@destroy');
 
     //peminjaman-ruangan
-    Route::get('peminjaman-ruangan', 'PeminjamanRuanganController@index');
-    Route::post('peminjaman-ruangan', 'PeminjamanRuanganController@store');
-    Route::get('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@show');
-    Route::put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
-    Route::delete('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@destroy');
-    Route::get('ruang-kosong/{ruang}/waktu/{tanggal}', 'PeminjamanRuanganController@RuanganKosong');
+    $router->get('peminjaman-ruangan', 'PeminjamanRuanganController@index');
+    $router->post('peminjaman-ruangan', 'PeminjamanRuanganController@store');
+    $router->get('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@show');
+    $router->put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
+    $router->delete('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@destroy');
+    $router->get('ruang-kosong/{ruang}/waktu/{tanggal}', 'PeminjamanRuanganController@RuanganKosong');
 
     //Kategori
-    Route::get('kategori', 'KategoriController@index');
-    Route::post('kategori', 'KategoriController@store');
-    Route::get('kategori/{id}', 'KategoriController@show');
-    Route::put('kategori/{id}', 'KategoriController@update');
-    Route::delete('kategori/{id}', 'KategoriController@destroy');
+    $router->get('kategori', 'KategoriController@index');
+    $router->post('kategori', 'KategoriController@store');
+    $router->get('kategori/{id}', 'KategoriController@show');
+    $router->put('kategori/{id}', 'KategoriController@update');
+    $router->delete('kategori/{id}', 'KategoriController@destroy');
 
     //Bookmark
-    Route::get('bookmark', 'BookmarkController@index');
-    Route::post('bookmark', 'BookmarkController@store');
-    Route::get('bookmark/{id}', 'BookmarkController@show');
-    Route::put('bookmark/{id}', 'BookmarkController@update');
-    Route::delete('bookmark/{id}', 'BookmarkController@destroy');
+    $router->get('bookmark', 'BookmarkController@index');
+    $router->post('bookmark', 'BookmarkController@store');
+    $router->get('bookmark/{id}', 'BookmarkController@show');
+    $router->put('bookmark/{id}', 'BookmarkController@update');
+    $router->delete('bookmark/{id}', 'BookmarkController@destroy');
 
     //Dokumen
-    Route::get('dokumen', 'DokumenController@index');
-    Route::post('dokumen', 'DokumenController@store');
-    Route::get('dokumen/{id}', 'DokumenController@show');
-    Route::put('dokumen/{id}', 'DokumenController@update');
-    Route::delete('dokumen/{id}', 'DokumenController@destroy');
+    $router->get('dokumen', 'DokumenController@index');
+    $router->post('dokumen', 'DokumenController@store');
+    $router->get('dokumen/{id}', 'DokumenController@show');
+    $router->put('dokumen/{id}', 'DokumenController@update');
+    $router->delete('dokumen/{id}', 'DokumenController@destroy');
 
-    Route::get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
-    // Route::get('/dokumen/{id}/download', [DokumenController::class, 'download']);
-    Route::get('/dokumen/{id}/view/{data}', 'DokumenController@view');
-    // Route::get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
+    // $router->get('/dokumen/{id}/download', [DokumenController::class, 'download']);
+    $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
+    // $router->get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
 
     //Peminjaman
-    Route::get('peminjaman-dokumen', 'PeminjamanController@index');
-    Route::post('peminjaman-dokumen', 'PeminjamanController@store');
-    Route::get('peminjaman-dokumen/{id}', 'PeminjamanController@show');
-    Route::put('peminjaman-dokumen/{id}', 'PeminjamanController@update');
-    Route::delete('peminjaman-dokumen/{id}', 'PeminjamanController@destroy');
+    $router->get('peminjaman-dokumen', 'PeminjamanController@index');
+    $router->post('peminjaman-dokumen', 'PeminjamanController@store');
+    $router->get('peminjaman-dokumen/{id}', 'PeminjamanController@show');
+    $router->put('peminjaman-dokumen/{id}', 'PeminjamanController@update');
+    $router->delete('peminjaman-dokumen/{id}', 'PeminjamanController@destroy');
 });
