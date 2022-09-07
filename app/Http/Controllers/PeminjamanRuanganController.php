@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Spatie\GoogleCalendar\Event;
 
 class PeminjamanRuanganController extends Controller
 {
@@ -127,5 +128,11 @@ class PeminjamanRuanganController extends Controller
             ], ['status_kursi' => $data]);
         }
         return $this->successResponse($Ruangan);
+    }
+
+    public function gcalender()
+    {
+        $event =  Event::get();
+        return $event;
     }
 }

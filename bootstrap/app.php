@@ -61,7 +61,8 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('jwt');
-$app->configure('cors');
+// $app->configure('cors');
+$app->configure('google-calendar');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -97,6 +98,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
+$app->register(Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
