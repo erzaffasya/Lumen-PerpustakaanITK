@@ -29,7 +29,7 @@ $router->get('/', function () use ($router) {
 //     return $router->app->version();
 // });
 $router->group(['prefix' => 'api'], function ($router) {
-    
+
     $router->get('gcalender', 'PeminjamanRuanganController@gcalender');
     $router->post('login', 'AuthController@login');
     $router->get('logout', 'AuthController@logout');
@@ -85,4 +85,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('peminjaman-dokumen/{id}', 'PeminjamanController@show');
     $router->put('peminjaman-dokumen/{id}', 'PeminjamanController@update');
     $router->delete('peminjaman-dokumen/{id}', 'PeminjamanController@destroy');
+
+    //Pembimbing
+    $router->get('pembimbing', 'PembimbingController@index');
+    $router->post('pembimbing', 'PembimbingController@store');
+    $router->get('pembimbing/{id}', 'PembimbingController@show');
+    $router->put('pembimbing/{id}', 'PembimbingController@update');
+    $router->delete('pembimbing/{id}', 'PembimbingController@destroy');
 });
