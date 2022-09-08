@@ -52,7 +52,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@show');
     $router->put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
     $router->delete('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@destroy');
-    $router->get('ruang-kosong/{ruang}/waktu/{tanggal}', 'PeminjamanRuanganController@RuanganKosong');
+    $router->get('ruang-kosong/{tanggal}/waktu_awal/{waktu_awal}/waktu_akhir/{waktu_akhir}', 'PeminjamanRuanganController@RuanganKosong');
 
     //Kategori
     $router->get('kategori', 'KategoriController@index');

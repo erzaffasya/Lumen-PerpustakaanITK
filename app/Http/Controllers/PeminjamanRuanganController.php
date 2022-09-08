@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\KursiBaca;
 use App\Models\PeminjamanRuangan;
+use App\Models\Ruangan;
 use App\Models\RuanganBaca;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,11 +23,13 @@ class PeminjamanRuanganController extends Controller
 
     public function store(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make(
             $request->all(),
             [
-                'kursi_baca_id' => 'required',
-                'tanggal_peminjaman' => 'required',
+                'ruangan_id' => 'required',
+                'waktu_awal' => 'required',
+                'waktu_akhir' => 'required',
             ]
         );
 
@@ -34,19 +37,31 @@ class PeminjamanRuanganController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $cekRuangan = PeminjamanRuangan::where('kursi_baca_id', $request->kursi_baca_id)
-            ->where('tanggal_peminjaman', $request->tanggal_peminjaman)
-            ->first();
-        $cekPeminjaman = PeminjamanRuangan::where('tanggal_peminjaman', '>', Carbon::now()->subDays(1))
-            ->where('user_id', Auth::user()->id)->count();
-        // return $cekPeminjaman;
-        if ($cekRuangan == null) {
+        // $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
+        // ->whereDate('tanggal_peminjaman', $request->tanggal_peminjaman)
+        // ->first();
+
+        $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
+            ->whereDate('tanggal', $request->tanggal)
+            ->whereTime('waktu_awal', '>=', $request->waktu_awal)
+            ->whereTime('waktu_akhir', '<=', $request->waktu_akhir)
+            ->exists();
+
+        $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
+            ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
+
+        if (!$cekRuangan) {
             if ($cekPeminjaman < 1) {
                 $PeminjamanRuangan = new PeminjamanRuangan();
                 $PeminjamanRuangan->user_id = Auth::user()->id;
-                $PeminjamanRuangan->kursi_baca_id = $request->kursi_baca_id;
-                $PeminjamanRuangan->tanggal_peminjaman = $request->tanggal_peminjaman;
+                $PeminjamanRuangan->tanggal = $request->tanggal;
+                $PeminjamanRuangan->ruangan_id = $request->ruangan_id;
+                $PeminjamanRuangan->waktu_awal = $request->waktu_awal;
+                $PeminjamanRuangan->waktu_akhir = $request->waktu_akhir;
+                $PeminjamanRuangan->keperluan = $request->keperluan;
+                $PeminjamanRuangan->status = 'Menunggu';
                 $PeminjamanRuangan->save();
+
                 return $this->successResponse(['status' => true, 'message' => 'PeminjamanRuangan Berhasil Ditambahkan']);
             } else {
                 return $this->errorResponse(['status' => false, 'message' => 'Anda Sudah Booking Ruangan'], 422);
@@ -95,38 +110,33 @@ class PeminjamanRuanganController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'PeminjamanRuangan Berhasil Dihapus']);
     }
 
-    public function RuanganKosong($ruang, $tanggal)
+    public function RuanganKosong($tanggal, $waktu_awal, $waktu_akhir)
     {
-        $dataKursiBaca = KursiBaca::select('kursi_baca.*', 'ruangan_baca.ruangan')
-            ->join('ruangan_baca', 'kursi_baca.ruangan_baca_id', 'ruangan_baca.id')
-            ->where('kursi_baca.ruangan_baca_id', '=', $ruang)
+
+        $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
+            ->whereTime('waktu_awal', '>=', $waktu_awal)
+            ->whereTime('waktu_akhir', '<=', $waktu_akhir)
             ->get();
 
-        if (count($dataKursiBaca) == 0) {
-            return $this->errorResponse('Kursi tidak tersedia', 422);
-        }
-
-        if ($tanggal == 'undefined') {
-            return response()->json(['error' => 'Data Tidak Lengkap'], 422);
-        }
-
-        foreach ($dataKursiBaca as $item) {
-            $cekKursi = PeminjamanRuangan::where('kursi_baca_id', '=', $item->id)->where('tanggal_peminjaman', '=', $tanggal)->first();
-
-            // True = Tersedia, False = Tidak Tersedia
-            if ($cekKursi == null) {
-                $data = True;
-            } else {
-                $data = False;
+        $getRuangan = Ruangan::all();
+        foreach ($getRuangan as $dataRuangan) {
+            $data = True;
+            foreach ($cekRuangan as $item) {
+                // True = Tersedia, False = Tidak Tersedia
+                if ($dataRuangan->id == $item->ruangan_id) {
+                    $data = False;
+                } 
             }
 
             $Ruangan[] = array_merge([
-                'id' => $item->id,
-                'nama_kursi' => $item->kursi,
-                'nama_ruangan' => $item->ruangan,
-                'status_kursi' => $item->status_kursi
+                'id' => $dataRuangan->id,
+                'nama_ruangan' => $dataRuangan->nama_ruangan,
+                'deskripsi' => $dataRuangan->deskripsi,
+                'jumlah_orang' => $dataRuangan->jumlah_orang,
+                'lokasi' => $dataRuangan->lokasi
             ], ['status_kursi' => $data]);
         }
+
         return $this->successResponse($Ruangan);
     }
 
@@ -134,5 +144,12 @@ class PeminjamanRuanganController extends Controller
     {
         $event =  Event::get();
         return $event;
+        // $event = new Event;
+
+        // $event->name = 'A new event';
+        // $event->startDateTime = Carbon::now();
+        // $event->endDateTime = Carbon::now()->addHour();
+
+        // $event->save();
     }
 }
