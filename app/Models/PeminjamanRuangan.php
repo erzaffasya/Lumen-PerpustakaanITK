@@ -11,8 +11,12 @@ class PeminjamanRuangan extends Model
     protected $table = 'peminjaman_ruangan';
     protected $fillable = [
         'user_id',
-        'kursi_baca_id',
-        'tanggal_peminjaman',
+        'ruangan_id',
+        'tanggal',
+        'waktu_awal',
+        'waktu_akhir',
+        'keperluan',
+        'status'
     ];
 
     protected $primaryKey = 'id';
@@ -21,8 +25,8 @@ class PeminjamanRuangan extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function KursiBaca()
+    public function Ruangan()
     {
-        return $this->belongsTo(KursiBaca::class, 'kursi_baca_id', 'id');
+        return $this->belongsTo(RuanganBaca::class, 'ruangan_id', 'id');
     }
 }

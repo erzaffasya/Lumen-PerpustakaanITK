@@ -40,18 +40,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
     $router->get('profile', 'AuthController@me');
     // Ruangan Baca 
-    $router->get('ruangan-baca', 'RuanganBacaController@index');
-    $router->post('ruangan-baca', 'RuanganBacaController@store');
-    $router->get('ruangan-baca/{id}', 'RuanganBacaController@show');
-    $router->put('ruangan-baca/{id}', 'RuanganBacaController@update');
-    $router->delete('ruangan-baca/{id}', 'RuanganBacaController@destroy');
-
-    // Kursi Baca 
-    $router->get('kursi-baca', 'KursiBacaController@index');
-    $router->post('kursi-baca', 'KursiBacaController@store');
-    $router->get('kursi-baca/{id}', 'KursiBacaController@show');
-    $router->put('kursi-baca/{id}', 'KursiBacaController@update');
-    $router->delete('kursi-baca/{id}', 'KursiBacaController@destroy');
+    $router->get('ruangan', 'RuanganController@index');
+    $router->post('ruangan', 'RuanganController@store');
+    $router->get('ruangan/{id}', 'RuanganController@show');
+    $router->put('ruangan/{id}', 'RuanganController@update');
+    $router->delete('ruangan/{id}', 'RuanganController@destroy');
 
     //peminjaman-ruangan
     $router->get('peminjaman-ruangan', 'PeminjamanRuanganController@index');

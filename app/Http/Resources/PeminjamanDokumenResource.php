@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PeminjamanResource extends JsonResource
+class PeminjamanDokumenResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

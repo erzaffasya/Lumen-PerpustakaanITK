@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Helper;
-use App\Http\Resources\PeminjamanResource;
-use App\Models\Peminjaman;
+use App\Http\Resources\PeminjamanDokumenResource;
+use App\Models\PeminjamanDokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class PeminjamanController extends Controller
+class PeminjamanDokumenController extends Controller
 {
     public function index()
     {
-        $Peminjaman = PeminjamanResource::collection(Peminjaman::all());
+        $Peminjaman = PeminjamanDokumenResource::collection(PeminjamanDokumen::all());
         // dd (Helper::cek_batasan_dokumen(6));
 
 
@@ -40,7 +40,7 @@ class PeminjamanController extends Controller
             return $this->errorResponse('Dokumen sudah penuh', 422);
         }
      
-        $Peminjaman = new Peminjaman(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
+        $Peminjaman = new PeminjamanDokumen(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
         $Peminjaman->save();
 
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Ditambahkan']);
@@ -48,23 +48,23 @@ class PeminjamanController extends Controller
 
     public function show($id)
     {
-        $Peminjaman = Peminjaman::find($id);
+        $Peminjaman = PeminjamanDokumen::find($id);
         if (!$Peminjaman) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
-        return $this->successResponse(new PeminjamanResource($Peminjaman));
+        return $this->successResponse(new PeminjamanDokumenResource($Peminjaman));
     }
 
     public function update(Request $request, $id)
     {
 
-        $Peminjaman = Peminjaman::find($id);
+        $Peminjaman = PeminjamanDokumen::find($id);
         if (!$Peminjaman) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
-        $Peminjaman = Peminjaman::find($Peminjaman->id)->update([
+        $Peminjaman = PeminjamanDokumen::find($Peminjaman->id)->update([
             'tgl_peminjaman' => $request->tgl_peminjaman,
             'tgl_pengembalian' => $request->tgl_pengembalian,
             'status' => $request->status,
@@ -77,7 +77,7 @@ class PeminjamanController extends Controller
 
     public function destroy($id)
     {
-        $Peminjaman = Peminjaman::find($id);
+        $Peminjaman = PeminjamanDokumen::find($id);
         if (!$Peminjaman) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
