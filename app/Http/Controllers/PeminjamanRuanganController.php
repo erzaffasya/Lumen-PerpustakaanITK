@@ -28,6 +28,7 @@ class PeminjamanRuanganController extends Controller
             $request->all(),
             [
                 'ruangan_id' => 'required',
+                'tanggal' => 'required',
                 'waktu_awal' => 'required',
                 'waktu_akhir' => 'required',
             ]
@@ -112,32 +113,54 @@ class PeminjamanRuanganController extends Controller
 
     public function RuanganKosong($tanggal, $waktu_awal, $waktu_akhir)
     {
+        $validator = Validator::make(
+            request()->all(),
+            [
+                'tanggal' => $tanggal,
+                'waktu_awal' => $waktu_awal,
+                'waktu_akhir' => $waktu_akhir,
+            ],
+            [
+                'tanggal' => ['required'],
+                'waktu_awal' => ['required'],
+                'waktu_akhir' => ['required'],
+            ],
+        );
 
-        $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
-            ->whereTime('waktu_awal', '>=', $waktu_awal)
-            ->whereTime('waktu_akhir', '<=', $waktu_akhir)
-            ->get();
 
-        $getRuangan = Ruangan::all();
-        foreach ($getRuangan as $dataRuangan) {
-            $data = True;
-            foreach ($cekRuangan as $item) {
-                // True = Tersedia, False = Tidak Tersedia
-                if ($dataRuangan->id == $item->ruangan_id) {
-                    $data = False;
-                } 
-            }
-
-            $Ruangan[] = array_merge([
-                'id' => $dataRuangan->id,
-                'nama_ruangan' => $dataRuangan->nama_ruangan,
-                'deskripsi' => $dataRuangan->deskripsi,
-                'jumlah_orang' => $dataRuangan->jumlah_orang,
-                'lokasi' => $dataRuangan->lokasi
-            ], ['status_kursi' => $data]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
         }
 
-        return $this->successResponse($Ruangan);
+        if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
+            $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
+                ->whereTime('waktu_awal', '>=', $waktu_awal)
+                ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                ->get();
+
+            $getRuangan = Ruangan::all();
+            foreach ($getRuangan as $dataRuangan) {
+                $data = True;
+                foreach ($cekRuangan as $item) {
+                    // True = Tersedia, False = Tidak Tersedia
+                    if ($dataRuangan->id == $item->ruangan_id) {
+                        $data = False;
+                    }
+                }
+
+                $Ruangan[] = array_merge([
+                    'id' => $dataRuangan->id,
+                    'nama_ruangan' => $dataRuangan->nama_ruangan,
+                    'deskripsi' => $dataRuangan->deskripsi,
+                    'jumlah_orang' => $dataRuangan->jumlah_orang,
+                    'lokasi' => $dataRuangan->lokasi
+                ], ['status_kursi' => $data]);
+            }
+
+            return $this->successResponse($Ruangan);
+        } else {            
+            return $this->errorResponse('Data Tidak Lengkap', 422);
+        }
     }
 
     public function gcalender()
