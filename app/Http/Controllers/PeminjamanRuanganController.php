@@ -23,7 +23,6 @@ class PeminjamanRuanganController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
         $validator = Validator::make(
             $request->all(),
             [
@@ -38,21 +37,17 @@ class PeminjamanRuanganController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        // $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
-        // ->whereDate('tanggal_peminjaman', $request->tanggal_peminjaman)
-        // ->first();
-
-        $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
-            ->whereDate('tanggal', $request->tanggal)
-            ->whereTime('waktu_awal', '>=', $request->waktu_awal)
-            ->whereTime('waktu_akhir', '<=', $request->waktu_akhir)
-            ->exists();
-
         $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
             ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
 
-        if (!$cekRuangan) {
-            if ($cekPeminjaman < 1) {
+        if ($cekPeminjaman < 1) {
+            $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
+                ->whereDate('tanggal', $request->tanggal)
+                ->whereTime('waktu_awal', '>=', $request->waktu_awal)
+                ->whereTime('waktu_akhir', '<=', $request->waktu_akhir)
+                ->exists();
+
+            if (!$cekRuangan) {
                 $PeminjamanRuangan = new PeminjamanRuangan();
                 $PeminjamanRuangan->user_id = Auth::user()->id;
                 $PeminjamanRuangan->tanggal = $request->tanggal;
@@ -62,13 +57,12 @@ class PeminjamanRuanganController extends Controller
                 $PeminjamanRuangan->keperluan = $request->keperluan;
                 $PeminjamanRuangan->status = 'Menunggu';
                 $PeminjamanRuangan->save();
-
-                return $this->successResponse(['status' => true, 'message' => 'PeminjamanRuangan Berhasil Ditambahkan']);
+                return $this->successResponse(['status' => true, 'message' => 'Peminjaman Ruangan Berhasil Ditambahkan']);
             } else {
-                return $this->errorResponse(['status' => false, 'message' => 'Anda Sudah Booking Ruangan'], 422);
+                return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
             }
         } else {
-            return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
+            return $this->errorResponse(['status' => false, 'message' => 'Anda Sudah Booking Ruangan'], 422);
         }
     }
 
@@ -158,7 +152,7 @@ class PeminjamanRuanganController extends Controller
             }
 
             return $this->successResponse($Ruangan);
-        } else {            
+        } else {
             return $this->errorResponse('Data Tidak Lengkap', 422);
         }
     }
