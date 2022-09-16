@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PeminjamanRuanganResource;
 use App\Models\KursiBaca;
 use App\Models\PeminjamanRuangan;
 use App\Models\Ruangan;
@@ -17,7 +18,7 @@ class PeminjamanRuanganController extends Controller
 {
     public function index()
     {
-        $PeminjamanRuangan = PeminjamanRuangan::all();
+        $PeminjamanRuangan = PeminjamanRuanganResource::collection(PeminjamanRuangan::all());
         return $this->successResponse($PeminjamanRuangan);
     }
 
@@ -37,11 +38,12 @@ class PeminjamanRuanganController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        //Blom Setting Diterima
         $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
-            ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
+            ->where('user_id', Auth::user()->id)->count();
 
         if ($cekPeminjaman < 1) {
-            $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan_id)
+            $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan)
                 ->whereDate('tanggal', $request->tanggal)
                 ->whereTime('waktu_awal', '>=', $request->waktu_awal)
                 ->whereTime('waktu_akhir', '<=', $request->waktu_akhir)
@@ -51,7 +53,7 @@ class PeminjamanRuanganController extends Controller
                 $PeminjamanRuangan = new PeminjamanRuangan();
                 $PeminjamanRuangan->user_id = Auth::user()->id;
                 $PeminjamanRuangan->tanggal = $request->tanggal;
-                $PeminjamanRuangan->ruangan_id = $request->ruangan_id;
+                $PeminjamanRuangan->ruangan_id = $request->ruangan;
                 $PeminjamanRuangan->waktu_awal = $request->waktu_awal;
                 $PeminjamanRuangan->waktu_akhir = $request->waktu_akhir;
                 $PeminjamanRuangan->keperluan = $request->keperluan;
@@ -68,7 +70,7 @@ class PeminjamanRuanganController extends Controller
 
     public function show($id)
     {
-        $PeminjamanRuangan = PeminjamanRuangan::find($id);
+        $PeminjamanRuangan = new PeminjamanRuanganResource(PeminjamanRuangan::find($id));
         if (!$PeminjamanRuangan) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
@@ -127,9 +129,11 @@ class PeminjamanRuanganController extends Controller
         }
 
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
+
+            //Blom Setting Diterima
             $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
                 ->whereTime('waktu_awal', '>=', $waktu_awal)
-                ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                ->whereTime('waktu_akhir', '<=', $waktu_akhir)  
                 ->get();
 
             $getRuangan = Ruangan::all();
