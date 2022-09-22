@@ -13,6 +13,7 @@ class KategoriController extends Controller
     public function index()
     {
         $Kategori = KategoriResource::collection(Kategori::all());
+        // visitor()->visit();
         return $this->successResponse($Kategori);
     }
 
