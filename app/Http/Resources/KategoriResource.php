@@ -19,6 +19,7 @@ class KategoriResource extends JsonResource
             'nama_kategori' => $this->nama_kategori,
             'detail' => $this->detail,
             'berkas' => json_decode($this->berkas),
+            'isPembimbing' => $this->isPembimbing,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

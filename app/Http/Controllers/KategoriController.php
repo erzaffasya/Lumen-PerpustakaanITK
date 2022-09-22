@@ -36,6 +36,7 @@ class KategoriController extends Controller
         $Kategori->nama_kategori = $request->nama_kategori;
         $Kategori->detail = $request->detail;
         $Kategori->berkas = $request->berkas;
+        $Kategori->isPembimbing = $request->isPembimbing;
         $Kategori->save();
 
         return $this->successResponse(['status' => true, 'message' => 'Kategori Berhasil Ditambahkan']);
@@ -68,6 +69,7 @@ class KategoriController extends Controller
             'nama_kategori' => $request->nama_kategori,
             'detail' => $request->detail,
             'berkas' => $request->berkas,
+            'isPembimbing' => $request->isPembimbing,
         ]);
 
         return $this->successResponse(['status' => true, 'message' => 'Kategori Berhasil Diubah']);
