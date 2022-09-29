@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('full_dokumen')->nullable();
             $table->enum('status',['Revisi','Diterima','Ditolak','Diproses'])->nullable()->default('Diproses');
             $table->longtext('data_tambahan')->nullable();
+            $table->text('catatan')->nullable();
 
             $table->timestamps();
         });

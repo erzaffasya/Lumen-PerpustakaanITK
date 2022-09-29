@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId("dokumen_id")->nullable()->constrained("dokumen")->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("cascade")->onUpdate("cascade");
-            $table->boolean("isPembimbing");
             $table->timestamps();
         });
     }
