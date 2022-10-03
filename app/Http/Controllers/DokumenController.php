@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DokumenResource;
 use App\Models\Dokumen;
+use App\Models\User;
+use App\Notifications\NotifRevisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -511,5 +515,25 @@ class DokumenController extends Controller
 
         $Dokumen->delete();
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
+    }
+
+    public function revisiDokumen()
+    {
+        // return 'erza';
+        // $data = array("name" => "Arunkumar");
+     
+        // $mail = Mail::send("mail", $data, function ($message) {
+        //     $message->to("easyselva@gmail.com", "Arunkumar")->subject("Test Mail from Selva");
+        //     $message->from("selva@snamservices.com", "Selvakumar");
+        // });
+        // dd($mail);
+        // echo "Email Sent. Check your inbox.";
+        // }
+        $revisi_data = [
+            'review_id' => 'erza',
+            'message' => 'Status Hak Cipta Berubah Menjadi!',
+        ];
+        $user = User::find(Auth::user()->id);
+        Notification::send($user, new NotifRevisi($revisi_data));
     }
 }

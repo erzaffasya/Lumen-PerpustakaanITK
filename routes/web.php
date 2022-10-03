@@ -30,6 +30,7 @@ $router->get('/', function () use ($router) {
 // });
 $router->group(['prefix' => 'api'], function ($router) {
 
+    $router->get('revisi-dokumen', 'DokumenController@revisiDokumen');
   
     $router->post('login', 'AuthController@login');
     $router->get('logout', 'AuthController@logout');

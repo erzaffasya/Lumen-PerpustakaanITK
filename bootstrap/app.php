@@ -22,8 +22,10 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
-
 $app->withFacades();
+// $app->withFacades(true, [
+//     "Illuminate\Support\Facades\Notification" => "Notification",
+//     ]);
 
 $app->withEloquent();
 
@@ -64,6 +66,7 @@ $app->configure('jwt');
 // $app->configure('cors');
 $app->configure('google-calendar');
 $app->configure('visitor');
+$app->configure('mail');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -94,13 +97,24 @@ $app->routeMiddleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class);
 $app->register(Shetabit\Visitor\Provider\VisitorServiceProvider::class);
+
+// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+
+
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->alias('mail.manager', Illuminate\Mail\MailManager::class);
+$app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
