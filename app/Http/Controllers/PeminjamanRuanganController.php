@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PeminjamanRuanganResource;
-use App\Models\KursiBaca;
 use App\Models\PeminjamanRuangan;
 use App\Models\Ruangan;
-use App\Models\RuanganBaca;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -133,7 +131,7 @@ class PeminjamanRuanganController extends Controller
             //Blom Setting Diterima
             $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
                 ->whereTime('waktu_awal', '>=', $waktu_awal)
-                ->whereTime('waktu_akhir', '<=', $waktu_akhir)  
+                ->whereTime('waktu_akhir', '<=', $waktu_akhir)
                 ->get();
 
             $getRuangan = Ruangan::all();
@@ -163,14 +161,15 @@ class PeminjamanRuanganController extends Controller
 
     public function gcalender()
     {
-        $event =  Event::get();
-        return $event;
-        // $event = new Event;
+        // return 'erza';
+        // $event =  Event::get();
+        // return $event;
+        $event = new Event;
 
-        // $event->name = 'A new event';
-        // $event->startDateTime = Carbon::now();
-        // $event->endDateTime = Carbon::now()->addHour();
+        $event->name = 'Erza Lumen';
+        $event->startDateTime = Carbon::now();
+        $event->endDateTime = Carbon::now()->addHour();
 
-        // $event->save();
+        $event->save();
     }
 }

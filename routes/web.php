@@ -30,7 +30,7 @@ $router->get('/', function () use ($router) {
 // });
 $router->group(['prefix' => 'api'], function ($router) {
 
-    $router->get('gcalender', 'PeminjamanRuanganController@gcalender');
+  
     $router->post('login', 'AuthController@login');
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
@@ -39,7 +39,7 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/QRCode', 'PengunjungController@index');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
-
+    $router->get('gcalender', 'PeminjamanRuanganController@gcalender');
     $router->get('profile', 'AuthController@me');
     // Ruangan Baca 
     $router->get('ruangan', 'RuanganController@index');
