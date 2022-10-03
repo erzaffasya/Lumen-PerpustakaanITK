@@ -35,6 +35,8 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
+    
+    $router->get('/QRCode', 'PengunjungController@index');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
