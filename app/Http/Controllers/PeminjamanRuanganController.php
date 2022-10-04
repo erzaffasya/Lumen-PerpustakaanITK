@@ -125,15 +125,30 @@ class PeminjamanRuanganController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-
+        if($waktu_awal > $waktu_akhir){
+            return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
+        }
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
+            // ->whereTime('waktu_awal', '>=', $waktu_awal)
+            // ->whereTime('waktu_akhir', '<=', $waktu_akhir)
 
             //Blom Setting Diterima
             $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
-                ->whereTime('waktu_awal', '>=', $waktu_awal)
-                ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                //IN RANGE    
+                ->whereTime('waktu_awal', '<=', $waktu_awal)
+                ->whereTime('waktu_akhir', '>=', $waktu_akhir)
+
+                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir) {
+                    $query->whereTime('waktu_awal', '>=', $waktu_awal)
+                        ->whereTime('waktu_awal', '<=', $waktu_akhir);
+                })
+                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir) {
+                    $query->whereTime('waktu_akhir', '>=', $waktu_awal)
+                        ->whereTime('waktu_akhir', '<=', $waktu_akhir);
+                })
                 ->get();
 
+            // dd($cekRuangan);
             $getRuangan = Ruangan::all();
             foreach ($getRuangan as $dataRuangan) {
                 $data = True;
@@ -161,7 +176,7 @@ class PeminjamanRuanganController extends Controller
 
     public function gcalender()
     {
-        // return 'erza';
+        // return Carbon::now();
         // $event =  Event::get();
         // return $event;
         $event = new Event;
