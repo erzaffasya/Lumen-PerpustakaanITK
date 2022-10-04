@@ -20,14 +20,16 @@ class PeminjamanRuanganResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => User::find($this->user_id),
+            'kode' => $this->kode,
             'ruangan' => Ruangan::find($this->ruangan_id),
             'tanggal' => $this->tanggal,
             'waktu_awal' => $this->waktu_awal,
             'waktu_akhir' => $this->waktu_akhir,
             'keperluan' => $this->keperluan,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'catatan' => $this->catatan,
+            'created_at' =>  date('d M Y', strtotime($this->created_at)),
+            'updated_at' =>  date('d M Y', strtotime($this->updated_at))
         ];
     }
 }

@@ -10,13 +10,15 @@ class PeminjamanRuangan extends Model
     use HasFactory;
     protected $table = 'peminjaman_ruangan';
     protected $fillable = [
+        'kode',
         'user_id',
         'ruangan_id',
         'tanggal',
         'waktu_awal',
         'waktu_akhir',
         'keperluan',
-        'status'
+        'status',
+        'catatan'
     ];
 
     protected $primaryKey = 'id';
@@ -27,6 +29,6 @@ class PeminjamanRuangan extends Model
     }
     public function Ruangan()
     {
-        return $this->belongsTo(RuanganBaca::class, 'ruangan_id', 'id');
+        return $this->belongsTo(Ruangan::class, 'ruangan_id', 'id');
     }
 }

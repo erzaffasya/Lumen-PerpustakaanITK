@@ -36,26 +36,41 @@ class PeminjamanRuanganController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        //Blom Setting Diterima
+        //Blom Setting Diterima || cek user apakah sudah booking/belum
         $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
-            ->where('user_id', Auth::user()->id)->count();
+            ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
 
         if ($cekPeminjaman < 1) {
-            $cekRuangan = PeminjamanRuangan::where('ruangan_id', $request->ruangan)
-                ->whereDate('tanggal', $request->tanggal)
-                ->whereTime('waktu_awal', '>=', $request->waktu_awal)
-                ->whereTime('waktu_akhir', '<=', $request->waktu_akhir)
+            //cek Jadwal tersebut tersedia atau tidak
+            $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $request->tanggal)
+                ->whereTime('waktu_awal', '<=', $request->waktu_awal)
+                ->whereTime('waktu_akhir', '>=', $request->waktu_akhir)
+                // ->orWhere(function ($query)  use ($request) {
+                //     $query->whereTime('waktu_awal', '>=', $request->waktu_awal)
+                //         ->whereTime('waktu_awal', '<=', $request->waktu_akhir);
+                // })
+                // ->orWhere(function ($query)  use ($request) {
+                //     $query->whereTime('waktu_akhir', '>=', $request->aktu_awal)
+                //         ->whereTime('waktu_akhir', '<=', $request->waktu_akhir);
+                // })
+                ->where('status', 'Diterima')
                 ->exists();
 
+            // Jika ruangan tersebut tersedia
             if (!$cekRuangan) {
                 $PeminjamanRuangan = new PeminjamanRuangan();
                 $PeminjamanRuangan->user_id = Auth::user()->id;
+                $PeminjamanRuangan->kode = $this->invoiceNumber();
                 $PeminjamanRuangan->tanggal = $request->tanggal;
                 $PeminjamanRuangan->ruangan_id = $request->ruangan;
                 $PeminjamanRuangan->waktu_awal = $request->waktu_awal;
                 $PeminjamanRuangan->waktu_akhir = $request->waktu_akhir;
                 $PeminjamanRuangan->keperluan = $request->keperluan;
-                $PeminjamanRuangan->status = 'Menunggu';
+                if (Auth::user()->role != 'Mahasiswa') {
+                    $Ruangan = Ruangan::find($request->ruangan);
+                    $PeminjamanRuangan->status = 'Diterima';
+                    $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
+                }
                 $PeminjamanRuangan->save();
                 return $this->successResponse(['status' => true, 'message' => 'Peminjaman Ruangan Berhasil Ditambahkan']);
             } else {
@@ -78,20 +93,18 @@ class PeminjamanRuanganController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $PeminjamanRuangan = PeminjamanRuangan::find($id);
         if (!$PeminjamanRuangan) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
+        $PeminjamanRuangan->status = $request->new_status;
+        $PeminjamanRuangan->catatan = $request->catatan;
+        $PeminjamanRuangan->save();
 
-        $PeminjamanRuangan = PeminjamanRuangan::find($PeminjamanRuangan->id)->update([
-            'user_id' => $request->user_id,
-            'kursi_baca_id' => $request->kursi_baca_id,
-            'kursi_baca_id_baca_id' => $request->tanggal_peminjaman,
-
-        ]);
-
-        return $this->successResponse(['status' => true, 'message' => 'PeminjamanRuangan Berhasil Diubah']);
+        if ($PeminjamanRuangan->status = 'Diterima') {
+            $this->gcalender($PeminjamanRuangan->keperluan . " - Ruangan " . $PeminjamanRuangan->Ruangan->nama_ruangan . "- Nama " . $PeminjamanRuangan->User->name . " " . $PeminjamanRuangan->User->nim, $PeminjamanRuangan->tanggal, $PeminjamanRuangan->waktu_awal, $PeminjamanRuangan->waktu_akhir);
+        }
+        return $this->successResponse(['status' => true, 'message' => 'Peminjaman Ruangan Berhasil Diubah']);
     }
 
     public function destroy($id)
@@ -125,7 +138,7 @@ class PeminjamanRuanganController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        if($waktu_awal > $waktu_akhir){
+        if ($waktu_awal > $waktu_akhir) {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
@@ -134,7 +147,6 @@ class PeminjamanRuanganController extends Controller
 
             //Blom Setting Diterima
             $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
-                //IN RANGE    
                 ->whereTime('waktu_awal', '<=', $waktu_awal)
                 ->whereTime('waktu_akhir', '>=', $waktu_akhir)
 
@@ -146,6 +158,7 @@ class PeminjamanRuanganController extends Controller
                     $query->whereTime('waktu_akhir', '>=', $waktu_awal)
                         ->whereTime('waktu_akhir', '<=', $waktu_akhir);
                 })
+                ->where('status', 'Diterima')
                 ->get();
 
             // dd($cekRuangan);
@@ -174,17 +187,24 @@ class PeminjamanRuanganController extends Controller
         }
     }
 
-    public function gcalender()
+    public function gcalender($namaEvent, $tanggal, $waktuAwal, $waktuAkhir)
     {
-        // return Carbon::now();
-        // $event =  Event::get();
-        // return $event;
         $event = new Event;
-
-        $event->name = 'Erza Lumen';
-        $event->startDateTime = Carbon::now();
-        $event->endDateTime = Carbon::now()->addHour();
-
+        $event->name = $namaEvent;
+        $event->startDateTime = Carbon::parse($tanggal . $waktuAwal);
+        $event->endDateTime = Carbon::parse($tanggal . $waktuAkhir);
         $event->save();
+    }
+
+    public function invoiceNumber()
+    {
+        $latest = PeminjamanRuangan::latest()->first();
+        if (!$latest) {
+            return 'BR0001';
+        }
+
+        $string = preg_replace("/[^0-9\.]/", '', $latest->kode);
+
+        return 'BR' . sprintf('%04d', $string + 1);
     }
 }

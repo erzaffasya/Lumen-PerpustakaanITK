@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('peminjaman_ruangan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode')->nullable();
             $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId("ruangan_id")->nullable()->constrained("ruangan")->onDelete("cascade")->onUpdate("cascade");
             $table->date('tanggal')->nullable();   
             $table->time('waktu_awal')->nullable();   
             $table->time('waktu_akhir')->nullable();   
             $table->text('keperluan')->nullable();
-            $table->enum('status', ['Diterima','Ditolak','Menunggu'])->nullable();
+            $table->enum('status', ['Diterima','Ditolak','Menunggu'])->default('Diterima');
+            $table->text('catatan')->nullable();            
             $table->timestamps();
         });
     }

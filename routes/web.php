@@ -40,7 +40,8 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/QRCode', 'PengunjungController@index');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
-    $router->get('gcalender', 'PeminjamanRuanganController@gcalender');
+    // $namaEvent, $tanggal, $waktuAwal, $waktuAkhir
+    $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
     $router->get('profile', 'AuthController@me');
     // Ruangan Baca 
     $router->get('ruangan', 'RuanganController@index');
