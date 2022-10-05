@@ -149,7 +149,6 @@ class PeminjamanRuanganController extends Controller
             $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $tanggal)
                 ->whereTime('waktu_awal', '<=', $waktu_awal)
                 ->whereTime('waktu_akhir', '>=', $waktu_akhir)
-
                 ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir) {
                     $query->whereTime('waktu_awal', '>=', $waktu_awal)
                         ->whereTime('waktu_awal', '<=', $waktu_akhir);

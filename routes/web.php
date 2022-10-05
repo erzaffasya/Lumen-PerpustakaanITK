@@ -38,6 +38,7 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
     
     $router->get('/QRCode', 'PengunjungController@index');
+    $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     // $namaEvent, $tanggal, $waktuAwal, $waktuAkhir
