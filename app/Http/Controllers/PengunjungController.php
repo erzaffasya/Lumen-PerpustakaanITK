@@ -4,17 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengunjung;
-use App\Models\Ruangan;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 
 class PengunjungController extends Controller
 {
@@ -28,8 +24,6 @@ class PengunjungController extends Controller
         $writer = new Writer($renderer);
         $qr_image = base64_encode($writer->writeString($url));
 
-        // return url("/checkin-pengunjung");
-        return $qr_image;
         return $this->successResponse(['qrcode_pengunjung' => $qr_image]);
     }
 

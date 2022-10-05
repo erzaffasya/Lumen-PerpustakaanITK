@@ -41,9 +41,10 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
-    // $namaEvent, $tanggal, $waktuAwal, $waktuAkhir
+
     $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
     $router->get('profile', 'AuthController@me');
+
     // Ruangan Baca 
     $router->get('ruangan', 'RuanganController@index');
     $router->post('ruangan', 'RuanganController@store');
@@ -97,4 +98,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('pembimbing/{id}', 'PembimbingController@show');
     $router->put('pembimbing/{id}', 'PembimbingController@update');
     $router->delete('pembimbing/{id}', 'PembimbingController@destroy');
+
+    //Notifikasi
+    $router->get('notifikasi', 'NotifikasiController@index');
 });

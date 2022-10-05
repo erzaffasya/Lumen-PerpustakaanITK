@@ -8,10 +8,8 @@ use App\Models\Dokumen;
 use App\Models\User;
 use App\Notifications\NotifRevisi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -361,13 +359,18 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Ditambahkan']);
     }
 
-    public function show($id)
+    public function show(Request $request ,$id)
     {
-        $Dokumen = new DokumenResource(Dokumen::findOrFail($id));
+        $showDokumen = Dokumen::findOrFail($id);
+        $Dokumen = new DokumenResource($showDokumen);
         if (!$Dokumen) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
+        $user = User::find(Auth::id());
+        $showDokumen->createVisitLog($user);
+        
+        // return $showDokumen->visitLogs()->count();
         return $this->successResponse($Dokumen);
     }
 

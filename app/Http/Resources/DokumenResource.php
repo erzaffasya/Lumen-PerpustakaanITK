@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Bookmark;
+use App\Models\Dokumen;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -49,7 +50,8 @@ class DokumenResource extends JsonResource
             'data_tambahan' => $this->data_tambahan,
             'jurusan' => $this->users->jurusan,
             'tanggal_dibuat' => date('d M Y', strtotime($this->created_at)),
-            'isBookmark' => $this->Bookmark($this->id)
+            'isBookmark' => $this->Bookmark($this->id),
+            'jumlah_kunjungan' => $this->jumlahPengunjung($this->id)
         ];
     }
     public function FormatFile($data)
@@ -97,5 +99,10 @@ class DokumenResource extends JsonResource
     public function Bookmark($dokumen){
         $cekBookmark = Bookmark::where('user_id',Auth::user()->id)->where('dokumen_id',$dokumen)->exists();
         return $cekBookmark;
+    }
+
+    public function jumlahPengunjung($id){
+        $jumlahPengunjung = Dokumen::find($id);
+        return $jumlahPengunjung->visitLogs()->count();
     }
 }
