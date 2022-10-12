@@ -35,9 +35,9 @@ class PengunjungController extends Controller
         if ($cekPengunjung) {
             return $this->errorResponse('Anda Sudah Checkin', 422);
         } else {
-            Pengunjung::created([
-                'user_id' => Auth::user()->id
-            ]);
+            $Pengunjung = new Pengunjung();
+            $Pengunjung->user_id = Auth::id();
+            $Pengunjung->save();
             return $this->successResponse(['status' => true, 'message' => 'Checkin Berhasil Dilakukan']);
         }
     }

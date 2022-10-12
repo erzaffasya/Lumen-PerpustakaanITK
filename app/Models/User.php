@@ -11,15 +11,16 @@ use Illuminate\Notifications\Notifiable;
 use Shetabit\Visitor\Traits\Visitable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject 
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
-    use Authenticatable, Authorizable, Notifiable,Visitable;
+    use Authenticatable, Authorizable, Notifiable, Visitable;
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
+    protected $guarded = [];
     public function getJWTIdentifier()
     {
         return $this->getKey();

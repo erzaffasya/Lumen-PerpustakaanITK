@@ -16,13 +16,20 @@ use Illuminate\Support\Facades\Validator;
 
 class DokumenController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->role == 'Admin') {
-            $Dokumen = DokumenResource::collection(Dokumen::all());
-        } else {
-            $Dokumen = DokumenResource::collection(Dokumen::where('user_id', Auth::user()->id)->get());
+        $query = Dokumen::all();
+        if ($request->status) {
+            if ($request->status != 'Riwayat') {
+                $query = $query->where('status', $request->status);
+            } else {
+                $query = $query->where('status', '!=', 'Revisi')->where('status', '!=', 'Diproses');
+            }
         }
+        if (Auth::user()->role != 'Admin') {
+            $query->where('user_id', Auth::user()->id);
+        }
+        $Dokumen = DokumenResource::collection($query);
         return $this->successResponse($Dokumen);
     }
 
@@ -359,7 +366,7 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Ditambahkan']);
     }
 
-    public function show(Request $request ,$id)
+    public function show(Request $request, $id)
     {
         $showDokumen = Dokumen::findOrFail($id);
         $Dokumen = new DokumenResource($showDokumen);
@@ -369,7 +376,7 @@ class DokumenController extends Controller
 
         $user = User::find(Auth::id());
         $showDokumen->createVisitLog($user);
-        
+
         // return $showDokumen->visitLogs()->count();
         return $this->successResponse($Dokumen);
     }
@@ -524,7 +531,7 @@ class DokumenController extends Controller
     {
         // return 'erza';
         // $data = array("name" => "Arunkumar");
-     
+
         // $mail = Mail::send("mail", $data, function ($message) {
         //     $message->to("easyselva@gmail.com", "Arunkumar")->subject("Test Mail from Selva");
         //     $message->from("selva@snamservices.com", "Selvakumar");
@@ -533,8 +540,8 @@ class DokumenController extends Controller
         // echo "Email Sent. Check your inbox.";
         // }
         $revisi_data = [
-            'review_id' => 'erza',
-            'message' => 'Status Hak Cipta Berubah Menjadi!',
+            'judul' => 'erza',
+            'pesan' => 'Status Hak Cipta Berubah Menjadi!',
         ];
         $user = User::find(Auth::user()->id);
         Notification::send($user, new NotifRevisi($revisi_data));

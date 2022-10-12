@@ -15,11 +15,18 @@ class NotifikasiResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->read_at) {
+            $data = $this->read_at->diffForHumans();
+        } else {
+            $data = null;
+        }
+        
         return [
             'id' => $this->id,
             'judul' => $this->user_id,
             'pesan' => $this->data,
-            'created_at' => $this->created_at->diffForHumans(),
+            'read_at' =>   $data,
+            'created_at' => $this->created_at->diffForHumans()
         ];
     }
 }
