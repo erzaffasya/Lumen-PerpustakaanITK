@@ -42,8 +42,8 @@ class NotifRevisi extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->greeting('Perubahan Status')
-            ->line($this->revisi_data['message']);
+            ->greeting('Perubahan Status Dokumen')
+            ->line($this->revisi_data['pesan']);
             // ->line('Thank you for using our application!');
     }
 
@@ -57,8 +57,8 @@ class NotifRevisi extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'review_id' => $this->revisi_data['review_id'],
-            'message' => $this->revisi_data['message'],
+            'judul' => $this->revisi_data['judul'],
+            'pesan' => $this->revisi_data['pesan'],
         ];
     }
 }

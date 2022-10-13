@@ -31,12 +31,12 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api'], function ($router) {
 
     $router->get('revisi-dokumen', 'DokumenController@revisiDokumen');
-  
+
     $router->post('login', 'AuthController@login');
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
-    
+
     $router->get('/QRCode', 'PengunjungController@index');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
@@ -80,6 +80,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('dokumen/{id}', 'DokumenController@show');
     $router->put('dokumen/{id}', 'DokumenController@update');
     $router->delete('dokumen/{id}', 'DokumenController@destroy');
+    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
 
     // $router->get('/dokumen/{id}/download', [DokumenController::class, 'download']);
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
@@ -101,4 +102,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
     //Notifikasi
     $router->get('notifikasi', 'NotifikasiController@index');
+
+    //User
+    $router->get('user', 'UserController@index');
+    $router->post('user', 'UserController@store');
+    $router->get('user/{id}', 'UserController@show');
+    $router->put('user/{id}', 'UserController@update');
+    $router->delete('user/{id}', 'UserController@destroy');
 });

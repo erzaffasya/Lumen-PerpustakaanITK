@@ -541,21 +541,16 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }
 
-    public function revisiDokumen()
+    public function revisiDokumen(Request $request,$id)
     {
-        // return 'erza';
-        // $data = array("name" => "Arunkumar");
+        $Dokumen = Dokumen::find($id);
+        $Dokumen->status = $request->status;
+        $Dokumen->catatan = $request->catatan;
+        $Dokumen->save();
 
-        // $mail = Mail::send("mail", $data, function ($message) {
-        //     $message->to("easyselva@gmail.com", "Arunkumar")->subject("Test Mail from Selva");
-        //     $message->from("selva@snamservices.com", "Selvakumar");
-        // });
-        // dd($mail);
-        // echo "Email Sent. Check your inbox.";
-        // }
         $revisi_data = [
-            'judul' => 'erza',
-            'pesan' => 'Status Hak Cipta Berubah Menjadi!',
+            'judul' => 'Perubahan Status Dokumen',
+            'pesan' => 'Status Dokumen '.$Dokumen->judul.' '.$Dokumen->status.'!',
         ];
         $user = User::find(Auth::user()->id);
         Notification::send($user, new NotifRevisi($revisi_data));
