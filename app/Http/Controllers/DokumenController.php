@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DokumenResource;
 use App\Models\Dokumen;
+use App\Models\Pembimbing;
 use App\Models\User;
 use App\Notifications\NotifRevisi;
 use Illuminate\Http\Request;
@@ -196,8 +197,11 @@ class DokumenController extends Controller
         $Dokumen->kategori_id = $request->kategori_id;
         $Dokumen->tahun_terbit = $request->tahun_terbit;
         $Dokumen->nama_pengarang = $request->nama_pengarang;
+        $Dokumen->deskripsi = $request->deskripsi;
         $Dokumen->penerbit = $request->penerbit;
         $Dokumen->user_id = Auth::user()->id;
+
+
 
         // Cover 
         if ($request->cover != null) {
@@ -360,9 +364,19 @@ class DokumenController extends Controller
             $request->file('full_dokumen')->move("storage/documents/$Dokumen->user_id", $file_name);
             $Dokumen->full_dokumen = $full_dokumen;
         }
-
         $Dokumen->save();
-
+        if ($request->pembimbing_1) {
+            Pembimbing::create([
+                'dokumen_id' => $Dokumen->id,
+                'user_id' => $request->pembimbing_1
+            ]);
+        }
+        if ($request->pembimbing_2) {
+            Pembimbing::create([
+                'dokumen_id' => $Dokumen->id,
+                'user_id' => $request->pembimbing_2
+            ]);
+        }
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Ditambahkan']);
     }
 

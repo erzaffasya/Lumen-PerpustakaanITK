@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -44,6 +46,15 @@ class Controller extends BaseController
             $user = auth('sanctum')->user();
         }
         return $user;
+    }
+
+    protected function notifEmail(){
+        $revisi_data = [
+            'judul' => 'erza',
+            'pesan' => 'Status Hak Cipta Berubah Menjadi!',
+        ];
+        $user = User::find(Auth::user()->id);
+        Notification::send($user, new NotifRevisi($revisi_data));
     }
 
     protected function vendor() {
