@@ -12,10 +12,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $User = UserResource::collection(User::all());
-        return $this->successResponse($User);
+        if($request->role){
+            $user = User::where('role',$request->role)->get();
+        }else{
+            $user = User::all();
+        }
+
+        $UserResource = UserResource::collection($user);
+        return $this->successResponse($UserResource);
     }
 
     public function store(Request $request)

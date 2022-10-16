@@ -4,6 +4,9 @@ namespace App\Http\Resources;
 
 use App\Models\Bookmark;
 use App\Models\Dokumen;
+use App\Models\Kategori;
+use App\Models\Pembimbing;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -21,7 +24,7 @@ class DokumenResource extends JsonResource
         return [
             'id' => $this->id,
             'judul' => $this->judul,
-            'kategori_id' => $this->kategori->nama_kategori,
+            'kategori' => $this->kategori($this->kategori_id),
             'tahun_terbit' => $this->tahun_terbit,
             'nama_pengarang' => $this->judul,
             'penerbit' => $this->penerbit,
@@ -52,7 +55,8 @@ class DokumenResource extends JsonResource
             'jurusan' => $this->users->jurusan,
             'tanggal_dibuat' => date('d M Y', strtotime($this->created_at)),
             'isBookmark' => $this->Bookmark($this->id),
-            'jumlah_kunjungan' => $this->jumlahPengunjung($this->id)
+            'jumlah_kunjungan' => $this->jumlahPengunjung($this->id),
+            'pembimbing' => $this->pembimbing($this->id)
         ];
     }
     public function FormatFile($data)
@@ -66,6 +70,11 @@ class DokumenResource extends JsonResource
         } else {
             return null;
         }
+    }
+
+    public function kategori($id){
+        $kategori = Kategori::select('id','nama_kategori')->where('id',$id)->first();
+        return $kategori;
     }
 
     public function FileSize($data)
@@ -105,5 +114,15 @@ class DokumenResource extends JsonResource
     public function jumlahPengunjung($id){
         $jumlahPengunjung = Dokumen::find($id);
         return $jumlahPengunjung->visitLogs()->count();
+    }
+
+    public function pembimbing($id){
+        $dataPembimbing = Pembimbing::where('dokumen_id',$id)->get();
+        if(count($dataPembimbing) > 0){
+            $getData = UserResource::collection(User::whereIn('id',$dataPembimbing->pluck('user_id'))->get());
+        }else{
+            $getData = null;
+        }
+        return $getData;
     }
 }

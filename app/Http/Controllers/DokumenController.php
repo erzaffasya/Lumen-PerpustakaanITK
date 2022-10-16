@@ -554,5 +554,7 @@ class DokumenController extends Controller
         ];
         $user = User::find(Auth::user()->id);
         Notification::send($user, new NotifRevisi($revisi_data));
+
+        return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
 }

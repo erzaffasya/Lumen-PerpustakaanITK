@@ -109,4 +109,12 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('user/{id}', 'UserController@show');
     $router->put('user/{id}', 'UserController@update');
     $router->delete('user/{id}', 'UserController@destroy');
+
+    //Statistik
+    $router->get('jumlah-dokumen','StatistikController@jumlahDokumen');
+    $router->get('jumlah-peminjaman-dokumen','StatistikController@jumlahPeminjamanDokumen');
+    $router->get('jumlah-ruangan','StatistikController@jumlahRuangan');
+    $router->get('jumlah-peminjaman-ruangan','StatistikController@jumlahPeminjamanRuangan');
+    
+    $router->get('jumlah-pengunjung','StatistikController@jumlahPengunjung');
 });
