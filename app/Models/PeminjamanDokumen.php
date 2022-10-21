@@ -14,7 +14,6 @@ class PeminjamanDokumen extends Model
         'user_id',
         'tgl_pengembalian',
         'tgl_peminjaman',
-        'status',
     ];
 
     protected $primaryKey = 'id';

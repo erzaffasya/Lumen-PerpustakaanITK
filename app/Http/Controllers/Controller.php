@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
+use App\Models\PeminjamanDokumen;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -71,8 +73,8 @@ class Controller extends BaseController
 
     public static function cek_batasan_dokumen($id)
     {
-        $peminjaman = Peminjaman::where('dokumen_id', $id)->where('status', 0)->get();
-        if ($peminjaman->count() > 0) {
+        $peminjaman = PeminjamanDokumen::where('dokumen_id', $id)->where('tgl_pengembalian', '>', Carbon::now())->get();
+        if ($peminjaman->count() > 10) {
             return False;
         } else{
             return True;

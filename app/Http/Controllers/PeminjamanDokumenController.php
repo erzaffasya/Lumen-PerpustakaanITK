@@ -6,19 +6,37 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Helper;
 use App\Http\Resources\PeminjamanDokumenResource;
 use App\Models\PeminjamanDokumen;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PeminjamanDokumenController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $Peminjaman = PeminjamanDokumenResource::collection(PeminjamanDokumen::all());
-        // dd (Helper::cek_batasan_dokumen(6));
+        if (Auth::user()->role != "Admin") {
+            $Peminjaman = PeminjamanDokumen::where('user_id',  Auth::id())->get();
+        } else {
+            $Peminjaman = PeminjamanDokumen::all();
+        }
 
+        if ($request->filter) {
+            switch ($request->filter) {
+                case 'riwayat':
+                    $dataPeminjaman = PeminjamanDokumenResource::collection($Peminjaman->where('tgl_pengembalian', '<', Carbon::now()));
+                    break;
+                case 'berlangsung':
+                    $dataPeminjaman = PeminjamanDokumenResource::collection($Peminjaman->where('tgl_pengembalian', '>', Carbon::now()));
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $dataPeminjaman = PeminjamanDokumenResource::collection($Peminjaman);
+        }
 
-        return $this->successResponse($Peminjaman);
+        return $this->successResponse($dataPeminjaman);
     }
 
     public function store(Request $request)
@@ -26,8 +44,6 @@ class PeminjamanDokumenController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'tgl_peminjaman' => 'required',
-                'tgl_pengembalian' => 'required',
                 'dokumen_id' => 'required',
             ]
         );
@@ -39,8 +55,13 @@ class PeminjamanDokumenController extends Controller
         if ($this->cek_batasan_dokumen($request->dokumen_id) == False) {
             return $this->errorResponse('Dokumen sudah penuh', 422);
         }
-     
-        $Peminjaman = new PeminjamanDokumen(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
+
+        $Peminjaman = new PeminjamanDokumen(([
+            'dokumen_id' => $request->dokumen_id,
+            'tgl_peminjaman' => Carbon::now(),
+            'tgl_pengembalian' => Carbon::now()->addDays(),
+            'user_id' => Auth::user()->id
+        ]));
         $Peminjaman->save();
 
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Ditambahkan']);
@@ -67,7 +88,6 @@ class PeminjamanDokumenController extends Controller
         $Peminjaman = PeminjamanDokumen::find($Peminjaman->id)->update([
             'tgl_peminjaman' => $request->tgl_peminjaman,
             'tgl_pengembalian' => $request->tgl_pengembalian,
-            'status' => $request->status,
             'dokumen_id' => $request->dokumen_id,
             'user_id' => $request->user_id,
         ]);
@@ -85,4 +105,12 @@ class PeminjamanDokumenController extends Controller
         $Peminjaman->delete();
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Dihapus']);
     }
+
+    // public function riwayatPeminjamanDokumen()
+    // {
+    //     $Peminjaman = PeminjamanDokumen::where('tgl_pengembalian', '>', Carbon::now())->get();
+    //     $dataPeminjaman = PeminjamanDokumenResource::collection($Peminjaman);
+
+    //     return $this->successResponse($dataPeminjaman);
+    // }
 }

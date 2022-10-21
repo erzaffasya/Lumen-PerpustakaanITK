@@ -6,7 +6,9 @@ use App\Models\Bookmark;
 use App\Models\Dokumen;
 use App\Models\Kategori;
 use App\Models\Pembimbing;
+use App\Models\PeminjamanDokumen;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -56,7 +58,8 @@ class DokumenResource extends JsonResource
             'tanggal_dibuat' => date('d M Y', strtotime($this->created_at)),
             'isBookmark' => $this->Bookmark($this->id),
             'jumlah_kunjungan' => $this->jumlahPengunjung($this->id),
-            'pembimbing' => $this->pembimbing($this->id)
+            'pembimbing' => $this->pembimbing($this->id),
+            'isPinjam' => $this->isPinjam($this->id)
         ];
     }
     public function FormatFile($data)
@@ -124,5 +127,10 @@ class DokumenResource extends JsonResource
             $getData = null;
         }
         return $getData;
+    }
+
+    public function isPinjam($id){
+        $dataPinjam = PeminjamanDokumen::where('dokumen_id',$id)->where('tgl_pengembalian','>',Carbon::now())->exists();
+        return $dataPinjam;
     }
 }

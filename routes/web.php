@@ -87,11 +87,12 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     // $router->get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
 
     //Peminjaman
-    $router->get('peminjaman-dokumen', 'PeminjamanController@index');
-    $router->post('peminjaman-dokumen', 'PeminjamanController@store');
-    $router->get('peminjaman-dokumen/{id}', 'PeminjamanController@show');
-    $router->put('peminjaman-dokumen/{id}', 'PeminjamanController@update');
-    $router->delete('peminjaman-dokumen/{id}', 'PeminjamanController@destroy');
+    $router->get('peminjaman-dokumen', 'PeminjamanDokumenController@index');
+    $router->post('peminjaman-dokumen', 'PeminjamanDokumenController@store');
+    $router->get('peminjaman-dokumen/{id}', 'PeminjamanDokumenController@show');
+    $router->put('peminjaman-dokumen/{id}', 'PeminjamanDokumenController@update');
+    $router->delete('peminjaman-dokumen/{id}', 'PeminjamanDokumenController@destroy');
+    // $router->get('riwayat-peminjaman-dokumen', 'PeminjamanDokumenController@riwayatPeminjamanDokumen');
 
     //Pembimbing
     $router->get('pembimbing', 'PembimbingController@index');
