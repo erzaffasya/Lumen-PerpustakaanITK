@@ -34,6 +34,81 @@ class DokumenController extends Controller
         return $this->successResponse($Dokumen);
     }
 
+    public function downloadFile($id, $data){
+        $dokumen = Dokumen::find($id);
+        switch ($data) {
+            case 'cover':
+                $file = $dokumen->cover;
+                break;
+            case 'lembar_pengesahan':
+                $file = $dokumen->lembar_pengesahan;
+                break;
+            case 'kata_pengantar':
+                $file = $dokumen->kata_pengantar;
+                break;
+            case 'ringkasan':
+                $file = $dokumen->ringkasan;
+                break;
+            case 'daftar_isi':
+                $file = $dokumen->daftar_isi;
+                break;
+            case 'daftar_gambar':
+                $file = $dokumen->daftar_gambar;
+                break;
+            case 'daftar_tabel':
+                $file = $dokumen->daftar_tabel;
+                break;
+            case 'daftar_notasi':
+                $file = $dokumen->daftar_notasi;
+                break;
+            case 'abstract_en':
+                $file = $dokumen->abstract_en;
+                break;
+            case 'abstract_id':
+                $file = $dokumen->abstract_id;
+                break;
+            case 'bab1':
+                $file = $dokumen->bab1;
+                break;
+            case 'bab2':
+                $file = $dokumen->bab2;
+                break;
+            case 'bab3':
+                $file = $dokumen->bab3;
+                break;
+            case 'bab4':
+                $file = $dokumen->bab4;
+                break;
+            case 'kesimpulan':
+                $file = $dokumen->kesimpulan;
+                break;
+            case 'daftar_pustaka':
+                $file = $dokumen->daftar_pustaka;
+                break;
+            case 'lampiran':
+                $file = $dokumen->lampiran;
+                break;
+            case 'paper':
+                $file = $dokumen->paper;
+                break;
+            case 'lembar_persetujuan':
+                $file = $dokumen->lembar_persetujuan;
+                break;
+            case 'full_dokumen':
+                $file = $dokumen->full_dokumen;
+                break;
+            case 'lembar_pengesahan':
+                $file = $dokumen->lembar_pengesahan;
+                break;
+            default:
+        }
+
+        $myFile = public_path($file);
+    	$headers = ['Content-Type: application/pdf'];
+    	$newName = $dokumen->judul.'-'.$data.'.pdf';
+    	return response()->download($myFile, $newName, $headers);
+    }
+
     public function showfile($id, $data)
     {
         $dokumen = Dokumen::find($id);

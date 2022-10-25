@@ -36,6 +36,7 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
+    $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
 
     $router->get('/QRCode', 'PengunjungController@index');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
