@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.0",
         "bacon/bacon-qr-code": "^2.0",
+        "darkaonline/swagger-lume": "9.*",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.5",
         "illuminate/mail": "^9.33",

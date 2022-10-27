@@ -67,6 +67,7 @@ $app->configure('jwt');
 $app->configure('google-calendar');
 $app->configure('visitor');
 $app->configure('mail');
+$app->configure('swagger-lume');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -104,7 +105,7 @@ $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class);
 $app->register(Shetabit\Visitor\Provider\VisitorServiceProvider::class);
-
+$app->register(\SwaggerLume\ServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
 
