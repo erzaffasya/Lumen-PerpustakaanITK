@@ -2,7 +2,6 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
-
-// $router->get('user/{id}', 'UserController@show');
-
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-// $router->get('/version', function () use ($router) {
-//     return $router->app->version();
-// });
 $router->group(['prefix' => 'api'], function ($router) {
 
     $router->get('revisi-dokumen', 'DokumenController@revisiDokumen');
@@ -38,7 +28,8 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
     $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
 
-    $router->get('/QRCode', 'PengunjungController@index');
+    $router->get('/QRCode', 'PengunjungController@qrcode');
+    $router->get('/pengunjung', 'PengunjungController@index');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {

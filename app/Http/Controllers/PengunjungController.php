@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PengunjungResource;
 use App\Models\Pengunjung;
 use Carbon\Carbon;
 
@@ -14,7 +15,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PengunjungController extends Controller
 {
-    public function index()
+    public function index(){
+        $data = PengunjungResource::collection(Pengunjung::all());
+        return $this->successResponse($data);
+    }
+
+    public function qrcode()
     {
         $renderer = new ImageRenderer(
             new RendererStyle(400),
