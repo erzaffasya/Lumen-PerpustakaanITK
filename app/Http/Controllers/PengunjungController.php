@@ -15,11 +15,30 @@ use Illuminate\Support\Facades\Auth;
 
 class PengunjungController extends Controller
 {
-    public function index(){
+    /**
+     * @OA\Get(
+     *  path="/api/pengunjung",
+     *  tags={"Pengunjung Perpustakaan"},
+     *  summary="Get pengunjung",
+     *  @OA\Response(response=200, description="Get pengunjung"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
+    public function index()
+    {
         $data = PengunjungResource::collection(Pengunjung::all());
         return $this->successResponse($data);
     }
 
+    /**
+     * @OA\Get(
+     *  path="/api/qrcode",
+     *  tags={"Pengunjung Perpustakaan"},
+     *  summary="Get qrcode",
+     *  @OA\Response(response=200, description="Get qrcode"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function qrcode()
     {
         $renderer = new ImageRenderer(
@@ -33,6 +52,15 @@ class PengunjungController extends Controller
         return $this->successResponse(['qrcode_pengunjung' => $qr_image]);
     }
 
+    /**
+     * @OA\Post(
+     *  path="/api/pengunjung",
+     *  tags={"Pengunjung Perpustakaan"},
+     *  summary="Post pengunjung",
+     *  @OA\Response(response=200, description="Post pengunjung"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function store()
     {
         $cekPengunjung = Pengunjung::whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])

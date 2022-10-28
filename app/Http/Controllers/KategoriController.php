@@ -13,7 +13,7 @@ class KategoriController extends Controller
     /**
      * @OA\Get(
      *  path="/api/kategori",
-     *  tags={"kategori"},
+     *  tags={"Kategori"},
      *  summary="Get the list of resources",
      *  @OA\Response(response=200, description="Return a list of resources"),
      *  security={{ "apiAuth": {} }}
@@ -28,7 +28,7 @@ class KategoriController extends Controller
     /**
      * @OA\Post(
      *     path="/api/kategori",
-     *     tags={"kategori"},
+     *     tags={"Kategori"},
      *     summary="Tambah Data Kategori",
      *     operationId="updatePetWithForm",
      *     @OA\Response(
@@ -94,7 +94,7 @@ class KategoriController extends Controller
     /**
      * @OA\Get(
      *  path="/api/kategori/{id}",
-     *  tags={"kategori"},
+     *  tags={"Kategori"},
      *  summary="Get kategori by kategori id",
      *  @OA\Parameter(
      *    name="id",
@@ -134,7 +134,7 @@ class KategoriController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/kategori/{id}",
-     *     tags={"kategori"},
+     *     tags={"Kategori"},
      *     summary="Deletes a kategori",
      *     operationId="deletekategori",
      *     @OA\Parameter(

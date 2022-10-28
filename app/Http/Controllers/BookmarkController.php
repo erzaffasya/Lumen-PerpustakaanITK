@@ -12,12 +12,30 @@ use Illuminate\Support\Facades\Validator;
 
 class BookmarkController extends Controller
 {
+    /**
+     * @OA\Get(
+     *  path="/api/bookmark",
+     *  tags={"Bookmark"},
+     *  summary="Get Bookmark",
+     *  @OA\Response(response=200, description="Bookmark"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function index()
     {
         $Bookmark = BookmarkResource::collection(Bookmark::all());
         return $this->successResponse($Bookmark);
     }
 
+    /**
+     * @OA\Post(
+     *  path="/api/bookmark",
+     *  tags={"Bookmark"},
+     *  summary="POST Bookmark",
+     *  @OA\Response(response=200, description="POST Bookmark"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make(
@@ -43,6 +61,15 @@ class BookmarkController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *  path="/api/bookmark/{id}",
+     *  tags={"Bookmark"},
+     *  summary="GET Bookmark",
+     *  @OA\Response(response=200, description="GET Bookmark"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function show($id)
     {
         $Bookmark = Bookmark::find($id);
@@ -53,6 +80,15 @@ class BookmarkController extends Controller
         return $this->successResponse($Bookmark);
     }
 
+    /**
+     * @OA\Put(
+     *  path="/api/bookmark",
+     *  tags={"Bookmark"},
+     *  summary="PUT Bookmark",
+     *  @OA\Response(response=200, description="PUT Bookmark"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function update(Request $request, $id)
     {
 
@@ -68,6 +104,15 @@ class BookmarkController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *  path="/api/bookmark",
+     *  tags={"Bookmark"},
+     *  summary="DELETE Bookmark",
+     *  @OA\Response(response=200, description="DELETE Bookmark"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function destroy($id)
     {
         $Bookmark = Bookmark::find($id);

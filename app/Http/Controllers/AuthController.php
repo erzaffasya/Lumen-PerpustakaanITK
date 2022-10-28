@@ -17,6 +17,15 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'refresh', 'logout']]);
     }
     /**
+     * @OA\Get(
+     *  path="/api/login",
+     *  tags={"Authentikasi"},
+     *  summary="Get the list of resources",
+     *  @OA\Response(response=200, description="Return a list of resources"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
+    /**
      * Get a JWT via given credentials.
      *
      * @param  Request  $request
@@ -136,6 +145,15 @@ class AuthController extends Controller
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
+     */
+    /**
+     * @OA\POST(
+     *  path="/api/logout",
+     *  tags={"Authentikasi"},
+     *  summary="Logout",
+     *  @OA\Response(response=200, description="Logout"),
+     *  security={{ "apiAuth": {} }}
+     * )
      */
     public function logout()
     {

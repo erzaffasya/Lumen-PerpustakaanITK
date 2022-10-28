@@ -9,10 +9,136 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/login": {
+            "get": {
+                "tags": [
+                    "Authentikasi"
+                ],
+                "summary": "Get the list of resources",
+                "responses": {
+                    "200": {
+                        "description": "Return a list of resources"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentikasi"
+                ],
+                "summary": "Logout",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Logout"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookmark": {
+            "get": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "Get Bookmark",
+                "operationId": "624baa971ef2dce3594bb2801425422d",
+                "responses": {
+                    "200": {
+                        "description": "Bookmark"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "PUT Bookmark",
+                "operationId": "c4d724c4c975054d14cd819d963d7aae",
+                "responses": {
+                    "200": {
+                        "description": "PUT Bookmark"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "POST Bookmark",
+                "operationId": "66a96659780ea38427e57a1d323992a4",
+                "responses": {
+                    "200": {
+                        "description": "POST Bookmark"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "DELETE Bookmark",
+                "operationId": "13f862f1f003d54192bb5049cb77a821",
+                "responses": {
+                    "200": {
+                        "description": "DELETE Bookmark"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/bookmark/{id}": {
+            "get": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "GET Bookmark",
+                "operationId": "a16a7bdc13e31558badf21e3c490eccf",
+                "responses": {
+                    "200": {
+                        "description": "GET Bookmark"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/kategori": {
             "get": {
                 "tags": [
-                    "kategori"
+                    "Kategori"
                 ],
                 "summary": "Get the list of resources",
                 "operationId": "2338314090a81813db8257437b649a2f",
@@ -29,7 +155,7 @@
             },
             "post": {
                 "tags": [
-                    "kategori"
+                    "Kategori"
                 ],
                 "summary": "Tambah Data Kategori",
                 "operationId": "updatePetWithForm",
@@ -76,7 +202,7 @@
         "/api/kategori/{id}": {
             "get": {
                 "tags": [
-                    "kategori"
+                    "Kategori"
                 ],
                 "summary": "Get kategori by kategori id",
                 "operationId": "4e5f418e3df1ff50fadd87ced238b8eb",
@@ -100,7 +226,7 @@
             },
             "delete": {
                 "tags": [
-                    "kategori"
+                    "Kategori"
                 ],
                 "summary": "Deletes a kategori",
                 "operationId": "deletekategori",
@@ -115,8 +241,269 @@
                     "400": {
                         "description": "Invalid ID supplied"
                     },
+                    "200": {
+                        "description": "Data Berhasil Dihapus"
+                    },
                     "404": {
                         "description": "kategori not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/notifikasi": {
+            "get": {
+                "tags": [
+                    "Notifikasi"
+                ],
+                "summary": "Get notifikasi",
+                "operationId": "aa4ccfa5188e6787f5766f357f978e0c",
+                "responses": {
+                    "200": {
+                        "description": "Get notifikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pengunjung": {
+            "get": {
+                "tags": [
+                    "Pengunjung Perpustakaan"
+                ],
+                "summary": "Get pengunjung",
+                "operationId": "51257e27427a4a399660808722ea6a8d",
+                "responses": {
+                    "200": {
+                        "description": "Get pengunjung"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pengunjung Perpustakaan"
+                ],
+                "summary": "Post pengunjung",
+                "operationId": "bdecbef775c3dbb9aa8463c6ca75a1ba",
+                "responses": {
+                    "200": {
+                        "description": "Post pengunjung"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/qrcode": {
+            "get": {
+                "tags": [
+                    "Pengunjung Perpustakaan"
+                ],
+                "summary": "Get qrcode",
+                "operationId": "5ac4f4edab8a03963750d0a210da0e64",
+                "responses": {
+                    "200": {
+                        "description": "Get qrcode"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ruangan": {
+            "get": {
+                "tags": [
+                    "Ruangan"
+                ],
+                "summary": "Get ruangan",
+                "operationId": "7b0f055d366d39c9507e5745e4041fb3",
+                "responses": {
+                    "200": {
+                        "description": "Get ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ruangan"
+                ],
+                "summary": "Post ruangan",
+                "operationId": "501b0018500f06e12bd1e99044094401",
+                "responses": {
+                    "200": {
+                        "description": "Post ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ruangan/{id}": {
+            "get": {
+                "tags": [
+                    "Ruangan"
+                ],
+                "summary": "Get ruangan",
+                "operationId": "58ca6ab7cd1f35992dee0d8b6763d398",
+                "responses": {
+                    "200": {
+                        "description": "Get ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Ruangan"
+                ],
+                "summary": "Put ruangan",
+                "operationId": "6c20f884db5c055d1091e01ca328a6d2",
+                "responses": {
+                    "200": {
+                        "description": "Put ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ruangan"
+                ],
+                "summary": "DELETE ruangan",
+                "operationId": "d313cf6fa63f264748c6f6c1915db6ff",
+                "responses": {
+                    "200": {
+                        "description": "DELETE ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/jumlah-dokumen": {
+            "get": {
+                "tags": [
+                    "Statistik"
+                ],
+                "summary": "Get jumlah-dokumen",
+                "operationId": "b0e862743ed77a63bf45b54ef6f2b7b1",
+                "responses": {
+                    "200": {
+                        "description": "Get jumlah-dokumen"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/jumlah-peminjaman-dokumen": {
+            "get": {
+                "tags": [
+                    "Statistik"
+                ],
+                "summary": "Get jumlah-peminjaman-dokumen",
+                "operationId": "cbb9b975140e4dace365991dec7a6df4",
+                "responses": {
+                    "200": {
+                        "description": "Get jumlah-peminjaman-dokumen"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/jumlah-ruangan": {
+            "get": {
+                "tags": [
+                    "Statistik"
+                ],
+                "summary": "Get jumlah-ruangan",
+                "operationId": "a354908d1909b96cc144b42f6f1c8e5b",
+                "responses": {
+                    "200": {
+                        "description": "Get jumlah-ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/jumlah-peminjaman-ruangan": {
+            "get": {
+                "tags": [
+                    "Statistik"
+                ],
+                "summary": "Get jumlah-peminjaman-ruangan",
+                "operationId": "3ae675ae137e49b975947a8514f672c3",
+                "responses": {
+                    "200": {
+                        "description": "Get jumlah-peminjaman-ruangan"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/jumlah-pengunjung": {
+            "get": {
+                "tags": [
+                    "Statistik"
+                ],
+                "summary": "Get jumlah-pengunjung",
+                "operationId": "f2e0b7ecd9bdb4d88e9f7a63ee7cc01f",
+                "responses": {
+                    "200": {
+                        "description": "Get jumlah-pengunjung"
                     }
                 },
                 "security": [

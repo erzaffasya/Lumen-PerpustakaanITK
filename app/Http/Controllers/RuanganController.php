@@ -13,12 +13,30 @@ use Spatie\GoogleCalendar\Event;
 
 class RuanganController extends Controller
 {
+    /**
+     * @OA\Get(
+     *  path="/api/ruangan",
+     *  tags={"Ruangan"},
+     *  summary="Get ruangan",
+     *  @OA\Response(response=200, description="Get ruangan"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function index()
     {
         $Ruangan = Ruangan::all();
         return $this->successResponse($Ruangan);
     }
 
+    /**
+     * @OA\Post(
+     *  path="/api/ruangan",
+     *  tags={"Ruangan"},
+     *  summary="Post ruangan",
+     *  @OA\Response(response=200, description="Post ruangan"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make(
@@ -45,6 +63,15 @@ class RuanganController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan']);
     }
 
+    /**
+     * @OA\Get(
+     *  path="/api/ruangan/{id}",
+     *  tags={"Ruangan"},
+     *  summary="Get ruangan",
+     *  @OA\Response(response=200, description="Get ruangan"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function show($id)
     {
         $Ruangan = Ruangan::find($id);
@@ -55,6 +82,15 @@ class RuanganController extends Controller
         return $this->successResponse($Ruangan);
     }
 
+    /**
+     * @OA\Put(
+     *  path="/api/ruangan/{id}",
+     *  tags={"Ruangan"},
+     *  summary="Put ruangan",
+     *  @OA\Response(response=200, description="Put ruangan"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function update(Request $request, $id)
     {
 
@@ -73,6 +109,15 @@ class RuanganController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Diubah']);
     }
 
+    /**
+     * @OA\Delete(
+     *  path="/api/ruangan/{id}",
+     *  tags={"Ruangan"},
+     *  summary="DELETE ruangan",
+     *  @OA\Response(response=200, description="DELETE ruangan"),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function destroy($id)
     {
         $Ruangan = Ruangan::find($id);

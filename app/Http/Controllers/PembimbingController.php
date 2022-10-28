@@ -13,9 +13,6 @@ class PembimbingController extends Controller
     public function index()
     {
         $Pembimbing = PembimbingResource::collection(Pembimbing::all());
-        // dd (Helper::cek_batasan_dokumen(6));
-
-
         return $this->successResponse($Pembimbing);
     }
 
@@ -31,7 +28,7 @@ class PembimbingController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-     
+
         $Pembimbing = new Pembimbing(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
         $Pembimbing->save();
 

@@ -37,7 +37,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
     $router->get('profile', 'AuthController@me');
 
-    // Ruangan Baca 
+    // Ruangan 
     $router->get('ruangan', 'RuanganController@index');
     $router->post('ruangan', 'RuanganController@store');
     $router->get('ruangan/{id}', 'RuanganController@show');
@@ -104,10 +104,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->delete('user/{id}', 'UserController@destroy');
 
     //Statistik
-    $router->get('jumlah-dokumen','StatistikController@jumlahDokumen');
-    $router->get('jumlah-peminjaman-dokumen','StatistikController@jumlahPeminjamanDokumen');
-    $router->get('jumlah-ruangan','StatistikController@jumlahRuangan');
-    $router->get('jumlah-peminjaman-ruangan','StatistikController@jumlahPeminjamanRuangan');
-    
-    $router->get('jumlah-pengunjung','StatistikController@jumlahPengunjung');
+    $router->get('jumlah-dokumen', 'StatistikController@jumlahDokumen');
+    $router->get('jumlah-peminjaman-dokumen', 'StatistikController@jumlahPeminjamanDokumen');
+    $router->get('jumlah-ruangan', 'StatistikController@jumlahRuangan');
+    $router->get('jumlah-peminjaman-ruangan', 'StatistikController@jumlahPeminjamanRuangan');
+    $router->get('jumlah-pengunjung', 'StatistikController@jumlahPengunjung');
 });
