@@ -10,10 +10,12 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Notifications\Notifiable;
 use Shetabit\Visitor\Traits\Visitable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
-    use Authenticatable, Authorizable, Notifiable, Visitable;
+    use Authenticatable, Authorizable, Notifiable, Visitable, HasFactory;
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

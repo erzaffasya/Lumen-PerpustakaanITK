@@ -2,15 +2,14 @@
 
 namespace Tests;
 
-use App\Models\Bookmark;
-use App\Models\Dokumen;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class Iterasi2Test extends TestCase
 {
+    use DatabaseTransactions;
+    
     public function test_lihat_bookmark()
     {
         $user = User::factory()->create();

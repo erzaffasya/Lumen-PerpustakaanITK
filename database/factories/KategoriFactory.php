@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Kategori;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserFactory extends Factory
+class KategoriFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Kategori::class;
 
     /**
      * Define the model's default state.
@@ -22,9 +22,10 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('123123123')
+            'nama_kategori' => $this->faker->words(2,true),
+            'detail' => $this->faker->words(2,true),
+            'berkas' =>  $this->faker->words(2,true),
+            'isPembimbing' => $this->faker->randomDigit(),
         ];
     }
 }

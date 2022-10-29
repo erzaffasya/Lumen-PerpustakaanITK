@@ -35,7 +35,7 @@ $router->group(['prefix' => 'api'], function ($router) {
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
     $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
-    $router->get('profile', 'AuthController@me');
+    $router->get('profil', 'AuthController@me');
 
     // Ruangan 
     $router->get('ruangan', 'RuanganController@index');
