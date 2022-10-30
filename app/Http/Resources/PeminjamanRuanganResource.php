@@ -19,7 +19,7 @@ class PeminjamanRuanganResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => User::find($this->user_id),
+            'user' => User::select('name','email','nim','jurusan','prodi','angkatan','role')->find($this->user_id),
             'kode' => $this->kode,
             'ruangan' => Ruangan::find($this->ruangan_id),
             'tanggal' => $this->tanggal,

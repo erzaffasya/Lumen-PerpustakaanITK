@@ -33,8 +33,8 @@ class PeminjamanRuanganFactory extends Factory
             'waktu_awal' => $this->faker->time(),
             'waktu_akhir' => $this->faker->time(),
             'keperluan' =>  $this->faker->paragraph(),
-            'status' =>  $this->faker->boolean(),
-            'catatan' => $this->faker->randomElement(['Menunggu', 'Diterima', 'Ditolak']),
+            'status' =>  $this->faker->randomElement(['Menunggu', 'Diterima', 'Ditolak']),
+            'catatan' => $this->faker->paragraph(),
         ];
     }
 }

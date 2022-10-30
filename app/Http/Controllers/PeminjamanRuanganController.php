@@ -16,7 +16,13 @@ class PeminjamanRuanganController extends Controller
 {
     public function index()
     {
-        $PeminjamanRuangan = PeminjamanRuanganResource::collection(PeminjamanRuangan::all());
+        if (Auth::user()->role != "Admin") {
+            $Peminjaman = PeminjamanRuangan::where('user_id',  Auth::id())->get();
+        } else {
+            $Peminjaman = PeminjamanRuangan::all();
+        }
+
+        $PeminjamanRuangan = PeminjamanRuanganResource::collection($Peminjaman);
         return $this->successResponse($PeminjamanRuangan);
     }
 
@@ -25,7 +31,7 @@ class PeminjamanRuanganController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'ruangan_id' => 'required',
+                'ruangan' => 'required',
                 'tanggal' => 'required',
                 'waktu_awal' => 'required',
                 'waktu_akhir' => 'required',
