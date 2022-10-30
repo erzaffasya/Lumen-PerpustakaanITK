@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Dokumen;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookmarkResource extends JsonResource
@@ -17,7 +18,7 @@ class BookmarkResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'user_id' => $this->user($this->user_id),
             // 'dokumen_id' => $this->dokumen_id,
             'dokumen' => $this->dokumen($this->dokumen_id),
             'created_at' => $this->created_at,
@@ -26,7 +27,12 @@ class BookmarkResource extends JsonResource
     }
 
     public function dokumen($id){
-        $data = Dokumen::find($id);
+        $data = Dokumen::select('id','judul','tahun_terbit','nama_pengarang','kategori_id','created_at','updated_at')->find($id);
+        return $data;
+    }
+
+    public function user($id){
+        $data = User::select('name','email','nim','jurusan','prodi','angkatan','role')->find($id);
         return $data;
     }
 }

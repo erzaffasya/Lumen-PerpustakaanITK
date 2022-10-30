@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\Dokumen;
 use App\Models\User;
 use Tests\TestCase;
 use Laravel\Lumen\Testing\DatabaseTransactions;
@@ -9,15 +10,47 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 class Iterasi2Test extends TestCase
 {
     use DatabaseTransactions;
-    
-    public function test_lihat_bookmark()
+
+    public function test_lihat_dokumen()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user)
-            ->get(url('/api/bookmark'));
+            ->get(url('/api/dokumen'));
 
-         $this->assertTrue(true);
+        $this->assertTrue(true);
     }
 
-  
+    public function test_tambah_dokumen()
+    {
+        $user = User::factory()->create();
+        $dokumen = Dokumen::factory()->create();
+
+        $this->actingAs($user)
+            ->post(url('/api/dokumen', $dokumen));
+
+        $this->assertTrue(true);
+    }
+
+    public function test_ubah_dokumen()
+    {
+        $user = User::factory()->create();
+        $dokumen = Dokumen::factory()->create();
+
+        $this->actingAs($user)
+            ->put(url('/api/dokumen/' . $dokumen->id, $dokumen));
+
+        $this->assertTrue(true);
+    }
+
+    public function test_hapus_dokumen()
+    {
+        $user = User::factory()->create();
+        $dokumen = Dokumen::factory()->create();
+
+        $this->actingAs($user)
+            ->delete(url('/api/dokumen/' . $dokumen->id));
+
+        $this->assertTrue(true);
+    }
+
 }

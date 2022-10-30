@@ -455,7 +455,7 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Ditambahkan']);
     }
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
         $showDokumen = Dokumen::findOrFail($id);
         $Dokumen = new DokumenResource($showDokumen);
@@ -466,7 +466,6 @@ class DokumenController extends Controller
         $user = User::find(Auth::id());
         $showDokumen->createVisitLog($user);
 
-        // return $showDokumen->visitLogs()->count();
         return $this->successResponse($Dokumen);
     }
 
@@ -622,6 +621,8 @@ class DokumenController extends Controller
         $Dokumen->status = $request->status;
         $Dokumen->catatan = $request->catatan;
         $Dokumen->save();
+
+        // return $request;
 
         $revisi_data = [
             'judul' => 'Perubahan Status Dokumen',

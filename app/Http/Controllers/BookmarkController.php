@@ -23,6 +23,11 @@ class BookmarkController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role != "Admin") {
+            $Bookmark = Bookmark::where('user_id',  Auth::id())->get();
+        } else {
+            $Bookmark = Bookmark::all();
+        }
         $Bookmark = BookmarkResource::collection(Bookmark::all());
         return $this->successResponse($Bookmark);
     }
