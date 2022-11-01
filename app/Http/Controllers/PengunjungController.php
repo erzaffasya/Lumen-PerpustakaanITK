@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PengunjungResource;
 use App\Models\Pengunjung;
+use App\Models\User;
 use Carbon\Carbon;
 
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PengunjungController extends Controller
@@ -63,7 +65,7 @@ class PengunjungController extends Controller
      */
     public function store()
     {
-        $cekPengunjung = Pengunjung::whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
+        $cekPengunjung = Pengunjung::where('user_id', Auth::id())->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
             ->first();
 
         if ($cekPengunjung) {
@@ -71,6 +73,27 @@ class PengunjungController extends Controller
         } else {
             $Pengunjung = new Pengunjung();
             $Pengunjung->user_id = Auth::id();
+            $Pengunjung->save();
+            return $this->successResponse(['status' => true, 'message' => 'Checkin Berhasil Dilakukan']);
+        }
+    }
+
+    public function tambahPengunjung(Request $request)
+    {   
+        // dd(request()->all());
+        $cekData = User::where('nim',$request->nim)->first();
+        if(!$cekData){
+            return $this->errorResponse('Data Tidak Ditemukan', 422);
+        }
+        // dd($cekData);
+        $cekPengunjung = Pengunjung::where('user_id',$cekData->id)->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
+        ->first();
+        // dd($cekPengunjung);
+        if ($cekPengunjung) {
+            return $this->errorResponse('Anda Sudah Checkin', 422);
+        } else {
+            $Pengunjung = new Pengunjung();
+            $Pengunjung->user_id = $cekData->id;
             $Pengunjung->save();
             return $this->successResponse(['status' => true, 'message' => 'Checkin Berhasil Dilakukan']);
         }

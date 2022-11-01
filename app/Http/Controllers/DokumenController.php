@@ -19,7 +19,7 @@ class DokumenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Dokumen::all();
+        $query = Dokumen::paginate(10);
         if ($request->status) {
             if ($request->status != 'Riwayat') {
                 $query = $query->where('status', $request->status);
@@ -30,7 +30,7 @@ class DokumenController extends Controller
         if (Auth::user()->role != 'Admin') {
             $query->where('user_id', Auth::user()->id);
         }
-        $Dokumen = DokumenResource::collection($query);
+        $Dokumen = DokumenResource::collection($query)->response()->getData(true);
         return $this->successResponse($Dokumen);
     }
 

@@ -30,6 +30,7 @@ $router->group(['prefix' => 'api'], function ($router) {
 
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->get('/pengunjung', 'PengunjungController@index');
+    $router->post('/pengunjung', 'PengunjungController@tambahPengunjung');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
