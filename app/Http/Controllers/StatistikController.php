@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PengunjungResource;
 use App\Models\Dokumen;
 use App\Models\PeminjamanDokumen;
 use App\Models\PeminjamanRuangan;
@@ -95,5 +96,7 @@ class StatistikController extends Controller
     }
     public function pengunjungTerbaru()
     {
+        $Pengunjung = PengunjungResource::collection(Pengunjung::limit(10)->latest()->get());
+        return $this->successResponse($Pengunjung);
     }
 }

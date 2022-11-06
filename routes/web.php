@@ -110,4 +110,5 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('jumlah-ruangan', 'StatistikController@jumlahRuangan');
     $router->get('jumlah-peminjaman-ruangan', 'StatistikController@jumlahPeminjamanRuangan');
     $router->get('jumlah-pengunjung', 'StatistikController@jumlahPengunjung');
+    $router->get('pengunjung-terakhir', 'StatistikController@pengunjungTerbaru');
 });
