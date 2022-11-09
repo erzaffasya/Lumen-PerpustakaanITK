@@ -47,7 +47,7 @@ class PengunjungController extends Controller
             new RendererStyle(400),
             new ImagickImageBackEnd()
         );
-        $url = url("/checkin-pengunjung");
+        $url = url("/api/checkin-pengunjung");
         $writer = new Writer($renderer);
         $qr_image = base64_encode($writer->writeString($url));
 

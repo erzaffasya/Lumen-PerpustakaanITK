@@ -111,4 +111,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('jumlah-peminjaman-ruangan', 'StatistikController@jumlahPeminjamanRuangan');
     $router->get('jumlah-pengunjung', 'StatistikController@jumlahPengunjung');
     $router->get('pengunjung-terakhir', 'StatistikController@pengunjungTerbaru');
+    $router->get('grafik-pengunjung', 'StatistikController@grafikPengunjung');
+    $router->get('peminjaman-dokumen-populer', 'StatistikController@peminjamanDokumenPopuler');
+    $router->get('peminjaman-ruangan-populer', 'StatistikController@peminjamanRuanganPopuler');
 });
