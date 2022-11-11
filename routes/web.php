@@ -103,6 +103,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('user/{id}', 'UserController@show');
     $router->put('user/{id}', 'UserController@update');
     $router->delete('user/{id}', 'UserController@destroy');
+    $router->post('bebas-pustaka', 'UserController@bebasPustaka');
 
     //Statistik
     $router->get('jumlah-dokumen', 'StatistikController@jumlahDokumen');

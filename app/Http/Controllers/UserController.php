@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Helper;
 use App\Http\Resources\UserResource;
+use App\Models\Dokumen;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,9 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->role){
-            $user = User::where('role',$request->role)->paginate(10);
-        }else{
+        if ($request->role) {
+            $user = User::where('role', $request->role)->paginate(10);
+        } else {
             $user = User::paginate(10);
         }
 
@@ -83,5 +84,25 @@ class UserController extends Controller
 
         $User->delete();
         return $this->successResponse(['status' => true, 'message' => 'User Berhasil Dihapus']);
+    }
+
+    public function bebasPustaka()
+    {
+        try {
+            User::where('nim', request()->nim)->firstOrFail();
+        } catch (\Throwable $th) {
+            return $this->errorResponse('NIM tidak ditemukan', 400);
+        }
+
+        $getData = Dokumen::select('*')
+            ->join('kategori', 'kategori.id', 'dokumen.kategori_id')
+            ->join('users', 'users.id', 'dokumen.user_id')
+            ->where('nim', request()->nim)
+            ->where('status', 'Diterima')
+            ->pluck('nama_kategori')->toArray();
+        if (in_array('Kerja Praktek', $getData) && in_array('Tugas Akhir', $getData)) {
+            return $this->successResponse('Anda sudah bebas pustaka!');
+        }
+        return $this->errorResponse('Anda belum bebas pustaka', 400);
     }
 }
