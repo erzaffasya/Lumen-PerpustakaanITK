@@ -26,7 +26,6 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
-    $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
 
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->get('/pengunjung', 'PengunjungController@index');
@@ -73,11 +72,13 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('dokumen/{id}', 'DokumenController@show');
     $router->put('dokumen/{id}', 'DokumenController@update');
     $router->delete('dokumen/{id}', 'DokumenController@destroy');
-    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
-
+    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');    
+    
     // $router->get('/dokumen/{id}/download', [DokumenController::class, 'download']);
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
+    $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
     // $router->get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
+    $router->get('dokumen/riwayat-peminjaman/{id}', 'PeminjamanDokumenController@riwayatPeminjaman');
 
     //Peminjaman
     $router->get('peminjaman-dokumen', 'PeminjamanDokumenController@index');
@@ -115,4 +116,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('grafik-pengunjung', 'StatistikController@grafikPengunjung');
     $router->get('peminjaman-dokumen-populer', 'StatistikController@peminjamanDokumenPopuler');
     $router->get('peminjaman-ruangan-populer', 'StatistikController@peminjamanRuanganPopuler');
+
+    //Aktif
+    $router->get('peminjaman-ruangan-aktif', 'PeminjamanRuanganController@peminjamanRuanganAktif');
+    $router->get('peminjaman-dokumen-aktif', 'PeminjamanDokumenController@peminjamanDokumenAktif');
+
 });

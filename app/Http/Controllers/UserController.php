@@ -100,6 +100,7 @@ class UserController extends Controller
             ->where('nim', request()->nim)
             ->where('status', 'Diterima')
             ->pluck('nama_kategori')->toArray();
+
         if (in_array('Kerja Praktek', $getData) && in_array('Tugas Akhir', $getData)) {
             return $this->successResponse('Anda sudah bebas pustaka!');
         }

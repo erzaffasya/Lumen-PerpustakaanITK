@@ -106,11 +106,15 @@ class PeminjamanDokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Dihapus']);
     }
 
-    // public function riwayatPeminjamanDokumen()
-    // {
-    //     $Peminjaman = PeminjamanDokumen::where('tgl_pengembalian', '>', Carbon::now())->get();
-    //     $dataPeminjaman = PeminjamanDokumenResource::collection($Peminjaman);
+    public function riwayatPeminjaman($id)
+    {
+        $getRiwayat = PeminjamanDokumenResource::collection(PeminjamanDokumen::where('dokumen_id',$id)->orderBy('created_at','DESC')->get()) ;
+        return $this->successResponse($getRiwayat);
+    }
 
-    //     return $this->successResponse($dataPeminjaman);
-    // }
+    public function peminjamanDokumenAktif()
+    {
+        $cekPeminjamanDokumen = PeminjamanDokumenResource::collection(PeminjamanDokumen::where('tgl_pengembalian', '>', Carbon::now())->get());
+        return $this->successResponse($cekPeminjamanDokumen);
+    }
 }

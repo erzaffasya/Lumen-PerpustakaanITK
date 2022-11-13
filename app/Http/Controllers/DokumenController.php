@@ -34,7 +34,12 @@ class DokumenController extends Controller
         return $this->successResponse($Dokumen);
     }
 
-    public function downloadFile($id, $data){
+    public function downloadFile($id, $data)
+    {
+        if (Auth::user()->role != 'Admin' && Auth::user()->role != 'Dosen') {
+            return $this->errorResponse('Anda Tidak Memiliki Akses Untuk Mendownload Berkas', 403);
+        }
+        
         $dokumen = Dokumen::find($id);
         switch ($data) {
             case 'cover':
@@ -104,9 +109,9 @@ class DokumenController extends Controller
         }
 
         $myFile = public_path($file);
-    	$headers = ['Content-Type: application/pdf'];
-    	$newName = $dokumen->judul.'-'.$data.'.pdf';
-    	return response()->download($myFile, $newName, $headers);
+        $headers = ['Content-Type: application/pdf'];
+        $newName = $dokumen->judul . '-' . $data . '.pdf';
+        return response()->download($myFile, $newName, $headers);
     }
 
     public function showfile($id, $data)
@@ -184,55 +189,55 @@ class DokumenController extends Controller
         $response->header('Content-Type', 'application/pdf');
         return $response;
     }
-    public function view($id, $data)
-    {
-        $dokumen = Dokumen::find($id);
-        switch ($data) {
-            case 'cover':
-                return redirect($dokumen->cover);
-                break;
-            case 'abstract_en':
-                return redirect($dokumen->abstract_en);
-                break;
-            case 'abstract_id':
-                return redirect($dokumen->abstract_id);
-                break;
-            case 'bab1':
-                return redirect($dokumen->bab1);
-                break;
-            case 'bab2':
-                return redirect($dokumen->bab2);
-                break;
-            case 'bab3':
-                return redirect($dokumen->bab3);
-                break;
-            case 'bab4':
-                return redirect($dokumen->bab4);
-                break;
-            case 'kesimpulan':
-                return redirect($dokumen->kesimpulan);
-                break;
-            case 'daftar_pustaka':
-                return redirect($dokumen->daftar_pustaka);
-                break;
-            case 'paper':
-                return redirect($dokumen->paper);
-                break;
-            case 'lembar_persetujuan':
-                return redirect($dokumen->lembar_persetujuan);
-                break;
-            case 'full_dokumen':
-                return redirect($dokumen->full_dokumen);
-                break;
-            default:
-        }
-        // $lst = explode('/', $dokumen->cover);
+    // public function view($id, $data)
+    // {
+    //     $dokumen = Dokumen::find($id);
+    //     switch ($data) {
+    //         case 'cover':
+    //             return redirect($dokumen->cover);
+    //             break;
+    //         case 'abstract_en':
+    //             return redirect($dokumen->abstract_en);
+    //             break;
+    //         case 'abstract_id':
+    //             return redirect($dokumen->abstract_id);
+    //             break;
+    //         case 'bab1':
+    //             return redirect($dokumen->bab1);
+    //             break;
+    //         case 'bab2':
+    //             return redirect($dokumen->bab2);
+    //             break;
+    //         case 'bab3':
+    //             return redirect($dokumen->bab3);
+    //             break;
+    //         case 'bab4':
+    //             return redirect($dokumen->bab4);
+    //             break;
+    //         case 'kesimpulan':
+    //             return redirect($dokumen->kesimpulan);
+    //             break;
+    //         case 'daftar_pustaka':
+    //             return redirect($dokumen->daftar_pustaka);
+    //             break;
+    //         case 'paper':
+    //             return redirect($dokumen->paper);
+    //             break;
+    //         case 'lembar_persetujuan':
+    //             return redirect($dokumen->lembar_persetujuan);
+    //             break;
+    //         case 'full_dokumen':
+    //             return redirect($dokumen->full_dokumen);
+    //             break;
+    //         default:
+    //     }
+    //     // $lst = explode('/', $dokumen->cover);
 
-        // $txt = '/api/' . $dokumen->user_id . '/view/' . $lst[3];
-        // dd($txt);
-        // return redirect('/api/dokumen/' . $dokumen->user_id . '/view/' . $lst[3]);
+    //     // $txt = '/api/' . $dokumen->user_id . '/view/' . $lst[3];
+    //     // dd($txt);
+    //     // return redirect('/api/dokumen/' . $dokumen->user_id . '/view/' . $lst[3]);
 
-    }
+    // }
 
     public function view_dokumen($id, $file_name)
     {
@@ -615,8 +620,9 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }
 
-    public function revisiDokumen(Request $request,$id)
+    public function revisiDokumen(Request $request, $id)
     {
+        // dd('erza');
         $Dokumen = Dokumen::find($id);
         $Dokumen->status = $request->status;
         $Dokumen->catatan = $request->catatan;
@@ -626,11 +632,13 @@ class DokumenController extends Controller
 
         $revisi_data = [
             'judul' => 'Perubahan Status Dokumen',
-            'pesan' => 'Status Dokumen '.$Dokumen->judul.' '.$Dokumen->status.'!',
+            'pesan' => 'Status Dokumen ' . $Dokumen->judul . ' ' . $Dokumen->status . '!',
         ];
         $user = User::find(Auth::user()->id);
         Notification::send($user, new NotifRevisi($revisi_data));
 
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
+
+
 }
