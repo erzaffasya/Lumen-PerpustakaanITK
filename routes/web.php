@@ -27,9 +27,11 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->post('refresh', 'AuthController@refresh');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
 
-    $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->get('/pengunjung', 'PengunjungController@index');
     $router->post('/pengunjung', 'PengunjungController@tambahPengunjung');
+    $router->delete('/pengunjung', 'PengunjungController@destroy');
+    
+    $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
@@ -113,7 +115,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('jumlah-peminjaman-ruangan', 'StatistikController@jumlahPeminjamanRuangan');
     $router->get('jumlah-pengunjung', 'StatistikController@jumlahPengunjung');
     $router->get('pengunjung-terakhir', 'StatistikController@pengunjungTerbaru');
-    $router->get('grafik-pengunjung', 'StatistikController@grafikPengunjung');
+    $router->get('grafik-perpustakaan', 'StatistikController@grafikPerpustakaan');
     $router->get('peminjaman-dokumen-populer', 'StatistikController@peminjamanDokumenPopuler');
     $router->get('peminjaman-ruangan-populer', 'StatistikController@peminjamanRuanganPopuler');
 

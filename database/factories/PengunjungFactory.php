@@ -2,17 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\Dokumen;
+use App\Models\PeminjamanDokumen;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserFactory extends Factory
+class PengunjungFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = PeminjamanDokumen::class;
 
     /**
      * Define the model's default state.
@@ -21,11 +23,9 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $User = User::factory()->create();
         return [
-            'name' => $this->faker->name,
-            'nim' => $this->faker->randomDigit(),
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('123123123')
+            'user_id' => $User->id,
         ];
     }
 }

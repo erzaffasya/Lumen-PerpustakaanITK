@@ -129,26 +129,64 @@ class StatistikController extends Controller
         return $this->successResponse($Pengunjung);
     }
 
-    public function grafikPengunjung()
+    public function grafikPerpustakaan()
     {
-        $Pengunjung = Pengunjung::select(
+        $Pengunjungs = Pengunjung::select(
             DB::raw('count(id) as total_pengunjung'),
             DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
-        )->groupBy('bulan')
+        )->groupBy('bulan')->whereYear('created_at', date('Y'))
             ->orderBy('bulan', 'ASC')
             ->get();
 
+        $PeminjamanDokumens = PeminjamanDokumen::select(
+            DB::raw('count(id) as total_peminjaman_dokumen'),
+            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+        )->groupBy('bulan')->whereYear('created_at', date('Y'))
+            ->orderBy('bulan', 'ASC')
+            ->get();
 
+        $PeminjamanRuangans = PeminjamanRuangan::select(
+            DB::raw('count(id) as total_peminjaman_ruangan'),
+            DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
+        )->groupBy('bulan')->whereYear('tanggal', date('Y'))
+            ->orderBy('bulan', 'ASC')
+            ->get();
+
+        $arrayStatistik = [
+            'jumlah_pengunjung' => 0,
+            'jumlah_peminjaman_dokumen' => 0,
+            'jumlah_peminjaman_ruangan' => 0
+        ];
+        
         for ($i = 1; $i <= 12; $i++) {
-            foreach ($Pengunjung as $item) {
+            $arrayStatistik['detail'][$i] = [
+                'total_pengunjung' => 0,
+                'total_peminjaman_dokumen' => 0,
+                'total_peminjaman_ruangan' => 0
+            ];
+
+            foreach ($Pengunjungs as $Pengunjung) {
+                if ($Pengunjung->bulan == $i) {
+                    $arrayStatistik['jumlah_pengunjung'] = $arrayStatistik['jumlah_pengunjung'] + $Pengunjung->total_pengunjung;
+                    $arrayStatistik['detail'][$i] = array_merge($arrayStatistik['detail'][$i], ['total_pengunjung' => $Pengunjung->total_pengunjung]);
+                }
             }
-            if ((int)$item->bulan == $i) {
-                $data[] = $item->total_pengunjung;
-            } else {
-                $data[] = 0;
+
+            foreach ($PeminjamanDokumens as $PeminjamanDokumen) {
+                if ($PeminjamanDokumen->bulan == $i) {
+                    $arrayStatistik['jumlah_peminjaman_dokumen'] = $arrayStatistik['jumlah_peminjaman_dokumen'] + $PeminjamanDokumen->total_peminjaman_dokumen;
+                    $arrayStatistik['detail'][$i] = array_merge($arrayStatistik['detail'][$i], ['total_peminjaman_dokumen' => $PeminjamanDokumen->total_peminjaman_dokumen]);
+                }
+            }
+
+            foreach ($PeminjamanRuangans as $PeminjamanRuangan) {
+                if ($PeminjamanRuangan->bulan == $i) {
+                    $arrayStatistik['jumlah_peminjaman_ruangan'] = $arrayStatistik['jumlah_peminjaman_ruangan'] + $PeminjamanRuangan->total_peminjaman_ruangan;
+                    $arrayStatistik['detail'][$i] = array_merge($arrayStatistik['detail'][$i], ['total_peminjaman_ruangan' => $PeminjamanRuangan->total_peminjaman_ruangan]);
+                }
             }
         }
 
-        return $this->successResponse($data);
+        return $this->successResponse($arrayStatistik);
     }
 }

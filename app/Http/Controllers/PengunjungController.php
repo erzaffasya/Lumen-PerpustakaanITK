@@ -65,7 +65,8 @@ class PengunjungController extends Controller
      */
     public function store()
     {
-        $cekPengunjung = Pengunjung::where('user_id', Auth::id())->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
+        $cekPengunjung = Pengunjung::where('user_id', Auth::id())
+            ->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
             ->first();
 
         if ($cekPengunjung) {
@@ -79,15 +80,16 @@ class PengunjungController extends Controller
     }
 
     public function tambahPengunjung(Request $request)
-    {   
+    {
         // dd(request()->all());
-        $cekData = User::where('nim',$request->nim)->first();
-        if(!$cekData){
+        $cekData = User::where('nim', $request->nim)->first();
+        if (!$cekData) {
             return $this->errorResponse('Data Tidak Ditemukan', 422);
         }
         // dd($cekData);
-        $cekPengunjung = Pengunjung::where('user_id',$cekData->id)->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
-        ->first();
+        $cekPengunjung = Pengunjung::where('user_id', $cekData->id)
+            ->whereBetween('created_at', [Carbon::now()->subMinutes(120), Carbon::now()])
+            ->first();
         // dd($cekPengunjung);
         if ($cekPengunjung) {
             return $this->errorResponse('Anda Sudah Checkin', 422);
@@ -97,5 +99,16 @@ class PengunjungController extends Controller
             $Pengunjung->save();
             return $this->successResponse(['status' => true, 'message' => 'Checkin Berhasil Dilakukan']);
         }
+    }
+
+    public function destroy($id)
+    {
+        $Pengunjung = Pengunjung::find($id);
+        if (!$Pengunjung) {
+            return $this->errorResponse('Data tidak ditemukan', 422);
+        }
+
+        $Pengunjung->delete();
+        return $this->successResponse(['status' => true, 'message' => 'Pengunjung Berhasil Dihapus']);
     }
 }
