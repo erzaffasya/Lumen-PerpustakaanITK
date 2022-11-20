@@ -13,7 +13,8 @@ class Kategori extends Model
         'nama_kategori',
         'detail',
         'berkas',
-        'isPembimbing'
+        'isPembimbing',
+        'isDeleted'
     ];
 
     protected $primaryKey = 'id';
