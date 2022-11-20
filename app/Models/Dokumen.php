@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Shetabit\Visitor\Traits\Visitable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Dokumen extends Model
 {
-    use HasFactory,Visitable;
+    use HasFactory,Visitable,SoftDeletes;
     protected $table = 'dokumen';
     protected $guarded = [];
 

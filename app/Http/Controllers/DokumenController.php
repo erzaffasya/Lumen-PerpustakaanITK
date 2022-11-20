@@ -189,56 +189,7 @@ class DokumenController extends Controller
         $response->header('Content-Type', 'application/pdf');
         return $response;
     }
-    // public function view($id, $data)
-    // {
-    //     $dokumen = Dokumen::find($id);
-    //     switch ($data) {
-    //         case 'cover':
-    //             return redirect($dokumen->cover);
-    //             break;
-    //         case 'abstract_en':
-    //             return redirect($dokumen->abstract_en);
-    //             break;
-    //         case 'abstract_id':
-    //             return redirect($dokumen->abstract_id);
-    //             break;
-    //         case 'bab1':
-    //             return redirect($dokumen->bab1);
-    //             break;
-    //         case 'bab2':
-    //             return redirect($dokumen->bab2);
-    //             break;
-    //         case 'bab3':
-    //             return redirect($dokumen->bab3);
-    //             break;
-    //         case 'bab4':
-    //             return redirect($dokumen->bab4);
-    //             break;
-    //         case 'kesimpulan':
-    //             return redirect($dokumen->kesimpulan);
-    //             break;
-    //         case 'daftar_pustaka':
-    //             return redirect($dokumen->daftar_pustaka);
-    //             break;
-    //         case 'paper':
-    //             return redirect($dokumen->paper);
-    //             break;
-    //         case 'lembar_persetujuan':
-    //             return redirect($dokumen->lembar_persetujuan);
-    //             break;
-    //         case 'full_dokumen':
-    //             return redirect($dokumen->full_dokumen);
-    //             break;
-    //         default:
-    //     }
-    //     // $lst = explode('/', $dokumen->cover);
-
-    //     // $txt = '/api/' . $dokumen->user_id . '/view/' . $lst[3];
-    //     // dd($txt);
-    //     // return redirect('/api/dokumen/' . $dokumen->user_id . '/view/' . $lst[3]);
-
-    // }
-
+  
     public function view_dokumen($id, $file_name)
     {
         // Check if file exists in app/storage/file folder
@@ -341,22 +292,22 @@ class DokumenController extends Controller
             $Dokumen->daftar_notasi = $daftar_notasi;
         }
         // // abstract_en 
-        // if ($request->abstract_en != null) {
-        //     $file_ext = $request->abstract_en->extension();
-        //     $file_name = 'abstract_en_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $abstract_en = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->abstract_en->move("storage/documents/$Dokumen->user_id",  $file_name);
-        //     $Dokumen->abstract_en = $abstract_en;
-        // }
+        if ($request->abstract_en != null) {
+            $file_ext = $request->abstract_en->extension();
+            $file_name = 'abstract_en_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $abstract_en = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->abstract_en->move("storage/documents/$Dokumen->user_id",  $file_name);
+            $Dokumen->abstract_en = $abstract_en;
+        }
 
         // // abstract_id 
-        // if ($request->abstract_id != null) {
-        //     $file_ext = $request->abstract_id->extension();
-        //     $file_name = 'abstract_id_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $abstract_id = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->abstract_id->move("storage/documents/$Dokumen->user_id", $file_name);
-        //     $Dokumen->abstract_id = $abstract_id;
-        // }
+        if ($request->abstract_id != null) {
+            $file_ext = $request->abstract_id->extension();
+            $file_name = 'abstract_id_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $abstract_id = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->abstract_id->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->abstract_id = $abstract_id;
+        }
 
         // bab1 
         if ($request->bab1 != null) {
@@ -400,41 +351,41 @@ class DokumenController extends Controller
             $request->file('lampiran')->move("storage/documents/$Dokumen->user_id", $file_name);
             $Dokumen->lampiran = $lampiran;
         }
-        // // kesimpulan 
-        // if ($request->kesimpulan != null) {
-        //     $file_ext = $request->kesimpulan->extension();
-        //     $file_name = 'kesimpulan_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $kesimpulan = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->kesimpulan->move("storage/documents/$Dokumen->user_id", $file_name);
-        //     $Dokumen->kesimpulan = $kesimpulan;
-        // }
+        // kesimpulan 
+        if ($request->kesimpulan != null) {
+            $file_ext = $request->kesimpulan->extension();
+            $file_name = 'kesimpulan_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $kesimpulan = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->kesimpulan->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->kesimpulan = $kesimpulan;
+        }
 
-        // // daftar_pustaka 
-        // if ($request->daftar_pustaka != null) {
-        //     $file_ext = $request->daftar_pustaka->extension();
-        //     $file_name = 'daftar_pustaka_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $daftar_pustaka = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->daftar_pustaka->move("storage/documents/$Dokumen->user_id", $file_name);
-        //     $Dokumen->daftar_pustaka = $daftar_pustaka;
-        // }
+        // daftar_pustaka 
+        if ($request->daftar_pustaka != null) {
+            $file_ext = $request->daftar_pustaka->extension();
+            $file_name = 'daftar_pustaka_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $daftar_pustaka = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->daftar_pustaka->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->daftar_pustaka = $daftar_pustaka;
+        }
 
-        // // paper 
-        // if ($request->paper != null) {
-        //     $file_ext = $request->paper->extension();
-        //     $file_name = 'paper_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $paper = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->paper->move("storage/documents/$Dokumen->user_id", $file_name);
-        //     $Dokumen->paper = $paper;
-        // }
+        // paper 
+        if ($request->paper != null) {
+            $file_ext = $request->paper->extension();
+            $file_name = 'paper_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $paper = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->paper->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->paper = $paper;
+        }
 
-        // // lembar_persetujuan 
-        // if ($request->lembar_persetujuan != null) {
-        //     $file_ext = $request->lembar_persetujuan->extension();
-        //     $file_name = 'lembar_persetujuan_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
-        //     $lembar_persetujuan = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
-        //     $request->lembar_persetujuan->move("storage/documents/$Dokumen->user_id", $file_name);
-        //     $Dokumen->lembar_persetujuan = $lembar_persetujuan;
-        // }
+        // lembar_persetujuan 
+        if ($request->lembar_persetujuan != null) {
+            $file_ext = $request->lembar_persetujuan->extension();
+            $file_name = 'lembar_persetujuan_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $lembar_persetujuan = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->lembar_persetujuan->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->lembar_persetujuan = $lembar_persetujuan;
+        }
 
         // full_dokumen 
         if ($request->full_dokumen != null) {
@@ -640,5 +591,8 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
 
+    public function cekDokumenPerjurusan(){
+        $cekDokumen = Dokumen::join('users','users.id','dokumen.user_id')->get();
+    }
 
 }

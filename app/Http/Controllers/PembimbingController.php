@@ -32,7 +32,7 @@ class PembimbingController extends Controller
         $Pembimbing = new Pembimbing(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
         $Pembimbing->save();
 
-        return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Ditambahkan']);
+        return $this->successResponse(['status' => true, 'message' => 'Pembimbing Berhasil Ditambahkan']);
     }
 
     public function show($id)
@@ -58,7 +58,7 @@ class PembimbingController extends Controller
             'user_id' => $request->user_id,
         ]);
 
-        return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Diubah']);
+        return $this->successResponse(['status' => true, 'message' => 'Pembimbing Berhasil Diubah']);
     }
 
     public function destroy($id)
@@ -69,6 +69,6 @@ class PembimbingController extends Controller
         }
 
         $Pembimbing->delete();
-        return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Dihapus']);
+        return $this->successResponse(['status' => true, 'message' => 'Pembimbing Berhasil Dihapus']);
     }
 }

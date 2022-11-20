@@ -75,6 +75,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->put('dokumen/{id}', 'DokumenController@update');
     $router->delete('dokumen/{id}', 'DokumenController@destroy');
     $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');    
+
+    
+    $router->get('cek-dokumen-perjurusan', 'DokumenController@cekDokumenPerjurusan');
     
     // $router->get('/dokumen/{id}/download', [DokumenController::class, 'download']);
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
