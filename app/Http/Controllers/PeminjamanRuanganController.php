@@ -28,13 +28,13 @@ class PeminjamanRuanganController extends Controller
 
     public function store(Request $request)
     {
-        // return 'erza';
         $validator = Validator::make(
             $request->all(),
             [
                 'tanggal' => 'required',
                 'waktu_awal' => 'required',
                 'waktu_akhir' => 'required',
+                'ruangan' => 'required'
             ]
         );
 
@@ -42,25 +42,42 @@ class PeminjamanRuanganController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        //Blom Setting Diterima || cek user apakah sudah booking/belum
-        $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
-            ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
+        $tanggal = $request->tanggal;
+        $waktu_awal = $request->waktu_awal;
+        $waktu_akhir = $request->waktu_akhir;
+        $ruangan = $request->ruangan;
+        
+        if ($waktu_awal > $waktu_akhir) {
+            return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
+        }
+        // cek mahasiswa apakah sudah booking/belum
+        if (Auth::user()->role == 'Mahasiswa') {
+            $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
+                ->where('user_id', Auth::user()->id)->where('status', 'Diterima')->count();
+        } else {
+            $cekPeminjaman = 0;
+        }
 
         if ($cekPeminjaman < 1) {
+  
             //cek Jadwal tersebut tersedia atau tidak
-            $cekRuangan = PeminjamanRuangan::whereDate('tanggal', $request->tanggal)
-                ->whereTime('waktu_awal', '<=', $request->waktu_awal)
-                ->whereTime('waktu_akhir', '>=', $request->waktu_akhir)
-                // ->orWhere(function ($query)  use ($request) {
-                //     $query->whereTime('waktu_awal', '>=', $request->waktu_awal)
-                //         ->whereTime('waktu_awal', '<=', $request->waktu_akhir);
-                // })
-                // ->orWhere(function ($query)  use ($request) {
-                //     $query->whereTime('waktu_akhir', '>=', $request->aktu_awal)
-                //         ->whereTime('waktu_akhir', '<=', $request->waktu_akhir);
-                // })
-                ->where('status', 'Diterima')
-                ->exists();
+            $cekRuangan = PeminjamanRuangan::orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal, $ruangan) {
+                $query
+                    ->whereTime('waktu_awal', '>=', $waktu_awal)
+                    ->whereTime('waktu_awal', '<=', $waktu_akhir)
+                    ->where('status', '=', 'Diterima')
+                    ->where('ruangan_id', $ruangan)
+                    ->whereDate('tanggal', $tanggal);
+            })
+            ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal, $ruangan) {
+                $query
+                    ->whereTime('waktu_akhir', '>=', $waktu_awal)
+                    ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                    ->where('status', '=', 'Diterima')
+                    ->where('ruangan_id', $ruangan)
+                    ->whereDate('tanggal', $tanggal);
+            })->exists();
+
             // Jika ruangan tersebut tersedia
             if (!$cekRuangan) {
                 $PeminjamanRuangan = new PeminjamanRuangan();
@@ -147,22 +164,20 @@ class PeminjamanRuanganController extends Controller
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
-
-            $cekRuangan = PeminjamanRuangan::whereTime('waktu_awal', '<=', $waktu_awal)
-                ->whereTime('waktu_akhir', '>=', $waktu_akhir)
-                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir) {
+            $cekRuangan = PeminjamanRuangan::orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                     $query
                         ->whereTime('waktu_awal', '>=', $waktu_awal)
-                        ->whereTime('waktu_awal', '<=', $waktu_akhir);
+                        ->whereTime('waktu_awal', '<=', $waktu_akhir)
+                        ->where('status', '=', 'Diterima')
+                        ->whereDate('tanggal', $tanggal);
                 })
-                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir) {
+                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                     $query
                         ->whereTime('waktu_akhir', '>=', $waktu_awal)
-                        ->whereTime('waktu_akhir', '<=', $waktu_akhir);
-                })
-                ->where('status', 'Diterima')
-                ->whereDate('tanggal', $tanggal)
-                ->get();
+                        ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                        ->where('status', '=', 'Diterima')
+                        ->whereDate('tanggal', $tanggal);
+                })->get();
 
             $getRuangan = Ruangan::all();
             foreach ($getRuangan as $dataRuangan) {

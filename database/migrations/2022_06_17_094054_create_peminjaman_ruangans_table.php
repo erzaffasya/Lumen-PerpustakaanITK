@@ -22,7 +22,7 @@ return new class extends Migration
             $table->time('waktu_awal')->nullable();   
             $table->time('waktu_akhir')->nullable();   
             $table->text('keperluan')->nullable();
-            $table->enum('status', ['Diterima','Ditolak','Menunggu'])->default('Diterima');
+            $table->enum('status', ['Diterima','Ditolak','Menunggu'])->default('Menunggu');
             $table->text('catatan')->nullable();            
             $table->timestamps();
         });

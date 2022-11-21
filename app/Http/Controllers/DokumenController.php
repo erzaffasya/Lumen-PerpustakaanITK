@@ -39,7 +39,7 @@ class DokumenController extends Controller
         if (Auth::user()->role != 'Admin' && Auth::user()->role != 'Dosen') {
             return $this->errorResponse('Anda Tidak Memiliki Akses Untuk Mendownload Berkas', 403);
         }
-        
+
         $dokumen = Dokumen::find($id);
         switch ($data) {
             case 'cover':
@@ -189,7 +189,7 @@ class DokumenController extends Controller
         $response->header('Content-Type', 'application/pdf');
         return $response;
     }
-  
+
     public function view_dokumen($id, $file_name)
     {
         // Check if file exists in app/storage/file folder
@@ -573,13 +573,10 @@ class DokumenController extends Controller
 
     public function revisiDokumen(Request $request, $id)
     {
-        // dd('erza');
         $Dokumen = Dokumen::find($id);
         $Dokumen->status = $request->status;
         $Dokumen->catatan = $request->catatan;
         $Dokumen->save();
-
-        // return $request;
 
         $revisi_data = [
             'judul' => 'Perubahan Status Dokumen',
@@ -591,8 +588,14 @@ class DokumenController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
 
-    public function cekDokumenPerjurusan(){
-        $cekDokumen = Dokumen::join('users','users.id','dokumen.user_id')->get();
-    }
+    public function cekDokumenPerjurusan()
+    {
+        $cekDokumen = Dokumen::select('dokumen.*')
+            ->join('users', 'users.id', 'dokumen.user_id')
+            ->where('users.jurusan', '=', Auth::user()->jurusan)
+            ->latest()
+            ->get();
 
+        return $this->successResponse($cekDokumen);
+    }
 }
