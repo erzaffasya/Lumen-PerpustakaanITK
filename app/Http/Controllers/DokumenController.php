@@ -19,7 +19,7 @@ class DokumenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Dokumen::paginate(10);
+        $query = Dokumen::paginate(4);
         if ($request->status) {
             if ($request->status != 'Riwayat') {
                 $query = $query->where('status', $request->status);
@@ -590,11 +590,12 @@ class DokumenController extends Controller
 
     public function cekDokumenPerjurusan()
     {
-        $cekDokumen = Dokumen::select('dokumen.*')
-            ->join('users', 'users.id', 'dokumen.user_id')
-            ->where('users.jurusan', '=', Auth::user()->jurusan)
-            ->latest()
-            ->get();
+        $cekDokumen = DokumenResource::collection(Dokumen::select('dokumen.*')
+        ->join('users', 'users.id', 'dokumen.user_id')
+        ->where('users.role','Mahasiswa')
+        ->where('users.jurusan', '=', Auth::user()->jurusan)
+        ->latest()
+        ->get());
 
         return $this->successResponse($cekDokumen);
     }

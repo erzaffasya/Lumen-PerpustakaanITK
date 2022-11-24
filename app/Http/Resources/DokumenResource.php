@@ -32,6 +32,7 @@ class DokumenResource extends JsonResource
             'penerbit' => $this->penerbit,
             'deskripsi' => $this->deskripsi,
             'user_id' => $this->users->name,
+            'nim' => $this->users->nim,
             'cover' => $this->FormatFile($this->cover),
             'lembar_pengesahan' => $this->FormatFile($this->lembar_pengesahan),
             'kata_pengantar' => $this->FormatFile($this->kata_pengantar),
