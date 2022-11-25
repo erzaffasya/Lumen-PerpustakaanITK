@@ -19,7 +19,7 @@ class DokumenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Dokumen::paginate(4);
+        $query = Dokumen::all();
         if ($request->status) {
             if ($request->status != 'Riwayat') {
                 $query = $query->where('status', $request->status);
