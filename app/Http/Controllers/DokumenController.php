@@ -107,7 +107,7 @@ class DokumenController extends Controller
                 break;
             default:
         }
-
+        
         $myFile = public_path($file);
         $headers = ['Content-Type: application/pdf'];
         $newName = $dokumen->judul . '-' . $data . '.pdf';
@@ -219,7 +219,7 @@ class DokumenController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return $this->errorResponse($validator->errors(), 422);
         }
 
 
@@ -234,6 +234,13 @@ class DokumenController extends Controller
 
 
 
+        if ($request->gambar_dokumen != null) {
+            $file_ext = $request->gambar_dokumen->extension();
+            $file_name = 'gambar_dokumen_' . $Dokumen->user_id . '_' . time() . '.' . $file_ext;
+            $gambar_dokumen = 'storage/documents/' . $Dokumen->user_id . '/' . $file_name;
+            $request->file('gambar_dokumen')->move("storage/documents/$Dokumen->user_id", $file_name);
+            $Dokumen->gambar_dokumen = $gambar_dokumen;
+        }
         // Cover 
         if ($request->cover != null) {
             $file_ext = $request->cover->extension();

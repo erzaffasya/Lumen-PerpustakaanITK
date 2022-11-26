@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tahun_terbit')->nullable();
             $table->string('nama_pengarang')->nullable();
             $table->string('penerbit')->nullable();
+            $table->string('gambar_dokumen')->nullable();
             $table->text('deskripsi')->nullable();
             $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("cascade")->onUpdate("cascade");
             $table->string('cover')->nullable();
