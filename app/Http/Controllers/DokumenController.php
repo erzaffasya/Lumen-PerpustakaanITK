@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DokumenResource;
+use App\Http\Resources\SimpelDokumenResource;
 use App\Models\Dokumen;
 use App\Models\Pembimbing;
 use App\Models\User;
@@ -107,7 +108,7 @@ class DokumenController extends Controller
                 break;
             default:
         }
-        
+
         $myFile = public_path($file);
         $headers = ['Content-Type: application/pdf'];
         $newName = $dokumen->judul . '-' . $data . '.pdf';
@@ -585,12 +586,12 @@ class DokumenController extends Controller
         $Dokumen->catatan = $request->catatan;
         $Dokumen->save();
 
-        $revisi_data = [
+        $dataNotif = [
             'judul' => 'Perubahan Status Dokumen',
             'pesan' => 'Status Dokumen ' . $Dokumen->judul . ' ' . $Dokumen->status . '!',
         ];
         $user = User::find(Auth::user()->id);
-        Notification::send($user, new NotifRevisi($revisi_data));
+        Notification::send($user, new NotifRevisi($dataNotif));
 
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
@@ -598,11 +599,24 @@ class DokumenController extends Controller
     public function cekDokumenPerjurusan()
     {
         $cekDokumen = DokumenResource::collection(Dokumen::select('dokumen.*')
-        ->join('users', 'users.id', 'dokumen.user_id')
-        ->where('users.role','Mahasiswa')
-        ->where('users.jurusan', '=', Auth::user()->jurusan)
-        ->latest()
-        ->get());
+            ->join('users', 'users.id', 'dokumen.user_id')
+            ->where('users.role', 'Mahasiswa')
+            ->where('users.jurusan', '=', Auth::user()->jurusan)
+            ->latest()
+            ->get());
+
+        return $this->successResponse($cekDokumen);
+    }
+
+    public function cariDokumen($id)
+    {
+        // dd($id);
+        $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*','kategori.nama_kategori')->join('kategori', 'dokumen.kategori_id', 'kategori.id')
+            ->where('dokumen.judul', 'LIKE', "%{$id}%")
+            ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
+            ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
+            ->where('dokumen.status', 'Diterima')
+            ->get());
 
         return $this->successResponse($cekDokumen);
     }

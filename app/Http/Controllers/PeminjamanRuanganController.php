@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PeminjamanRuanganResource;
 use App\Models\PeminjamanRuangan;
 use App\Models\Ruangan;
+use App\Models\User;
+use App\Notifications\NotifRevisi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Spatie\GoogleCalendar\Event;
 
@@ -91,6 +94,12 @@ class PeminjamanRuanganController extends Controller
                 if (Auth::user()->role != 'Mahasiswa') {
                     $Ruangan = Ruangan::find($request->ruangan);
                     $PeminjamanRuangan->status = 'Diterima';
+                    $dataNotif = [
+                        'judul' => 'Peminjaman Ruangan Berhasil',
+                        'pesan' => 'Peminjaman Ruangan ' . $Ruangan->nama_ruangan . ' Pada tanggal '. $PeminjamanRuangan->tanggal.' Berhasil Dilakukan.',
+                    ];
+                    $user = User::find(Auth::user()->id);
+                    Notification::send($user, new NotifRevisi($dataNotif));
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
                 }
                 $PeminjamanRuangan->save();
@@ -125,6 +134,7 @@ class PeminjamanRuanganController extends Controller
 
         if ($PeminjamanRuangan->status = 'Diterima') {
             $this->gcalender($PeminjamanRuangan->keperluan . " - Ruangan " . $PeminjamanRuangan->Ruangan->nama_ruangan . "- Nama " . $PeminjamanRuangan->User->name . " " . $PeminjamanRuangan->User->nim, $PeminjamanRuangan->tanggal, $PeminjamanRuangan->waktu_awal, $PeminjamanRuangan->waktu_akhir);
+        
         }
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Ruangan Berhasil Diubah']);
     }

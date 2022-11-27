@@ -10,15 +10,15 @@ class NotifRevisi extends Notification
 {
     use Queueable;
 
-    private $revisi_data;
+    private $dataNotif;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($revisi_data)
+    public function __construct($dataNotif)
     {
-        $this->revisi_data = $revisi_data;
+        $this->dataNotif = $dataNotif;
     }
 
     /**
@@ -43,7 +43,7 @@ class NotifRevisi extends Notification
     {
         return (new MailMessage)
             ->greeting('Perubahan Status Dokumen')
-            ->line($this->revisi_data['pesan']);
+            ->line($this->dataNotif['pesan']);
             // ->line('Thank you for using our application!');
     }
 
@@ -57,8 +57,8 @@ class NotifRevisi extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'judul' => $this->revisi_data['judul'],
-            'pesan' => $this->revisi_data['pesan'],
+            'judul' => $this->dataNotif['judul'],
+            'pesan' => $this->dataNotif['pesan'],
         ];
     }
 }

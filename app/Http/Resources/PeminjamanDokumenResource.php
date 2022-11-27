@@ -20,6 +20,7 @@ class PeminjamanDokumenResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => $this->user($this->user_id),
+            'gambar_dokumen' => url($this->getURL($this->dokumen_id)),
             'tgl_peminjaman' => date('d-m-Y', strtotime($this->tgl_peminjaman)),
             'tgl_pengembalian' => date('d-m-Y', strtotime($this->tgl_pengembalian)),
             'dokumen' => $this->dokumen($this->dokumen_id),
@@ -37,16 +38,23 @@ class PeminjamanDokumenResource extends JsonResource
         }
     }
 
+    public function getURL($id)
+    {
+        $getDokumen = Dokumen::where('id',$id)->first();
+        return $getDokumen->gambar_dokumen;
+    }
     public function user($id)
     {
-        $getUser = User::select('id', 'name', 'email', 'role')->where('id', $id)->first();
+        $getUser = User::select('id', 'name', 'email', 'role')
+            ->where('id', $id)
+            ->first();
         return $getUser;
     }
     public function dokumen($id)
     {
-        $getDokumen = Dokumen::select('dokumen.id', 'dokumen.judul', 'dokumen.tahun_terbit', 'dokumen.penerbit', 'dokumen.cover', 'dokumen.status', 'kategori.nama_kategori')
-        ->join('kategori', 'kategori.id', 'dokumen.kategori_id')
-        ->where('dokumen.id',$id)->first();
+        $getDokumen = Dokumen::select('dokumen.id', 'dokumen.judul', 'dokumen.tahun_terbit', 'dokumen.penerbit', 'dokumen.status', 'kategori.nama_kategori')
+            ->join('kategori', 'kategori.id', 'dokumen.kategori_id')
+            ->where('dokumen.id', $id)->first();
         return $getDokumen;
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PengunjungResource;
 use App\Models\Pengunjung;
 use App\Models\User;
+use App\Notifications\NotifRevisi;
 use Carbon\Carbon;
 
 use BaconQrCode\Renderer\ImageRenderer;
@@ -14,6 +15,7 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PengunjungController extends Controller
 {
@@ -75,6 +77,13 @@ class PengunjungController extends Controller
             $Pengunjung = new Pengunjung();
             $Pengunjung->user_id = Auth::id();
             $Pengunjung->save();
+
+            $dataNotif = [
+                'judul' => 'Checkin Perpustakaan Berhasil',
+                'pesan' => 'Anda telah berhasil melakukan checkin perpustakaan ITK pada ' . $Pengunjung->created_at,
+            ];
+            $user = User::find(Auth::user()->id);
+            Notification::send($user, new NotifRevisi($dataNotif));
             return $this->successResponse(['status' => true, 'message' => 'Checkin Berhasil Dilakukan']);
         }
     }

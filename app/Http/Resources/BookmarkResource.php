@@ -21,6 +21,7 @@ class BookmarkResource extends JsonResource
             'user_id' => $this->user($this->user_id),
             // 'dokumen_id' => $this->dokumen_id,
             'dokumen' => $this->dokumen($this->dokumen_id),
+            'gambar_dokumen' => url($this->getURL($this->dokumen_id)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -34,5 +35,10 @@ class BookmarkResource extends JsonResource
     public function user($id){
         $data = User::select('name','email','nim','jurusan','prodi','angkatan','role')->find($id);
         return $data;
+    }
+    public function getURL($id)
+    {
+        $getDokumen = Dokumen::where('id',$id)->first();
+        return $getDokumen->gambar_dokumen;
     }
 }

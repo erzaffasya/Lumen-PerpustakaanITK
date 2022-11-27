@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\Helper;
 use App\Http\Resources\PeminjamanDokumenResource;
+use App\Models\Dokumen;
 use App\Models\PeminjamanDokumen;
+use App\Models\User;
+use App\Notifications\NotifRevisi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class PeminjamanDokumenController extends Controller
@@ -64,6 +68,13 @@ class PeminjamanDokumenController extends Controller
         ]));
         $Peminjaman->save();
 
+        $Dokumen = Dokumen::find($request->dokumen_id);
+        $dataNotif = [
+            'judul' => 'Peminjaman Dokumen Berhasil',
+            'pesan' => 'Peminjaman Dokumen ' . $Dokumen->judul . ' Berhasil Dilakukan, Masa Berlaku Sampai ' . $Peminjaman->tgl_pengembalian . '.',
+        ];
+        $user = User::find(Auth::user()->id);
+        Notification::send($user, new NotifRevisi($dataNotif));
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Ditambahkan']);
     }
 

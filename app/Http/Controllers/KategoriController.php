@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\KategoriResource;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class KategoriController extends Controller
@@ -69,6 +70,9 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
+        $this->isAdmin();
+        // dd(Auth::user()->role);
+
         $validator = Validator::make(
             $request->all(),
             [

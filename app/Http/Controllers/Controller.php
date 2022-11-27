@@ -83,17 +83,11 @@ class Controller extends BaseController
         Notification::send($user, new NotifRevisi($revisi_data));
     }
 
-    protected function vendor()
+    protected function isAdmin()
     {
-        $user = null;
-        if (auth('sanctum')->check()) {
-            $user = auth('sanctum')->user();
-            if (!$user->is_vendor) {
-                return null;
-            }
-            $user = User::where('id', $user->id)->with('vendor')->first();
-        }
-        return $user;
+        if (Auth::user()->role != 'Admin') {
+            return $this->errorResponse('Tidak tidak memiliki akses', 403);
+        } 
     }
 
     public static function cek_batasan_dokumen($id)
