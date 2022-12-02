@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nama_kategori')->nullable();
             $table->string('detail')->nullable();
             $table->text('berkas')->nullable();
-            $table->boolean('isPembimbing')->nullable();
-            $table->boolean('isDeleted')->default(0);
+            $table->boolean('isPembimbing')->default(false);
+            $table->boolean('isDeleted')->default(false);
             $table->timestamps();
         });
     }

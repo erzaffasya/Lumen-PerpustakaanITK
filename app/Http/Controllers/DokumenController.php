@@ -440,9 +440,7 @@ class DokumenController extends Controller
         if (!$Dokumen) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
-
-        $Dokumen = Dokumen::find($Dokumen->id);
-
+        // return ($request->all());
         $Dokumen->judul = $request->judul;
         if ($request->kategori_id != null) {
             $Dokumen->kategori_id = $request->kategori_id;
@@ -564,7 +562,6 @@ class DokumenController extends Controller
         }
 
         $Dokumen->save();
-
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
     }
 
@@ -608,16 +605,27 @@ class DokumenController extends Controller
         return $this->successResponse($cekDokumen);
     }
 
-    public function cariDokumen($id)
+    public function cariDokumen(Request $request, $id)
     {
         // dd($id);
-        $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*','kategori.nama_kategori')->join('kategori', 'dokumen.kategori_id', 'kategori.id')
+        $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*', 'kategori.nama_kategori')
+            ->join('kategori', 'dokumen.kategori_id', 'kategori.id')
             ->where('dokumen.judul', 'LIKE', "%{$id}%")
             ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
             ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
             ->where('dokumen.status', 'Diterima')
             ->get());
 
+        return $this->successResponse($cekDokumen);
+    }
+
+    public function dataDokumen(Request $request)
+    {
+        $dataDokumen = Dokumen::where('status','Diterima')->get();
+        if ($request->kategori) {
+            $dataDokumen = $dataDokumen->where('kategori_id', $request->kategori);
+        }
+        $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
         return $this->successResponse($cekDokumen);
     }
 }

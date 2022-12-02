@@ -80,8 +80,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('cek-dokumen-perjurusan', 'DokumenController@cekDokumenPerjurusan');
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
     $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
-    // $router->get('/view/{filename}', [DokumenController::class, 'view_dokumen'])->name('viewdoc');
     $router->get('/cari-dokumen/{id}', 'DokumenController@cariDokumen');
+    $router->get('/data-dokumen', 'DokumenController@dataDokumen');
     $router->get('dokumen/riwayat-peminjaman/{id}', 'PeminjamanDokumenController@riwayatPeminjaman');
 
     //Peminjaman
@@ -98,7 +98,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('pembimbing/{id}', 'PembimbingController@show');
     $router->put('pembimbing/{id}', 'PembimbingController@update');
     $router->delete('pembimbing/{id}', 'PembimbingController@destroy');
-
+    $router->get('pembimbing/{id}/dokumen', 'PembimbingController@getByDokukumenId');
     //Notifikasi
     $router->get('notifikasi', 'NotifikasiController@index');
 

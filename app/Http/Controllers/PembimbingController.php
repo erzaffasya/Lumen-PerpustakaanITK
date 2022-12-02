@@ -71,4 +71,10 @@ class PembimbingController extends Controller
         $Pembimbing->delete();
         return $this->successResponse(['status' => true, 'message' => 'Pembimbing Berhasil Dihapus']);
     }
+
+    public function getByDokukumenId($id)
+    {
+        $Pembimbing = PembimbingResource::collection(Pembimbing::where('dokumen_id',$id)->get());
+        return $this->successResponse($Pembimbing);
+    }
 }

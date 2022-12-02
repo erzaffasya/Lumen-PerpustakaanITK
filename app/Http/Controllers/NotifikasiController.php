@@ -22,6 +22,6 @@ class NotifikasiController extends Controller
     {
         $user = User::find(Auth::id());
         $Notifikasi = NotifikasiResource::collection($user->notifications);
-        return $this->successResponse(['jumlah_notifikasi' => $user->notifications->count(), 'data' => $Notifikasi]);
+        return $this->successResponse(['jumlah_notifikasi' => $user->notifications->count(),'notifikasi_unread' => $user->unreadNotifications->count(), 'data' => $Notifikasi]);
     }
 }

@@ -16,6 +16,7 @@ class PembimbingResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'nama_pembimbing' => $this->user->name,
             'dokumen' => $this->dokumen->judul,
         ];

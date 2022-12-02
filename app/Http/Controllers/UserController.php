@@ -16,12 +16,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->role) {
-            $user = User::where('role', $request->role)->paginate(10);
+            $user = User::where('role', $request->role)->get();
         } else {
-            $user = User::paginate(10);
+            $user = User::all();
         }
 
-        $UserResource = UserResource::collection($user)->response()->getData(true);
+        $UserResource = UserResource::collection($user);
         return $this->successResponse($UserResource);
     }
 
