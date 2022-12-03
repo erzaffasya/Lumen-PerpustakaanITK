@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('nim')->nullable();
             $table->string('jurusan')->nullable();
             $table->string('prodi')->nullable();
-            $table->string('angkatan')->nullable();           
+            $table->string('angkatan')->nullable();      
+            $table->string('no_telp')->nullable();       
+            $table->string('status')->nullable();            
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->enum('role',['Admin','Mahasiswa','Dosen','Tendik'])->default('Mahasiswa');

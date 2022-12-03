@@ -59,7 +59,7 @@ class AuthController extends Controller
     //         return response()->json($validator->errors());
     //     }
 
-    //     $response = Http::acceptJson()->post('https://api-gerbang2.itk.ac.id/api/siakad/login', [
+    //     $response = Http::acceptJson()->post('https://api-gerbang.itk.ac.id/api/siakad/login', [
     //         'email' => $request->email,
     //         'password' => $request->password
     //     ]);
@@ -86,6 +86,7 @@ class AuthController extends Controller
     //             return $this->respondWithToken($login);
     //         } elseif (array_key_exists("MA_Nrp", $mahasiswa['biodata'])) {
     //             // mahasiswa
+    //             // dd($mahasiswa['biodata']);
     //             $mahasiswalogin = User::updateOrCreate(
     //                 [
     //                     'nim' => $mahasiswa['XNAMA']
@@ -97,6 +98,8 @@ class AuthController extends Controller
     //                     'jurusan' => $mahasiswa['biodata']['nama_jurusan'],
     //                     'prodi' => $mahasiswa['biodata']['prodi']['Nama_Prodi'],
     //                     'angkatan' => $mahasiswa['biodata']['MA_Tahun_Masuk'],
+    //                     'no_telp' => $mahasiswa['biodata']['MA_TelpMhs'],
+    //                     'status' => $mahasiswa['biodata']['status_aktif']['status_mahasiswa'],
     //                     'role' => 'Mahasiswa',
     //                     'password' => bcrypt($mahasiswa['XNAMA'])
     //                 ]
@@ -118,7 +121,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return $this->successResponse(auth()->user());
+        return $this->successResponse(new UserResource(auth()->user()));
     }
 
     /**

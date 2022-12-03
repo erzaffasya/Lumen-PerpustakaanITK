@@ -99,8 +99,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->put('pembimbing/{id}', 'PembimbingController@update');
     $router->delete('pembimbing/{id}', 'PembimbingController@destroy');
     $router->get('pembimbing/{id}/dokumen', 'PembimbingController@getByDokukumenId');
+    
     //Notifikasi
     $router->get('notifikasi', 'NotifikasiController@index');
+    $router->get('baca-notifikasi', 'NotifikasiController@bacaNotifikasi');
 
     //User
     $router->get('user', 'UserController@index');
