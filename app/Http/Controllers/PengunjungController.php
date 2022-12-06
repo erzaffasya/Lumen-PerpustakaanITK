@@ -28,9 +28,20 @@ class PengunjungController extends Controller
      *  security={{ "apiAuth": {} }}
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = PengunjungResource::collection(Pengunjung::all());
+        if ($request->tanggal_awal) {
+            $query = Pengunjung::whereDate('created_at', '>=', $request->tanggal_awal)
+                ->whereDate('created_at', '<=', $request->tanggal_akhir??Carbon::now())->get();
+        } else {
+            $query = Pengunjung::all();
+        }
+
+        if (Auth::user()->role != 'Admin') {
+            $query->where('user_id', Auth::user()->id);
+        }
+
+        $data = PengunjungResource::collection($query);
         return $this->successResponse($data);
     }
 

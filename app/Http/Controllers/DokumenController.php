@@ -20,7 +20,8 @@ class DokumenController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Dokumen::where('nama_kategori', 'LIKE', "%{$request->kategori}%")
+        $query = Dokumen::select('dokumen.*', 'kategori.nama_kategori')
+            ->where('nama_kategori', 'LIKE', "%{$request->kategori}%")
             ->join('kategori', 'kategori.id', 'dokumen.kategori_id')
             ->get();
 
@@ -35,7 +36,7 @@ class DokumenController extends Controller
         if (Auth::user()->role != 'Admin') {
             $query->where('user_id', Auth::user()->id);
         }
-        
+
         $Dokumen = DokumenResource::collection($query);
         return $this->successResponse($Dokumen);
     }
