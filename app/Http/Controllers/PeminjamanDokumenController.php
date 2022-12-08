@@ -60,6 +60,14 @@ class PeminjamanDokumenController extends Controller
             return $this->errorResponse('Dokumen sudah penuh', 422);
         }
 
+        if (PeminjamanDokumen::where('user_id', Auth::id())
+            ->where('dokumen_id', $request->dokumen_id)
+            ->where('tgl_pengembalian', '>', Carbon::now())
+            ->exists()
+        ) {
+            return $this->errorResponse('Dokumen sudah anda pinjam', 422);
+        }
+
         $Peminjaman = new PeminjamanDokumen(([
             'dokumen_id' => $request->dokumen_id,
             'tgl_peminjaman' => Carbon::now(),
@@ -119,7 +127,7 @@ class PeminjamanDokumenController extends Controller
 
     public function riwayatPeminjaman($id)
     {
-        $getRiwayat = PeminjamanDokumenResource::collection(PeminjamanDokumen::where('dokumen_id',$id)->orderBy('created_at','DESC')->get()) ;
+        $getRiwayat = PeminjamanDokumenResource::collection(PeminjamanDokumen::where('dokumen_id', $id)->orderBy('created_at', 'DESC')->get());
         return $this->successResponse($getRiwayat);
     }
 
