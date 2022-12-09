@@ -103,13 +103,11 @@ class PeminjamanDokumenController extends Controller
         if (!$Peminjaman) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
-
-        $Peminjaman = PeminjamanDokumen::find($Peminjaman->id)->update([
-            'tgl_peminjaman' => $request->tgl_peminjaman,
-            'tgl_pengembalian' => $request->tgl_pengembalian,
-            'dokumen_id' => $request->dokumen_id,
-            'user_id' => $request->user_id,
-        ]);
+        $Peminjaman->tgl_peminjaman = $request->tgl_peminjaman;
+        $Peminjaman->tgl_pengembalian = $request->tgl_pengembalian;
+        $Peminjaman->dokumen_id = $request->dokumen_id;
+        $Peminjaman->user_id = $request->user_id;
+        $Peminjaman->save();
 
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Berhasil Diubah']);
     }

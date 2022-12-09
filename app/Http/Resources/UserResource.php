@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'nim' => $this->nim,
             'no_telp' => $this->no_telp,
-            'status_mahasiswa' => $this->status,
+            'status_keaktifan' => $this->status,
             'jurusan' => $this->jurusan,
             'prodi' => $this->prodi,
             'angkatan' => $this->angkatan,

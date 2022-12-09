@@ -29,7 +29,7 @@ $router->group(['prefix' => 'api'], function ($router) {
 
     $router->get('/pengunjung', 'PengunjungController@index');
     $router->post('/pengunjung', 'PengunjungController@tambahPengunjung');
-    $router->delete('/pengunjung', 'PengunjungController@destroy');
+    $router->delete('/pengunjung/{id}', 'PengunjungController@destroy');
     
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');

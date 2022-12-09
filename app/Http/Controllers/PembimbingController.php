@@ -12,7 +12,11 @@ class PembimbingController extends Controller
 {
     public function index()
     {
-        $Pembimbing = PembimbingResource::collection(Pembimbing::all());
+        $query = Pembimbing::all();
+        if (Auth::user()->role != 'Admin') {
+            $query->where('user_id', Auth::user()->id);
+        }
+        $Pembimbing = PembimbingResource::collection($query);
         return $this->successResponse($Pembimbing);
     }
 
@@ -22,6 +26,7 @@ class PembimbingController extends Controller
             $request->all(),
             [
                 'dokumen_id' => 'required',
+                'user_id' => 'required'
             ]
         );
 
@@ -29,7 +34,14 @@ class PembimbingController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $Pembimbing = new Pembimbing(array_merge($request->all(), ['status' => False, 'user_id' => Auth::user()->id]));
+        if (Pembimbing::where('user_id', $request->user_id)
+            ->where('dokumen_id', $request->dokumen_id)
+            ->exists()
+        ) {
+            return $this->errorResponse('Pembimbing sudah ditambahkan', 422);
+        }
+
+        $Pembimbing = new Pembimbing($request->all());
         $Pembimbing->save();
 
         return $this->successResponse(['status' => true, 'message' => 'Pembimbing Berhasil Ditambahkan']);
@@ -37,7 +49,7 @@ class PembimbingController extends Controller
 
     public function show($id)
     {
-        $Pembimbing = Pembimbing::find($id);
+        $Pembimbing = new PembimbingResource(Pembimbing::find($id));
         if (!$Pembimbing) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
@@ -74,7 +86,7 @@ class PembimbingController extends Controller
 
     public function getByDokukumenId($id)
     {
-        $Pembimbing = PembimbingResource::collection(Pembimbing::where('dokumen_id',$id)->get());
+        $Pembimbing = PembimbingResource::collection(Pembimbing::where('dokumen_id', $id)->get());
         return $this->successResponse($Pembimbing);
     }
 }
