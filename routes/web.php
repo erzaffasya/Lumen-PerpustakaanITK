@@ -35,38 +35,60 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
+    $router->group(['middleware' => 'role:Admin'], function () use ($router) {
+        $router->post('ruangan', 'RuanganController@store');
+        $router->put('ruangan/{id}', 'RuanganController@update');
+        $router->delete('ruangan/{id}', 'RuanganController@destroy');
+        $router->put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
+        $router->post('kategori', 'KategoriController@store');
+        $router->put('kategori/{id}', 'KategoriController@update');
+        $router->delete('kategori/{id}', 'KategoriController@destroy');
+        $router->put('bookmark/{id}', 'BookmarkController@update');
+        $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
+        $router->put('yudisium/{id}', 'YudisiumController@update');
+        $router->delete('yudisium/{id}', 'YudisiumController@destroy');
+        $router->post('yudisium', 'YudisiumController@store');
+        $router->put('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@update');
+        $router->put('user/{id}', 'UserController@update');
+        $router->delete('user/{id}', 'UserController@destroy');
+    });
+
+    $router->group(['middleware' => 'role:Admin,Dosen'], function () use ($router) {
+        $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
+    });
 
     $router->get('/cek-akses-dokumen/{id}/{data}', 'DokumenController@cekAksesDokumen');
     $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
     $router->get('profil', 'AuthController@me');
 
+
     // Ruangan 
     $router->get('ruangan', 'RuanganController@index');
-    $router->post('ruangan', 'RuanganController@store');
+    // $router->post('ruangan', 'RuanganController@store');
     $router->get('ruangan/{id}', 'RuanganController@show');
-    $router->put('ruangan/{id}', 'RuanganController@update');
-    $router->delete('ruangan/{id}', 'RuanganController@destroy');
+    // $router->put('ruangan/{id}', 'RuanganController@update');
+    // $router->delete('ruangan/{id}', 'RuanganController@destroy');
 
     //peminjaman-ruangan
     $router->get('peminjaman-ruangan', 'PeminjamanRuanganController@index');
     $router->post('peminjaman-ruangan', 'PeminjamanRuanganController@store');
     $router->get('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@show');
-    $router->put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
+    // $router->put('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@update');
     $router->delete('peminjaman-ruangan/{id}', 'PeminjamanRuanganController@destroy');
     $router->get('ruang-kosong/{tanggal}/waktu_awal/{waktu_awal}/waktu_akhir/{waktu_akhir}', 'PeminjamanRuanganController@RuanganKosong');
 
     //Kategori
     $router->get('kategori', 'KategoriController@index');
-    $router->post('kategori', 'KategoriController@store');
+    // $router->post('kategori', 'KategoriController@store');
     $router->get('kategori/{id}', 'KategoriController@show');
-    $router->put('kategori/{id}', 'KategoriController@update');
-    $router->delete('kategori/{id}', 'KategoriController@destroy');
+    // $router->put('kategori/{id}', 'KategoriController@update');
+    // $router->delete('kategori/{id}', 'KategoriController@destroy');
 
     //Bookmark
     $router->get('bookmark', 'BookmarkController@index');
     $router->post('bookmark', 'BookmarkController@store');
     $router->get('bookmark/{id}', 'BookmarkController@show');
-    $router->put('bookmark/{id}', 'BookmarkController@update');
+    // $router->put('bookmark/{id}', 'BookmarkController@update');
     $router->delete('bookmark/{id}', 'BookmarkController@destroy');
 
     //Dokumen
@@ -75,12 +97,12 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('dokumen/{id}', 'DokumenController@show');
     $router->put('dokumen/{id}', 'DokumenController@update');
     $router->delete('dokumen/{id}', 'DokumenController@destroy');
-    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
+    // $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
 
 
     $router->get('cek-dokumen-perjurusan', 'DokumenController@cekDokumenPerjurusan');
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
-    $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
+    // $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
     $router->get('/cari-dokumen/{id}', 'DokumenController@cariDokumen');
     $router->get('/data-dokumen', 'DokumenController@dataDokumen');
     $router->get('dokumen/riwayat-peminjaman/{id}', 'PeminjamanDokumenController@riwayatPeminjaman');
@@ -103,16 +125,16 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
     //Yudisium
     $router->get('yudisium', 'YudisiumController@index');
-    $router->post('yudisium', 'YudisiumController@store');
+    // $router->post('yudisium', 'YudisiumController@store');
     $router->get('yudisium/{id}', 'YudisiumController@show');
-    $router->put('yudisium/{id}', 'YudisiumController@update');
-    $router->delete('yudisium/{id}', 'YudisiumController@destroy');
+    // $router->put('yudisium/{id}', 'YudisiumController@update');
+    // $router->delete('yudisium/{id}', 'YudisiumController@destroy');
 
     //MahasiswaYudisium
     $router->get('yudisium-mahasiswa', 'YudisiumMahasiswaController@index');
     $router->post('yudisium-mahasiswa', 'YudisiumMahasiswaController@store');
     $router->get('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@show');
-    $router->put('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@update');
+    // $router->put('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@update');
     $router->delete('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@destroy');
 
     //Notifikasi
@@ -123,8 +145,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('user', 'UserController@index');
     $router->post('user', 'UserController@store');
     $router->get('user/{id}', 'UserController@show');
-    $router->put('user/{id}', 'UserController@update');
-    $router->delete('user/{id}', 'UserController@destroy');
+    // $router->put('user/{id}', 'UserController@update');
+    // $router->delete('user/{id}', 'UserController@destroy');
     $router->post('bebas-pustaka', 'UserController@bebasPustaka');
 
     //Statistik
