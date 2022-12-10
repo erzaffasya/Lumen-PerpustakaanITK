@@ -4,18 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PembimbingResource;
 use App\Models\Pembimbing;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PembimbingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = Pembimbing::all();
+
+        if ($request->tanggal_awal) {
+            $query = Pembimbing::whereDate('created_at', '>=', $request->tanggal_awal)
+                ->whereDate('created_at', '<=', $request->tanggal_akhir??Carbon::now())->get();
+        } 
+
         if (Auth::user()->role != 'Admin') {
-            $query->where('user_id', Auth::user()->id);
+            $query = $query->where('user_id', Auth::user()->id);
         }
+   
         $Pembimbing = PembimbingResource::collection($query);
         return $this->successResponse($Pembimbing);
     }

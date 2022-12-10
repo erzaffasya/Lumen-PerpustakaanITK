@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PeminjamanDokumenResource;
 use App\Http\Resources\PengunjungResource;
+use App\Http\Resources\SimpelDokumenResource;
 use App\Models\Dokumen;
 use App\Models\PeminjamanDokumen;
 use App\Models\PeminjamanRuangan;
@@ -75,10 +76,7 @@ class StatistikController extends Controller
     public function peminjamanDokumenPopuler()
     {
         $PeminjamanDokumen = PeminjamanDokumen::select(
-            'dokumen.id',
-            'dokumen.judul',
-            'dokumen.nama_pengarang',
-            'dokumen.tahun_terbit',
+            'dokumen.*',
             'kategori.nama_kategori',
             DB::raw('count(peminjaman_dokumen.id) as total_peminjaman')
         )->groupBy('dokumen_id')
@@ -87,7 +85,7 @@ class StatistikController extends Controller
             ->orderBy('total_peminjaman', 'DESC')
             ->limit(5)
             ->get();
-        return $this->successResponse($PeminjamanDokumen);
+        return $this->successResponse(SimpelDokumenResource::collection($PeminjamanDokumen));
     }
     public function peminjamanRuanganPopuler()
     {
