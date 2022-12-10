@@ -77,8 +77,9 @@ class DokumenResource extends JsonResource
         }
     }
 
-    public function kategori($id){
-        $kategori = Kategori::select('id','nama_kategori')->where('id',$id)->first();
+    public function kategori($id)
+    {
+        $kategori = Kategori::select('id', 'nama_kategori')->where('id', $id)->first();
         return $kategori;
     }
 
@@ -111,28 +112,35 @@ class DokumenResource extends JsonResource
         return $data;
     }
 
-    public function Bookmark($dokumen){
-        $cekBookmark = Bookmark::where('user_id',Auth::user()->id)->where('dokumen_id',$dokumen)->exists();
+    public function Bookmark($dokumen)
+    {
+        $cekBookmark = Bookmark::where('user_id', Auth::user()->id)->where('dokumen_id', $dokumen)->exists();
         return $cekBookmark;
     }
 
-    public function jumlahPengunjung($id){
+    public function jumlahPengunjung($id)
+    {
         $jumlahPengunjung = Dokumen::find($id);
         return $jumlahPengunjung->visitLogs()->count();
     }
 
-    public function pembimbing($id){
-        $dataPembimbing = Pembimbing::where('dokumen_id',$id)->get();
-        if(count($dataPembimbing) > 0){
-            $getData = UserResource::collection(User::whereIn('id',$dataPembimbing->pluck('user_id'))->get());
-        }else{
+    public function pembimbing($id)
+    {
+        $dataPembimbing = Pembimbing::where('dokumen_id', $id)->get();
+        if (count($dataPembimbing) > 0) {
+            $getData = UserResource::collection(User::whereIn('id', $dataPembimbing->pluck('user_id'))->get());
+        } else {
             $getData = null;
         }
         return $getData;
     }
 
-    public function isPinjam($id){
-        $dataPinjam = PeminjamanDokumen::where('dokumen_id',$id)->where('tgl_pengembalian','>',Carbon::now())->exists();
+    public function isPinjam($id)
+    {
+        $dataPinjam = PeminjamanDokumen::where('dokumen_id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->where('tgl_pengembalian', '>', Carbon::now())
+            ->exists();
         return $dataPinjam;
     }
 }

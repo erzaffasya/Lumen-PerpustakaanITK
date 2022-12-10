@@ -7,8 +7,10 @@ use App\Http\Resources\DokumenResource;
 use App\Http\Resources\SimpelDokumenResource;
 use App\Models\Dokumen;
 use App\Models\Pembimbing;
+use App\Models\PeminjamanDokumen;
 use App\Models\User;
 use App\Notifications\NotifRevisi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -34,7 +36,7 @@ class DokumenController extends Controller
         }
 
         if (Auth::user()->role != 'Admin') {
-            $query->where('user_id', Auth::user()->id);
+            $query = $query->where('user_id', Auth::user()->id);
         }
 
         $Dokumen = DokumenResource::collection($query);
@@ -121,9 +123,39 @@ class DokumenController extends Controller
         return response()->download($myFile, $newName, $headers);
     }
 
+    public function cekAksesDokumen($id, $data)
+    {
+        $dokumen = Dokumen::find($id);
+        // dd($id);
+        //cek hak akses
+        $url = url('api/showDokumen/' . $id . '/' . $data);
+        if (Auth::user()->role != 'Admin') {
+
+            if (Dokumen::where('id', $id)
+                ->where('user_id', Auth::user()->id)
+                ->exists()
+            ) {
+                return $this->successResponse(['link' => $url]);
+            }
+
+            $cekStatus = PeminjamanDokumen::where('user_id', Auth::user()->id)
+                ->where('dokumen_id', $id)
+                // ->where('user_id','!=',Auth::user()->id)
+                ->where('tgl_pengembalian', '>', Carbon::now())
+                ->exists();
+
+            if ($cekStatus) {
+                return $this->successResponse(['link' => $url]);
+            } else {
+                return $this->errorResponse('Anda Tidak Memiliki Akses', 403);
+            }
+        }
+        return $this->successResponse(['link' => $url]);
+    }
     public function showfile($id, $data)
     {
         $dokumen = Dokumen::find($id);
+
         switch ($data) {
             case 'cover':
                 $file = $dokumen->cover;

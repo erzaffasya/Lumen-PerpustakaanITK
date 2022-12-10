@@ -25,7 +25,6 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->post('login', 'AuthController@login');
     $router->get('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
-    $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
 
     $router->get('/pengunjung', 'PengunjungController@index');
     $router->post('/pengunjung', 'PengunjungController@tambahPengunjung');
@@ -33,9 +32,11 @@ $router->group(['prefix' => 'api'], function ($router) {
 
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
+    $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
 
+    $router->get('/cek-akses-dokumen/{id}/{data}', 'DokumenController@cekAksesDokumen');
     $router->get('gcalender/{namaEvent}/{tanggal}/{waktuAwal}/{waktuAkhir}', 'PeminjamanRuanganController@gcalender');
     $router->get('profil', 'AuthController@me');
 

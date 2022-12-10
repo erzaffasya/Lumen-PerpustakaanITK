@@ -30,6 +30,7 @@ class PengunjungController extends Controller
      */
     public function index(Request $request)
     {
+        
         if ($request->tanggal_awal) {
             $query = Pengunjung::whereDate('created_at', '>=', $request->tanggal_awal)
                 ->whereDate('created_at', '<=', $request->tanggal_akhir??Carbon::now())->get();
@@ -38,7 +39,7 @@ class PengunjungController extends Controller
         }
 
         if (Auth::user()->role != 'Admin') {
-            $query->where('user_id', Auth::user()->id);
+            $query = $query->where('user_id', Auth::user()->id);
         }
 
         $data = PengunjungResource::collection($query);

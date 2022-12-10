@@ -131,7 +131,12 @@ class PeminjamanDokumenController extends Controller
 
     public function peminjamanDokumenAktif()
     {
-        $cekPeminjamanDokumen = PeminjamanDokumenResource::collection(PeminjamanDokumen::where('tgl_pengembalian', '>', Carbon::now())->get());
+        if (Auth::user()->role != "Admin") {
+            $Peminjaman = PeminjamanDokumen::where('user_id',  Auth::id())->get();
+        } else {
+            $Peminjaman = PeminjamanDokumen::all();
+        }
+        $cekPeminjamanDokumen = PeminjamanDokumenResource::collection($Peminjaman->where('tgl_pengembalian', '>', Carbon::now()));
         return $this->successResponse($cekPeminjamanDokumen);
     }
 }

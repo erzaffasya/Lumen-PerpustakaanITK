@@ -22,7 +22,7 @@ class YudisiumMahasiswaController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->role != "Admin") {
+        if (Auth::user()->role != "Admin" && Auth::user()->role != "Tendik") {
             $YudisiumMahasiswa = YudisiumMahasiswa::where('user_id',  Auth::id())->get();
         } else {
             $YudisiumMahasiswa = YudisiumMahasiswa::all();
@@ -32,7 +32,7 @@ class YudisiumMahasiswaController extends Controller
             switch ($request->filter) {
                 case 'pengajuan':
                     $dataYudisiumMahasiswa = YudisiumMahasiswaResource::collection($YudisiumMahasiswa
-                        ->where('status_final', '!=', true));
+                        ->where('status_final', false));
                     break;
                 case 'riwayatPengajuan':
                     $dataYudisiumMahasiswa = YudisiumMahasiswaResource::collection($YudisiumMahasiswa
