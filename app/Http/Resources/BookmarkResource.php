@@ -20,17 +20,17 @@ class BookmarkResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user($this->user_id),
             // 'dokumen_id' => $this->dokumen_id,
-            'dokumen' => $this->dokumen($this->dokumen_id),
+            'dokumen' => new DokumenResource(Dokumen::find($this->dokumen_id)),
             'gambar_dokumen' => url($this->getURL($this->dokumen_id)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
     }
 
-    public function dokumen($id){
-        $data = Dokumen::select('id','judul','tahun_terbit','nama_pengarang','kategori_id','created_at','updated_at')->find($id);
-        return $data;
-    }
+    // public function dokumen($id){
+    //     $data = Dokumen::select('id','judul','tahun_terbit','nama_pengarang','kategori_id','created_at','updated_at')->find($id);
+    //     return $data;
+    // }
 
     public function user($id){
         $data = User::select('name','email','nim','jurusan','prodi','angkatan','role')->find($id);
