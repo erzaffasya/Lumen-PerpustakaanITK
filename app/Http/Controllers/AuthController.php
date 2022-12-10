@@ -32,88 +32,88 @@ class AuthController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function login(Request $request)
-    {
-
-        $this->validate($request, [
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        $credentials = $request->only(['email', 'password']);
-
-        if (!$token = Auth::attempt($credentials)) {
-            return $this->errorResponse(['message' => 'Unauthorized'], 401);
-        }
-
-        return $this->respondWithToken($token);
-    }
     // public function login(Request $request)
     // {
-    //     $validator = Validator::make($request->all(), [
-    //         'email' => 'required',
-    //         'password' => 'required'
+
+    //     $this->validate($request, [
+    //         'email' => 'required|string',
+    //         'password' => 'required|string',
     //     ]);
 
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors());
+    //     $credentials = $request->only(['email', 'password']);
+
+    //     if (!$token = Auth::attempt($credentials)) {
+    //         return $this->errorResponse(['message' => 'Unauthorized'], 401);
     //     }
 
-    //     $response = Http::acceptJson()->post('https://api-gerbang.itk.ac.id/api/siakad/login', [
-    //         'email' => $request->email,
-    //         'password' => $request->password
-    //     ]);
-
-    //     if ($response->ok()) {
-    //         $json = $response->json();
-    //         $mahasiswa = $json['data'];
-
-    //         if (array_key_exists("PE_Nip", $mahasiswa['biodata'])) {
-    //             //dosen
-    //             $mahasiswalogin = User::updateOrCreate(
-    //                 [
-    //                     'nim' => $mahasiswa['XNAMA']
-    //                 ],
-    //                 [
-    //                     'nim' => $mahasiswa['XNAMA'],
-    //                     'name' => $mahasiswa['USERDESC'],
-    //                     'email' => $mahasiswa['biodata']['PE_Email'],
-    //                     'role' => 'Dosen',
-    //                     'password' => bcrypt($mahasiswa['XNAMA'])
-    //                 ]
-    //             );
-    //             $login = Auth::attempt(['email' => $mahasiswalogin->email, 'password' => $mahasiswa['XNAMA']]);
-    //             return $this->respondWithToken($login);
-    //         } elseif (array_key_exists("MA_Nrp", $mahasiswa['biodata'])) {
-    //             // mahasiswa
-    //             // dd($mahasiswa['biodata']);
-    //             $mahasiswalogin = User::updateOrCreate(
-    //                 [
-    //                     'nim' => $mahasiswa['XNAMA']
-    //                 ],
-    //                 [
-    //                     'nim' => $mahasiswa['XNAMA'],
-    //                     'name' => $mahasiswa['USERDESC'],
-    //                     'email' => $mahasiswa['biodata']['MA_Email'],
-    //                     'jurusan' => $mahasiswa['biodata']['nama_jurusan'],
-    //                     'prodi' => $mahasiswa['biodata']['prodi']['Nama_Prodi'],
-    //                     'angkatan' => $mahasiswa['biodata']['MA_Tahun_Masuk'],
-    //                     'no_telp' => $mahasiswa['biodata']['MA_TelpMhs'],
-    //                     'status' => $mahasiswa['biodata']['status_aktif']['status_mahasiswa'],
-    //                     'role' => 'Mahasiswa',
-    //                     'password' => bcrypt($mahasiswa['XNAMA'])
-    //                 ]
-    //             );
-    //             $login = Auth::attempt(['email' => $mahasiswalogin->email, 'password' => $mahasiswa['XNAMA']]);
-    //             return $this->respondWithToken($login);
-    //         }
-    //     } else {
-    //         if (!$token = Auth::attempt($request->only('email', 'password'))) {
-    //             return $this->errorResponse('Unauthorized', 401);
-    //         }
-    //         return $this->respondWithToken($token);
-    //     }
+    //     return $this->respondWithToken($token);
     // }
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $response = Http::acceptJson()->post('https://api-gerbang.itk.ac.id/api/siakad/login', [
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
+
+        if ($response->ok()) {
+            $json = $response->json();
+            $mahasiswa = $json['data'];
+
+            if (array_key_exists("PE_Nip", $mahasiswa['biodata'])) {
+                //dosen
+                $mahasiswalogin = User::updateOrCreate(
+                    [
+                        'nim' => $mahasiswa['XNAMA']
+                    ],
+                    [
+                        'nim' => $mahasiswa['XNAMA'],
+                        'name' => $mahasiswa['USERDESC'],
+                        'email' => $mahasiswa['biodata']['PE_Email'],
+                        'role' => 'Dosen',
+                        'password' => bcrypt($mahasiswa['XNAMA'])
+                    ]
+                );
+                $login = Auth::attempt(['email' => $mahasiswalogin->email, 'password' => $mahasiswa['XNAMA']]);
+                return $this->respondWithToken($login);
+            } elseif (array_key_exists("MA_Nrp", $mahasiswa['biodata'])) {
+                // mahasiswa
+                // dd($mahasiswa['biodata']);
+                $mahasiswalogin = User::updateOrCreate(
+                    [
+                        'nim' => $mahasiswa['XNAMA']
+                    ],
+                    [
+                        'nim' => $mahasiswa['XNAMA'],
+                        'name' => $mahasiswa['USERDESC'],
+                        'email' => $mahasiswa['biodata']['MA_Email'],
+                        'jurusan' => $mahasiswa['biodata']['nama_jurusan'],
+                        'prodi' => $mahasiswa['biodata']['prodi']['Nama_Prodi'],
+                        'angkatan' => $mahasiswa['biodata']['MA_Tahun_Masuk'],
+                        'no_telp' => $mahasiswa['biodata']['MA_TelpMhs'],
+                        'status' => $mahasiswa['biodata']['status_aktif']['status_mahasiswa'],
+                        'role' => 'Mahasiswa',
+                        'password' => bcrypt($mahasiswa['XNAMA'])
+                    ]
+                );
+                $login = Auth::attempt(['email' => $mahasiswalogin->email, 'password' => $mahasiswa['XNAMA']]);
+                return $this->respondWithToken($login);
+            }
+        } else {
+            if (!$token = Auth::attempt($request->only('email', 'password'))) {
+                return $this->errorResponse('Unauthorized', 401);
+            }
+            return $this->respondWithToken($token);
+        }
+    }
     /**
      * Get the authenticated User.
      *
