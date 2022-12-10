@@ -96,21 +96,21 @@ class BookmarkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = Bookmark::find($id);
-        $data->dokumen_id = $request->dokumen_id;
-        $data->user_id = $request->user_id;
-        $data->save();
-        return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Diubah']);
-        // $data = Bookmark::where('dokumen_id', $id)->where('user_id', Auth::user()->id)->first();
+        // $data = Bookmark::find($id);
+        // $data->dokumen_id = $request->dokumen_id;
+        // $data->user_id = $request->user_id;
+        // $data->save();
+        // return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Diubah']);
+        $data = Bookmark::where('dokumen_id', $id)->where('user_id', Auth::user()->id)->first();
 
-        // if ($data) {
-        //     $data->delete();
-        //     return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Dihapus']);
-        // } else {
-        //     $Bookmark = new Bookmark(["user_id" => Auth::user()->id, "dokumen_id" => $id]);
-        //     $Bookmark->save();
-        //     return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Ditambahkan']);
-        // }
+        if ($data) {
+            $data->delete();
+            return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Dihapus']);
+        } else {
+            $Bookmark = new Bookmark(["user_id" => Auth::user()->id, "dokumen_id" => $id]);
+            $Bookmark->save();
+            return $this->successResponse(['status' => true, 'message' => 'Bookmark Berhasil Ditambahkan']);
+        }
     }
 
     /**

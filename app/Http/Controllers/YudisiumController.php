@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\KategoriResource;
-use App\Models\Kategori;
+use App\Http\Resources\YudisiumResource;
+use App\Models\Yudisium;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class KategoriController extends Controller
+class YudisiumController extends Controller
 {
     /**
      * @OA\Get(
-     *  path="/api/kategori",
-     *  tags={"Kategori"},
+     *  path="/api/Yudisium",
+     *  tags={"Yudisium"},
      *  summary="Get the list of resources",
      *  @OA\Response(response=200, description="Return a list of resources"),
      *  security={{ "apiAuth": {} }}
@@ -21,15 +21,15 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $Kategori = KategoriResource::collection(Kategori::all());
-        return $this->successResponse($Kategori);
+        $Yudisium = YudisiumResource::collection(Yudisium::all());
+        return $this->successResponse($Yudisium);
     }
 
     /**
      * @OA\Post(
-     *     path="/api/kategori",
-     *     tags={"Kategori"},
-     *     summary="Tambah Data Kategori",
+     *     path="/api/Yudisium",
+     *     tags={"Yudisium"},
+     *     summary="Tambah Data Yudisium",
      *     operationId="updatePetWithForm",
      *     @OA\Response(
      *         response=200,
@@ -43,18 +43,18 @@ class KategoriController extends Controller
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(
-     *                     property="nama_kategori",
-     *                     description="Nama Kategori",
+     *                     property="periode",
+     *                     description="Nama Yudisium",
      *                     type="string",
      *                 ),
      *                 @OA\Property(
-     *                     property="detail",
-     *                     description="Detail Kategori",
+     *                     property="tahun",
+     *                     description="tahun Yudisium",
      *                     type="string"
      *                 ), 
      *                 @OA\Property(
-     *                     property="berkas",
-     *                     description="Berkas",
+     *                     property="expired_at",
+     *                     description="expired_at",
      *                     type="string"
      *                 ),
      *                 @OA\Property(
@@ -73,8 +73,8 @@ class KategoriController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama_kategori' => 'required',
-                'detail' => 'required',
+                'periode' => 'required',
+                'tahun' => 'required',
             ]
         );
 
@@ -82,21 +82,20 @@ class KategoriController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $Kategori = new Kategori();
-        $Kategori->nama_kategori = $request->nama_kategori;
-        $Kategori->detail = $request->detail;
-        $Kategori->berkas = $request->berkas;
-        $Kategori->isPembimbing = $request->isPembimbing;
-        $Kategori->save();
+        $Yudisium = new Yudisium();
+        $Yudisium->periode = $request->periode;
+        $Yudisium->tahun = $request->tahun;
+        $Yudisium->expired_at = $request->expired_at;
+        $Yudisium->save();
 
-        return $this->successResponse(['status' => true, 'message' => 'Kategori Berhasil Ditambahkan']);
+        return $this->successResponse(['status' => true, 'message' => 'Yudisium Berhasil Ditambahkan']);
     }
 
     /**
      * @OA\Get(
-     *  path="/api/kategori/{id}",
-     *  tags={"Kategori"},
-     *  summary="Get kategori by kategori id",
+     *  path="/api/Yudisium/{id}",
+     *  tags={"Yudisium"},
+     *  summary="Get Yudisium by Yudisium id",
      *  @OA\Parameter(
      *    name="id",
      *    in="path",
@@ -107,37 +106,36 @@ class KategoriController extends Controller
      */
     public function show($id)
     {
-        $Kategori = new KategoriResource(Kategori::findOrFail($id));
-        if (!$Kategori) {
+        $Yudisium = new YudisiumResource(Yudisium::findOrFail($id));
+        if (!$Yudisium) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
-        return $this->successResponse($Kategori);
+        return $this->successResponse($Yudisium);
     }
 
     public function update(Request $request, $id)
     {
-        $Kategori = Kategori::find($id);
-        if (!$Kategori) {
+        $Yudisium = Yudisium::find($id);
+        if (!$Yudisium) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
-        $Kategori->Save();
-        $Kategori = Kategori::find($Kategori->id)->update([
-            'nama_kategori' => $request->nama_kategori,
-            'detail' => $request->detail,
-            'berkas' => $request->berkas,
-            'isPembimbing' => $request->isPembimbing,
+        $Yudisium->Save();
+        $Yudisium = Yudisium::find($Yudisium->id)->update([
+            'periode' => $request->periode,
+            'tahun' => $request->tahun,
+            'expired_at' => $request->expired_at,
         ]);
 
-        return $this->successResponse(['status' => true, 'message' => 'Kategori Berhasil Diubah']);
+        return $this->successResponse(['status' => true, 'message' => 'Yudisium Berhasil Diubah']);
     }
 
     /**
      * @OA\Delete(
-     *     path="/api/kategori/{id}",
-     *     tags={"Kategori"},
-     *     summary="Deletes a kategori",
-     *     operationId="deletekategori",
+     *     path="/api/Yudisium/{id}",
+     *     tags={"Yudisium"},
+     *     summary="Deletes a Yudisium",
+     *     operationId="deleteYudisium",
      *     @OA\Parameter(
      *    name="id",
      *    in="path",
@@ -152,19 +150,19 @@ class KategoriController extends Controller
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="kategori not found",
+     *         description="Yudisium not found",
      *     ),
      *     security={{ "apiAuth": {} }}
      * )
      */
     public function destroy($id)
     {
-        $Kategori = Kategori::find($id);
-        if (!$Kategori) {
+        $Yudisium = Yudisium::find($id);
+        if (!$Yudisium) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
-        $Kategori->delete();
-        return $this->successResponse(['status' => true, 'message' => 'Kategori Berhasil Dihapus']);
+        $Yudisium->delete();
+        return $this->successResponse(['status' => true, 'message' => 'Yudisium Berhasil Dihapus']);
     }
 }

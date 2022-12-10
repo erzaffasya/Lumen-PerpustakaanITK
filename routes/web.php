@@ -30,7 +30,7 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/pengunjung', 'PengunjungController@index');
     $router->post('/pengunjung', 'PengunjungController@tambahPengunjung');
     $router->delete('/pengunjung/{id}', 'PengunjungController@destroy');
-    
+
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
 });
@@ -74,9 +74,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('dokumen/{id}', 'DokumenController@show');
     $router->put('dokumen/{id}', 'DokumenController@update');
     $router->delete('dokumen/{id}', 'DokumenController@destroy');
-    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');    
+    $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
 
-    
+
     $router->get('cek-dokumen-perjurusan', 'DokumenController@cekDokumenPerjurusan');
     $router->get('/dokumen/{id}/view/{data}', 'DokumenController@view');
     $router->get('/download-dokumen/{id}/{data}', 'DokumenController@downloadFile');
@@ -99,7 +99,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->put('pembimbing/{id}', 'PembimbingController@update');
     $router->delete('pembimbing/{id}', 'PembimbingController@destroy');
     $router->get('pembimbing/{id}/dokumen', 'PembimbingController@getByDokukumenId');
-    
+
+    //Yudisium
+    $router->get('yudisium', 'YudisiumController@index');
+    $router->post('yudisium', 'YudisiumController@store');
+    $router->get('yudisium/{id}', 'YudisiumController@show');
+    $router->put('yudisium/{id}', 'YudisiumController@update');
+    $router->delete('yudisium/{id}', 'YudisiumController@destroy');
+
+    //MahasiswaYudisium
+    $router->get('yudisium-mahasiswa', 'YudisiumMahasiswaController@index');
+    $router->post('yudisium-mahasiswa', 'YudisiumMahasiswaController@store');
+    $router->get('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@show');
+    $router->put('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@update');
+    $router->delete('yudisium-mahasiswa/{id}', 'YudisiumMahasiswaController@destroy');
+
     //Notifikasi
     $router->get('notifikasi', 'NotifikasiController@index');
     $router->get('baca-notifikasi', 'NotifikasiController@bacaNotifikasi');
@@ -126,5 +140,4 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     //Aktif
     $router->get('peminjaman-ruangan-aktif', 'PeminjamanRuanganController@peminjamanRuanganAktif');
     $router->get('peminjaman-dokumen-aktif', 'PeminjamanDokumenController@peminjamanDokumenAktif');
-
 });
