@@ -59,7 +59,7 @@ class AuthController extends Controller
             return response()->json($validator->errors());
         }
 
-        $response = Http::acceptJson()->post('https://api-gerbang.itk.ac.id/api/siakad/login', [
+        $response = Http::acceptJson()->post('https://api-gerbang2.itk.ac.id/api/siakad/login', [
             'email' => $request->email,
             'password' => $request->password
         ]);
