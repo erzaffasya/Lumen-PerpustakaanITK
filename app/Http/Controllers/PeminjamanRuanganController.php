@@ -103,7 +103,7 @@ class PeminjamanRuanganController extends Controller
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
                 }
                 $PeminjamanRuangan->save();
-                return  $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan', 'data' => new PeminjamanRuanganResource($Ruangan->id)]);
+                return  $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan', 'data' => new PeminjamanRuanganResource($PeminjamanRuangan->id)]);
             } else {
                 return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
             }
