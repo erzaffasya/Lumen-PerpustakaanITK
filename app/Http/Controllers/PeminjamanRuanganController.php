@@ -99,7 +99,9 @@ class PeminjamanRuanganController extends Controller
                         'judul' => 'Peminjaman Ruangan Berhasil',
                         'pesan' => 'Peminjaman Ruangan ' . $Ruangan->nama_ruangan . ' Pada tanggal ' . $PeminjamanRuangan->tanggal . ' Berhasil Dilakukan.',
                     ];
+                    // dd('erza');
                     $user = User::find(Auth::user()->id);
+                    // dd($user);
                     Notification::send($user, new NotifRevisi($dataNotif));
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
                 }
@@ -135,7 +137,14 @@ class PeminjamanRuanganController extends Controller
         $PeminjamanRuangan->status = $request->new_status;
         $PeminjamanRuangan->catatan = $request->catatan;
         $PeminjamanRuangan->save();
-
+        $dataNotif = [
+            'judul' => 'Perubahan Status Peminjaman Ruangan',
+            'pesan' => 'Peminjaman Ruangan ' . $PeminjamanRuangan->nama_ruangan . ' Pada tanggal ' . $PeminjamanRuangan->tanggal . ' Status Berubah Menjadi ' . $PeminjamanRuangan->status,
+        ];
+        // dd('erza');
+        $user = User::find(Auth::user()->id);
+        // dd($user);
+        Notification::send($user, new NotifRevisi($dataNotif));
         if ($PeminjamanRuangan->status = 'Diterima') {
             $this->gcalender($PeminjamanRuangan->keperluan . " - Ruangan " . $PeminjamanRuangan->Ruangan->nama_ruangan . "- Nama " . $PeminjamanRuangan->User->name . " " . $PeminjamanRuangan->User->nim, $PeminjamanRuangan->tanggal, $PeminjamanRuangan->waktu_awal, $PeminjamanRuangan->waktu_akhir);
         }

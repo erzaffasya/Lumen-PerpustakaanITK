@@ -699,7 +699,7 @@ class DokumenController extends Controller
             'judul' => 'Perubahan Status Dokumen',
             'pesan' => 'Status Dokumen ' . $Dokumen->judul . ' ' . $Dokumen->status . '!',
         ];
-        $user = User::find(Auth::user()->id);
+        $user = User::find($Dokumen->user_id);
         Notification::send($user, new NotifRevisi($dataNotif));
 
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Diubah']);
