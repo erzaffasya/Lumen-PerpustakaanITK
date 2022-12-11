@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PeminjamanRuanganResource;
+use App\Http\Resources\UserResource;
 use App\Models\PeminjamanRuangan;
 use App\Models\Ruangan;
 use App\Models\User;
@@ -49,7 +50,7 @@ class PeminjamanRuanganController extends Controller
         $waktu_awal = $request->waktu_awal;
         $waktu_akhir = $request->waktu_akhir;
         $ruangan = $request->ruangan;
-        
+
         if ($waktu_awal > $waktu_akhir) {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
@@ -62,7 +63,7 @@ class PeminjamanRuanganController extends Controller
         }
 
         if ($cekPeminjaman < 1) {
-  
+
             //cek Jadwal tersebut tersedia atau tidak
             $cekRuangan = PeminjamanRuangan::orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal, $ruangan) {
                 $query
@@ -72,14 +73,14 @@ class PeminjamanRuanganController extends Controller
                     ->where('ruangan_id', $ruangan)
                     ->whereDate('tanggal', $tanggal);
             })
-            ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal, $ruangan) {
-                $query
-                    ->whereTime('waktu_akhir', '>=', $waktu_awal)
-                    ->whereTime('waktu_akhir', '<=', $waktu_akhir)
-                    ->where('status', '=', 'Diterima')
-                    ->where('ruangan_id', $ruangan)
-                    ->whereDate('tanggal', $tanggal);
-            })->exists();
+                ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal, $ruangan) {
+                    $query
+                        ->whereTime('waktu_akhir', '>=', $waktu_awal)
+                        ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                        ->where('status', '=', 'Diterima')
+                        ->where('ruangan_id', $ruangan)
+                        ->whereDate('tanggal', $tanggal);
+                })->exists();
 
             // Jika ruangan tersebut tersedia
             if (!$cekRuangan) {
@@ -96,14 +97,17 @@ class PeminjamanRuanganController extends Controller
                     $PeminjamanRuangan->status = 'Diterima';
                     $dataNotif = [
                         'judul' => 'Peminjaman Ruangan Berhasil',
-                        'pesan' => 'Peminjaman Ruangan ' . $Ruangan->nama_ruangan . ' Pada tanggal '. $PeminjamanRuangan->tanggal.' Berhasil Dilakukan.',
+                        'pesan' => 'Peminjaman Ruangan ' . $Ruangan->nama_ruangan . ' Pada tanggal ' . $PeminjamanRuangan->tanggal . ' Berhasil Dilakukan.',
                     ];
                     $user = User::find(Auth::user()->id);
                     Notification::send($user, new NotifRevisi($dataNotif));
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
                 }
                 $PeminjamanRuangan->save();
-                return  $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan', 'data' => $PeminjamanRuangan]);
+                return  $this->successResponse([
+                    'status' => true, 'message' => 'Ruangan Berhasil Ditambahkan',
+                    'data' => ['ruangan' => $PeminjamanRuangan, 'user' => new UserResource(User::find(($PeminjamanRuangan->user_id)))]
+                ]);
             } else {
                 return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
             }
@@ -134,7 +138,6 @@ class PeminjamanRuanganController extends Controller
 
         if ($PeminjamanRuangan->status = 'Diterima') {
             $this->gcalender($PeminjamanRuangan->keperluan . " - Ruangan " . $PeminjamanRuangan->Ruangan->nama_ruangan . "- Nama " . $PeminjamanRuangan->User->name . " " . $PeminjamanRuangan->User->nim, $PeminjamanRuangan->tanggal, $PeminjamanRuangan->waktu_awal, $PeminjamanRuangan->waktu_akhir);
-        
         }
         return $this->successResponse(['status' => true, 'message' => 'Peminjaman Ruangan Berhasil Diubah']);
     }
@@ -175,12 +178,12 @@ class PeminjamanRuanganController extends Controller
         }
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
             $cekRuangan = PeminjamanRuangan::orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
-                    $query
-                        ->whereTime('waktu_awal', '>=', $waktu_awal)
-                        ->whereTime('waktu_awal', '<=', $waktu_akhir)
-                        ->where('status', '=', 'Diterima')
-                        ->whereDate('tanggal', $tanggal);
-                })
+                $query
+                    ->whereTime('waktu_awal', '>=', $waktu_awal)
+                    ->whereTime('waktu_awal', '<=', $waktu_akhir)
+                    ->where('status', '=', 'Diterima')
+                    ->whereDate('tanggal', $tanggal);
+            })
                 ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                     $query
                         ->whereTime('waktu_akhir', '>=', $waktu_awal)
@@ -216,7 +219,7 @@ class PeminjamanRuanganController extends Controller
 
     public function gcalender($namaEvent, $tanggal, $waktuAwal, $waktuAkhir)
     {
-        try {        
+        try {
             $event = new Event;
             $event->name = $namaEvent;
             $event->startDateTime = Carbon::parse($tanggal . $waktuAwal);
@@ -225,7 +228,6 @@ class PeminjamanRuanganController extends Controller
         } catch (\Throwable $th) {
             $this->errorResponse('Google Calendar sedang bermasalah, silahkan coba lagi!', 500);
         }
-
     }
 
     public function invoiceNumber()
