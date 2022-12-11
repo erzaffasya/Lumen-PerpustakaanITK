@@ -216,11 +216,16 @@ class PeminjamanRuanganController extends Controller
 
     public function gcalender($namaEvent, $tanggal, $waktuAwal, $waktuAkhir)
     {
-        $event = new Event;
-        $event->name = $namaEvent;
-        $event->startDateTime = Carbon::parse($tanggal . $waktuAwal);
-        $event->endDateTime = Carbon::parse($tanggal . $waktuAkhir);
-        $event->save();
+        try {        
+            $event = new Event;
+            $event->name = $namaEvent;
+            $event->startDateTime = Carbon::parse($tanggal . $waktuAwal);
+            $event->endDateTime = Carbon::parse($tanggal . $waktuAkhir);
+            $event->save();
+        } catch (\Throwable $th) {
+            $this->errorResponse('Google Calendar sedang bermasalah, silahkan coba lagi!', 500);
+        }
+
     }
 
     public function invoiceNumber()
