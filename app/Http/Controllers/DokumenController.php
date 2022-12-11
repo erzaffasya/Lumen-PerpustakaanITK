@@ -707,7 +707,7 @@ class DokumenController extends Controller
 
     public function cekDokumenPerjurusan()
     {
-        $cekDokumen = DokumenResource::collection(Dokumen::select('dokumen.*')
+        $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*')
             ->join('users', 'users.id', 'dokumen.user_id')
             ->where('users.role', '=', 'Mahasiswa')
             ->where('users.jurusan', '=', Auth::user()->jurusan)
