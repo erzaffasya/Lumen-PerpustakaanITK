@@ -97,9 +97,9 @@ class UserController extends Controller
         $getData = Dokumen::select('*')
             ->join('kategori', 'kategori.id', 'dokumen.kategori_id')
             ->join('users', 'users.id', 'dokumen.user_id')
-            ->where('nim', request()->nim)
-            ->where('status', 'Diterima')
-            ->pluck('nama_kategori')->toArray();
+            ->where('users.nim', request()->nim)
+            ->where('dokumen.status', 'Diterima')
+            ->pluck('kategori.nama_kategori')->toArray();
 
         if (in_array('Kerja Praktek', $getData)) {
             return $this->successResponse('Anda sudah bebas pustaka!');
