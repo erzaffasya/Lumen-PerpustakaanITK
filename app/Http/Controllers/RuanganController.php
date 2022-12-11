@@ -60,8 +60,14 @@ class RuanganController extends Controller
         $Ruangan->jumlah_orang = $request->jumlah_orang;
         $Ruangan->lokasi = $request->lokasi;
         $Ruangan->save();
-
-        return $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan', 'data' => new PeminjamanRuanganResource($Ruangan->id)]);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Ruangan Berhasil Ditambahkan',
+            'code' => 200,
+            'data' => new PeminjamanRuanganResource($Ruangan->id)
+        ]);
+     
     }
 
     /**
