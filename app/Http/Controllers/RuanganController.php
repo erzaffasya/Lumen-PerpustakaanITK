@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PeminjamanRuanganResource;
 use App\Models\PeminjamanRuangan;
 use App\Models\Ruangan;
 use Carbon\Carbon;
@@ -60,7 +61,7 @@ class RuanganController extends Controller
         $Ruangan->lokasi = $request->lokasi;
         $Ruangan->save();
 
-        return $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan']);
+        return $this->successResponse(['status' => true, 'message' => 'Ruangan Berhasil Ditambahkan', 'data' => new PeminjamanRuanganResource($Ruangan->id)]);
     }
 
     /**
