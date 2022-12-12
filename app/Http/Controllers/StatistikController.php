@@ -10,8 +10,10 @@ use App\Models\PeminjamanDokumen;
 use App\Models\PeminjamanRuangan;
 use App\Models\Pengunjung;
 use App\Models\Ruangan;
+use App\Models\YudisiumMahasiswa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Shetabit\Visitor\Models\Visit;
 
 class StatistikController extends Controller
@@ -27,8 +29,11 @@ class StatistikController extends Controller
      */
     public function jumlahDokumen()
     {
-        $Dokumen = Dokumen::count();
-        return $this->successResponse($Dokumen);
+        $query = Dokumen::all();
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        }
+        return $this->successResponse($query->count());
     }
     /**
      * @OA\Get(
@@ -41,8 +46,11 @@ class StatistikController extends Controller
      */
     public function jumlahPeminjamanDokumen()
     {
-        $PeminjamanDokumen = PeminjamanDokumen::count();
-        return $this->successResponse($PeminjamanDokumen);
+        $query = PeminjamanDokumen::all();
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        }
+        return $this->successResponse($query->count());
     }
 
     /**
@@ -56,8 +64,11 @@ class StatistikController extends Controller
      */
     public function jumlahRuangan()
     {
-        $Ruangan = Ruangan::count();
-        return $this->successResponse($Ruangan);
+        $query = Ruangan::all();
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        }
+        return $this->successResponse($query->count());
     }
 
     /**
@@ -71,9 +82,39 @@ class StatistikController extends Controller
      */
     public function jumlahPeminjamanRuangan()
     {
-        $PeminjamanRuangan = PeminjamanRuangan::count();
-        return $this->successResponse($PeminjamanRuangan);
+        $query = PeminjamanRuangan::all();
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        }
+        return $this->successResponse($query->count());
     }
+
+    public function jumlahYudisium(Request $request)
+    {
+        $query = YudisiumMahasiswa::all();
+
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        } 
+
+        if ($request->filter) {
+            switch ($request->filter) {
+                case 'pengajuan':
+                    $query = $query
+                        ->where('status_final', false);
+                    break;
+                case 'riwayatPengajuan':
+                    $query = $query
+                        ->where('status_final', true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return $this->successResponse($query->count());
+    }
+
     public function peminjamanDokumenPopuler()
     {
         $PeminjamanDokumen = PeminjamanDokumen::select(
@@ -130,9 +171,24 @@ class StatistikController extends Controller
 
     public function grafikPerpustakaan()
     {
-        $Pengunjungs = Pengunjung::all();
-        $PeminjamanDokumens = PeminjamanDokumen::all();
-        $PeminjamanRuangans  = PeminjamanRuangan::all();
+        $Pengunjungs = Pengunjung::select(
+            DB::raw('count(id) as total_pengunjung'),
+            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+        )->groupBy('bulan')->whereYear('created_at', date('Y'))
+            ->orderBy('bulan', 'ASC')
+            ->get();;
+        $PeminjamanDokumens = PeminjamanDokumen::select(
+            DB::raw('count(id) as total_peminjaman_dokumen'),
+            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+        )->groupBy('bulan')->whereYear('created_at', date('Y'))
+            ->orderBy('bulan', 'ASC')
+            ->get();
+        $PeminjamanRuangans  = PeminjamanRuangan::select(
+            DB::raw('count(id) as total_peminjaman_ruangan'),
+            DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
+        )->groupBy('bulan')->whereYear('tanggal', date('Y'))
+            ->orderBy('bulan', 'ASC')
+            ->get();
 
         if (Auth::user()->role != 'Admin') {
             $Pengunjungs = $Pengunjungs->where('user_id', Auth::user()->id);
@@ -140,26 +196,11 @@ class StatistikController extends Controller
             $PeminjamanRuangans = $Pengunjungs->where('user_id', Auth::user()->id);
         }
 
-        $Pengunjungs = $Pengunjungs->select(
-            DB::raw('count(id) as total_pengunjung'),
-            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('created_at', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();
+        // $Pengunjungs = $Pengunjungs
 
-        $PeminjamanDokumens = $PeminjamanDokumens->select(
-            DB::raw('count(id) as total_peminjaman_dokumen'),
-            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('created_at', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();
+        // $PeminjamanDokumens = $PeminjamanDokumens->
 
-        $PeminjamanRuangans = $PeminjamanRuangans->select(
-            DB::raw('count(id) as total_peminjaman_ruangan'),
-            DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('tanggal', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();
+        // $PeminjamanRuangans = $PeminjamanRuangans->
 
         $arrayStatistik = [
             'jumlah_pengunjung' => 0,
