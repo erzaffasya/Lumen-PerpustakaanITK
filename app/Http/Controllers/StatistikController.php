@@ -10,6 +10,7 @@ use App\Models\PeminjamanDokumen;
 use App\Models\PeminjamanRuangan;
 use App\Models\Pengunjung;
 use App\Models\Ruangan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Shetabit\Visitor\Models\Visit;
 
@@ -129,21 +130,31 @@ class StatistikController extends Controller
 
     public function grafikPerpustakaan()
     {
-        $Pengunjungs = Pengunjung::select(
+        $Pengunjungs = Pengunjung::all();
+        $PeminjamanDokumens = PeminjamanDokumen::all();
+        $PeminjamanRuangans  = PeminjamanRuangan::all();
+
+        if (Auth::user()->role != 'Admin') {
+            $Pengunjungs = $Pengunjungs->where('user_id', Auth::user()->id);
+            $PeminjamanDokumens = $Pengunjungs->where('user_id', Auth::user()->id);
+            $PeminjamanRuangans = $Pengunjungs->where('user_id', Auth::user()->id);
+        }
+
+        $Pengunjungs = $Pengunjungs->select(
             DB::raw('count(id) as total_pengunjung'),
             DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
         )->groupBy('bulan')->whereYear('created_at', date('Y'))
             ->orderBy('bulan', 'ASC')
             ->get();
 
-        $PeminjamanDokumens = PeminjamanDokumen::select(
+        $PeminjamanDokumens = $PeminjamanDokumens->select(
             DB::raw('count(id) as total_peminjaman_dokumen'),
             DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
         )->groupBy('bulan')->whereYear('created_at', date('Y'))
             ->orderBy('bulan', 'ASC')
             ->get();
 
-        $PeminjamanRuangans = PeminjamanRuangan::select(
+        $PeminjamanRuangans = $PeminjamanRuangans->select(
             DB::raw('count(id) as total_peminjaman_ruangan'),
             DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
         )->groupBy('bulan')->whereYear('tanggal', date('Y'))
@@ -155,7 +166,7 @@ class StatistikController extends Controller
             'jumlah_peminjaman_dokumen' => 0,
             'jumlah_peminjaman_ruangan' => 0
         ];
-        
+
         for ($i = 1; $i <= 12; $i++) {
             $arrayStatistik['detail'][$i] = [
                 'total_pengunjung' => 0,

@@ -722,10 +722,10 @@ class DokumenController extends Controller
         // dd($id);
         $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*', 'kategori.nama_kategori')
             ->join('kategori', 'dokumen.kategori_id', 'kategori.id')
+            ->where('dokumen.status', '=', 'Diterima')
             ->where('dokumen.judul', 'LIKE', "%{$id}%")
             ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
             ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
-            ->where('dokumen.status', 'Diterima')
             ->get());
 
         return $this->successResponse($cekDokumen);

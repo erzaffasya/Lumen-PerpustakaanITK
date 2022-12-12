@@ -32,7 +32,8 @@ class SimpelDokumenResource extends JsonResource
             'tanggal_dibuat' => date('d M Y', strtotime($this->created_at)),
             'isBookmark' => $this->Bookmark($this->id),
             'jumlah_kunjungan' => $this->jumlahPengunjung($this->id),
-            'isPinjam' => $this->isPinjam($this->id)
+            'isPinjam' => $this->isPinjam($this->id),
+            // 'user' => new UserResource(User::find($this->user_id))
         ];
     }
 
