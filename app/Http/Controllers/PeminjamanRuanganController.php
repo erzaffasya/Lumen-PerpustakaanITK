@@ -105,11 +105,20 @@ class PeminjamanRuanganController extends Controller
                     Notification::send($user, new NotifRevisi($dataNotif));
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
                 }
-                $PeminjamanRuangan->save();
                 return  $this->successResponse([
                     'status' => true, 'message' => 'Ruangan Berhasil Ditambahkan',
-                    'data' => [ $PeminjamanRuangan, 'ruangan' => Ruangan::find($PeminjamanRuangan->ruangan_id), 'user' => new UserResource(User::find(($PeminjamanRuangan->user_id)))]
+                    'data' => [
+                        'kode' => $PeminjamanRuangan->kode,
+                        'tanggal' => $PeminjamanRuangan->tanggal,
+                        'waktu_awal' => $PeminjamanRuangan->waktu_awal,
+                        'waktu_akhir' => $PeminjamanRuangan->waktu_akhir,
+                        'keperluan' => $PeminjamanRuangan->keperluan,
+                        'status' => $PeminjamanRuangan->status,
+                        'user' => new UserResource(User::find(($PeminjamanRuangan->user_id))),
+                        'ruangan' => Ruangan::find($PeminjamanRuangan->ruangan_id),
+                    ],
                 ]);
+                $PeminjamanRuangan->save();
             } else {
                 return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
             }
