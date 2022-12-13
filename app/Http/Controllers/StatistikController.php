@@ -192,8 +192,8 @@ class StatistikController extends Controller
 
         if (Auth::user()->role != 'Admin') {
             $Pengunjungs = $Pengunjungs->where('user_id', Auth::user()->id);
-            $PeminjamanDokumens = $Pengunjungs->where('user_id', Auth::user()->id);
-            $PeminjamanRuangans = $Pengunjungs->where('user_id', Auth::user()->id);
+            $PeminjamanDokumens = $PeminjamanDokumens->where('user_id', Auth::user()->id);
+            $PeminjamanRuangans = $PeminjamanRuangans->where('user_id', Auth::user()->id);
         }
 
         // $Pengunjungs = $Pengunjungs
