@@ -108,7 +108,7 @@ class PeminjamanRuanganController extends Controller
                 $PeminjamanRuangan->save();
                 return  $this->successResponse([
                     'status' => true, 'message' => 'Ruangan Berhasil Ditambahkan',
-                    'data' => ['result' => $PeminjamanRuangan, 'ruangan' => Ruangan::find($PeminjamanRuangan->ruangan_id), 'user' => new UserResource(User::find(($PeminjamanRuangan->user_id)))]
+                    'data' => [ $PeminjamanRuangan, 'ruangan' => Ruangan::find($PeminjamanRuangan->ruangan_id), 'user' => new UserResource(User::find(($PeminjamanRuangan->user_id)))]
                 ]);
             } else {
                 return $this->errorResponse(['status' => false, 'message' => 'Kursi Sudah Dibooking'], 422);
