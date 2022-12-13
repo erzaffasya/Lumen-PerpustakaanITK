@@ -95,7 +95,7 @@ class StatistikController extends Controller
 
         if (Auth::user()->role != 'Admin') {
             $query = $query->where('user_id', Auth::user()->id);
-        } 
+        }
 
         if ($request->filter) {
             switch ($request->filter) {
@@ -171,36 +171,54 @@ class StatistikController extends Controller
 
     public function grafikPerpustakaan()
     {
-        $Pengunjungs = Pengunjung::select(
-            DB::raw('count(id) as total_pengunjung'),
-            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('created_at', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();;
-        $PeminjamanDokumens = PeminjamanDokumen::select(
-            DB::raw('count(id) as total_peminjaman_dokumen'),
-            DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('created_at', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();
-        $PeminjamanRuangans  = PeminjamanRuangan::select(
-            DB::raw('count(id) as total_peminjaman_ruangan'),
-            DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
-        )->groupBy('bulan')->whereYear('tanggal', date('Y'))
-            ->orderBy('bulan', 'ASC')
-            ->get();
-
         if (Auth::user()->role != 'Admin') {
-            $Pengunjungs = $Pengunjungs->where('user_id', Auth::user()->id);
-            $PeminjamanDokumens = $PeminjamanDokumens->where('user_id', Auth::user()->id);
-            $PeminjamanRuangans = $PeminjamanRuangans->where('user_id', Auth::user()->id);
+            $Pengunjungs = Pengunjung::select(
+                DB::raw('count(id) as total_pengunjung'),
+                DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+            )
+                ->where('user_id', Auth::user()->id)
+                ->groupBy('bulan')
+                ->whereYear('created_at', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
+            $PeminjamanDokumens = PeminjamanDokumen::select(
+                DB::raw('count(id) as total_peminjaman_dokumen'),
+                DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+            )
+                ->where('user_id', Auth::user()->id)
+                ->groupBy('bulan')
+                ->whereYear('created_at', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
+            $PeminjamanRuangans = PeminjamanRuangan::select(
+                DB::raw('count(id) as total_peminjaman_ruangan'),
+                DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
+            )
+                ->where('user_id', Auth::user()->id)
+                ->groupBy('bulan')
+                ->whereYear('tanggal', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
+        } else {
+            $Pengunjungs = Pengunjung::select(
+                DB::raw('count(id) as total_pengunjung'),
+                DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+            )->groupBy('bulan')->whereYear('created_at', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
+            $PeminjamanDokumens = PeminjamanDokumen::select(
+                DB::raw('count(id) as total_peminjaman_dokumen'),
+                DB::raw("DATE_FORMAT(created_at,'%m') as bulan")
+            )->groupBy('bulan')->whereYear('created_at', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
+            $PeminjamanRuangans  = PeminjamanRuangan::select(
+                DB::raw('count(id) as total_peminjaman_ruangan'),
+                DB::raw("DATE_FORMAT(tanggal,'%m') as bulan")
+            )->groupBy('bulan')->whereYear('tanggal', date('Y'))
+                ->orderBy('bulan', 'ASC')
+                ->get();
         }
-
-        // $Pengunjungs = $Pengunjungs
-
-        // $PeminjamanDokumens = $PeminjamanDokumens->
-
-        // $PeminjamanRuangans = $PeminjamanRuangans->
 
         $arrayStatistik = [
             'jumlah_pengunjung' => 0,
