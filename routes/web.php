@@ -43,7 +43,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
         $router->post('kategori', 'KategoriController@store');
         $router->put('kategori/{id}', 'KategoriController@update');
         $router->delete('kategori/{id}', 'KategoriController@destroy');
-        $router->put('bookmark/{id}', 'BookmarkController@update');
+        // $router->put('bookmark/{id}', 'BookmarkController@update');
         $router->put('revisi-dokumen/{id}', 'DokumenController@revisiDokumen');
         $router->put('yudisium/{id}', 'YudisiumController@update');
         $router->delete('yudisium/{id}', 'YudisiumController@destroy');
@@ -88,7 +88,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('bookmark', 'BookmarkController@index');
     $router->post('bookmark', 'BookmarkController@store');
     $router->get('bookmark/{id}', 'BookmarkController@show');
-    // $router->put('bookmark/{id}', 'BookmarkController@update');
+    $router->put('bookmark/{id}', 'BookmarkController@update');
     $router->delete('bookmark/{id}', 'BookmarkController@destroy');
 
     //Dokumen
