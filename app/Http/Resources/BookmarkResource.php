@@ -20,7 +20,7 @@ class BookmarkResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user($this->user_id),
             // 'dokumen_id' => $this->dokumen_id,
-            'dokumen' => new DokumenResource(Dokumen::find($this->dokumen_id)),
+            'dokumen' => new SimpelDokumenResource(Dokumen::find($this->dokumen_id)),
             'gambar_dokumen' => url($this->getURL($this->dokumen_id)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
