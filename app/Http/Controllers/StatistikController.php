@@ -141,6 +141,7 @@ class StatistikController extends Controller
             ->get();
         return $this->successResponse(SimpelDokumenResource::collection($PeminjamanDokumen));
     }
+    
     public function peminjamanRuanganPopuler()
     {
         $PeminjamanRuangan = PeminjamanRuangan::select(

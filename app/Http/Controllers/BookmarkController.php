@@ -28,7 +28,7 @@ class BookmarkController extends Controller
         } else {
             $Bookmark = Bookmark::all();
         }
-        $Bookmark = BookmarkResource::collection(Bookmark::all());
+        $Bookmark = BookmarkResource::collection($Bookmark);
         return $this->successResponse($Bookmark);
     }
 
