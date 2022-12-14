@@ -10,6 +10,7 @@ use App\Models\PeminjamanDokumen;
 use App\Models\PeminjamanRuangan;
 use App\Models\Pengunjung;
 use App\Models\Ruangan;
+use App\Models\Yudisium;
 use App\Models\YudisiumMahasiswa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -90,6 +91,17 @@ class StatistikController extends Controller
     }
 
     public function jumlahYudisium(Request $request)
+    {
+        $query = Yudisium::all();
+
+        if (Auth::user()->role != 'Admin') {
+            $query = $query->where('user_id', Auth::user()->id);
+        }
+
+        return $this->successResponse($query->count());
+    }
+
+    public function jumlahYudisiumMahasiswa(Request $request)
     {
         $query = YudisiumMahasiswa::all();
 

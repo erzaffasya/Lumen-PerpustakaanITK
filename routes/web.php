@@ -155,7 +155,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('jumlah-ruangan', 'StatistikController@jumlahRuangan');
     $router->get('jumlah-peminjaman-ruangan', 'StatistikController@jumlahPeminjamanRuangan');
     $router->get('jumlah-pengunjung', 'StatistikController@jumlahPengunjung');
-    $router->get('jumlah-yudisium-mahasiswa', 'StatistikController@jumlahYudisium');
+    $router->get('jumlah-yudisium', 'StatistikController@jumlahYudisium');
+    $router->get('jumlah-yudisium-mahasiswa', 'StatistikController@jumlahYudisiumMahasiswa');
     $router->get('pengunjung-terakhir', 'StatistikController@pengunjungTerbaru');
     $router->get('grafik-perpustakaan', 'StatistikController@grafikPerpustakaan');
     $router->get('peminjaman-dokumen-populer', 'StatistikController@peminjamanDokumenPopuler');
