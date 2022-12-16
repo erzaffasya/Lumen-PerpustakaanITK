@@ -33,6 +33,8 @@ $router->group(['prefix' => 'api'], function ($router) {
     $router->get('/QRCode', 'PengunjungController@qrcode');
     $router->post('/checkin-pengunjung', 'PengunjungController@store');
     $router->get('/showDokumen/{id}/{data}', 'DokumenController@showfile');
+    
+    $router->get('export-yudisium-mahasiswa', 'YudisiumMahasiswaController@exportYudisiumMahasiswa');
 });
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->group(['middleware' => 'role:Admin'], function () use ($router) {

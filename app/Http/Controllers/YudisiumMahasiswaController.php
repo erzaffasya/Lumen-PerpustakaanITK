@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\YudisiumMahasiswaExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\YudisiumMahasiswaResource;
 use App\Models\YudisiumMahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class YudisiumMahasiswaController extends Controller
 {
@@ -195,8 +197,8 @@ class YudisiumMahasiswaController extends Controller
         return $this->successResponse(['status' => true, 'message' => 'YudisiumMahasiswa Berhasil Dihapus']);
     }
 
-    public function exportTerbit()
+    public function exportYudisiumMahasiswa(Request $request)
     {
-        return Excel::download(new TerbitExport(), 'Terbit.xlsx');
+        return (new YudisiumMahasiswaExport(['waktu_awal'=>$request->waktu_awal,'waktu_akhir'=>$request->waktu_akhir]))->download('invoices.xlsx');
     }
 }
