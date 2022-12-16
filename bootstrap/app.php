@@ -107,6 +107,7 @@ $app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class);
 $app->register(Shetabit\Visitor\Provider\VisitorServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
+$app->register(Maatwebsite\Excel\ExcelServiceProvider::class,);
 // $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
 
@@ -118,6 +119,7 @@ $app->alias('mailer', Illuminate\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->alias('Excel', Maatwebsite\Excel\Facades\Excel::class);
 
 /*
 |--------------------------------------------------------------------------

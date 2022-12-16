@@ -194,4 +194,9 @@ class YudisiumMahasiswaController extends Controller
         $YudisiumMahasiswa->delete();
         return $this->successResponse(['status' => true, 'message' => 'YudisiumMahasiswa Berhasil Dihapus']);
     }
+
+    public function exportTerbit()
+    {
+        return Excel::download(new TerbitExport(), 'Terbit.xlsx');
+    }
 }
