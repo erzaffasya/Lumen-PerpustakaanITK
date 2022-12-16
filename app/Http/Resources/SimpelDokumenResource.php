@@ -51,9 +51,13 @@ class SimpelDokumenResource extends JsonResource
         $jumlahPengunjung = Dokumen::find($id);
         return $jumlahPengunjung->visitLogs()->count();
     }
-
-    public function isPinjam($id){
-        $dataPinjam = PeminjamanDokumen::where('dokumen_id',$id)->where('tgl_pengembalian','>',Carbon::now())->exists();
+    
+    public function isPinjam($id)
+    {
+        $dataPinjam = PeminjamanDokumen::where('dokumen_id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->where('tgl_pengembalian', '>', Carbon::now())
+            ->exists();
         return $dataPinjam;
     }
 }
