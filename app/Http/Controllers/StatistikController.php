@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PeminjamanDokumenResource;
+use App\Http\Resources\PeminjamanDokumenTerpopulerResource;
 use App\Http\Resources\PengunjungResource;
 use App\Http\Resources\SimpelDokumenResource;
 use App\Models\Dokumen;
@@ -139,7 +140,7 @@ class StatistikController extends Controller
             ->orderBy('total_peminjaman', 'DESC')
             ->limit(5)
             ->get();
-        return $this->successResponse(SimpelDokumenResource::collection($PeminjamanDokumen));
+        return $this->successResponse(PeminjamanDokumenTerpopulerResource::collection($PeminjamanDokumen));
     }
     
     public function peminjamanRuanganPopuler()
