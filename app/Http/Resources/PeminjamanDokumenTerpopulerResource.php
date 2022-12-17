@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use PDO;
 
 class PeminjamanDokumenTerpopulerResource extends JsonResource
 {
@@ -30,16 +31,8 @@ class PeminjamanDokumenTerpopulerResource extends JsonResource
             'penerbit' => $this->penerbit,
             'tahun_terbit' => $this->tahun_terbit,
             'tanggal_dibuat' => date('d M Y', strtotime($this->created_at)),
-            'isBookmark' => $this->Bookmark($this->id),
-            'jumlah_kunjungan' => $this->jumlahPengunjung($this->id),
-            'isPinjam' => $this->isPinjam($this->id),
-            // 'user' => new UserResource(User::find($this->user_id))
+            'total_peminjaman' => $this->total_peminjaman
         ];
-    }
-
-    public function Bookmark($dokumen){
-        $cekBookmark = Bookmark::where('user_id',Auth::user()->id)->where('dokumen_id',$dokumen)->exists();
-        return $cekBookmark;
     }
     
     public function Kategori($id){
@@ -47,13 +40,4 @@ class PeminjamanDokumenTerpopulerResource extends JsonResource
         return $dataKategori->nama_kategori;
     }
 
-    public function jumlahPengunjung($id){
-        $jumlahPengunjung = Dokumen::find($id);
-        return $jumlahPengunjung->visitLogs()->count();
-    }
-
-    public function isPinjam($id){
-        $dataPinjam = PeminjamanDokumen::where('dokumen_id',$id)->where('tgl_pengembalian','>',Carbon::now())->exists();
-        return $dataPinjam;
-    }
 }
