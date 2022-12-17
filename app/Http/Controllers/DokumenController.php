@@ -726,9 +726,8 @@ class DokumenController extends Controller
             ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
             ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
             ->get());
-            
         $cekDokumen = $cekDokumen
-            ->where('dokumen.status', '=', 'Diterima');
+            ->where('status','Diterima');
 
         return $this->successResponse($cekDokumen);
     }
