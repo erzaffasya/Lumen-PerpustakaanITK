@@ -108,6 +108,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function ($router) {
     $router->get('/cari-dokumen/{id}', 'DokumenController@cariDokumen');
     $router->get('/data-dokumen', 'DokumenController@dataDokumen');
     $router->get('/data-dokumen/terbaru', 'DokumenController@dataDokumenTerbaru');
+    $router->get('/data-dokumen/rekomendasi', 'DokumenController@dataDokumenRekomendasi');
     $router->get('dokumen/riwayat-peminjaman/{id}', 'PeminjamanDokumenController@riwayatPeminjaman');
 
     //Peminjaman

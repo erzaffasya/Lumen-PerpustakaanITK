@@ -721,7 +721,7 @@ class DokumenController extends Controller
     {
         // dd($id);
         $words = explode('%20', $id);
-        $kata = join(" ",$words);
+        $kata = join(" ", $words);
 
         $cekDokumen = Dokumen::select('dokumen.*', 'kategori.nama_kategori')
             ->join('kategori', 'dokumen.kategori_id', 'kategori.id')
@@ -731,8 +731,8 @@ class DokumenController extends Controller
             ->get();
 
         $cekDokumen = $cekDokumen
-            ->where('status','Diterima');
-            $cekDokumen = SimpelDokumenResource::collection($cekDokumen);
+            ->where('status', 'Diterima');
+        $cekDokumen = SimpelDokumenResource::collection($cekDokumen);
 
         return $this->successResponse($cekDokumen);
     }
@@ -742,7 +742,7 @@ class DokumenController extends Controller
         $dataDokumen = Dokumen::where('status', 'Diterima')->get();
         if ($request->kategori) {
             $dataDokumen = $dataDokumen->where('kategori_id', $request->kategori);
-        }        
+        }
 
         $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
         return $this->successResponse($cekDokumen);
@@ -758,8 +758,9 @@ class DokumenController extends Controller
 
     public function dataDokumenRekomendasi(Request $request)
     {
-        $dataDokumen = Dokumen::where('status', 'Diterima')->latest()->limit(10)->get();
-
+        // $dataDokumen = Dokumen::where('status', 'Diterima')
+        //     ->latest()->limit(10)->get();
+        $dataDokumen = Dokumen::all()->random(5);
         $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
         return $this->successResponse($cekDokumen);
     }
