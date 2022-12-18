@@ -720,14 +720,37 @@ class DokumenController extends Controller
     public function cariDokumen(Request $request, $id)
     {
         // dd($id);
-        $cekDokumen = SimpelDokumenResource::collection(Dokumen::select('dokumen.*', 'kategori.nama_kategori')
+        $words = explode('%20', $id);
+
+        // dd($words);
+
+        $cekDokumen = Dokumen::select('dokumen.*', 'kategori.nama_kategori')
             ->join('kategori', 'dokumen.kategori_id', 'kategori.id')
-            ->where('dokumen.judul', 'LIKE', "%{$id}%")
-            ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
-            ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
-            ->get());
-        $cekDokumen = $cekDokumen
+            ->where(function ($query) use($words) {
+                foreach($words as $word) {
+                    $query->orWhere('dokumen.judul', 'LIKE', '%' . $word . '%');
+                }
+            })->orWhere(function ($query) use($words) {
+                foreach($words as $word) {
+                    $query->orWhere('dokumen.penerbit', 'LIKE', '%' . $word . '%');
+                }
+            })->orWhere(function ($query) use($words) {
+                foreach($words as $word) {
+                    $query->orWhere('dokumen.nama_pengarang', 'LIKE', '%' . $word . '%');
+                }
+            })->get();
+
+            $cekDokumen = $cekDokumen
             ->where('status','Diterima');
+
+
+            // ->where('dokumen.judul', 'LIKE', "%{$id}%")
+            // ->orWhere('dokumen.penerbit', 'LIKE', "%{$id}%")
+            // ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$id}%")
+            // ->get();
+
+        $cekDokumen = SimpelDokumenResource::collection($cekDokumen);
+
 
         return $this->successResponse($cekDokumen);
     }

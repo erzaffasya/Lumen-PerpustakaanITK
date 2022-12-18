@@ -20,12 +20,11 @@ class PeminjamanRuanganController extends Controller
 {
     public function index()
     {
+        $Peminjaman = PeminjamanRuangan::latest()->get();
+        // dd($Peminjaman);
         if (Auth::user()->role != "Admin") {
-            $Peminjaman = PeminjamanRuangan::where('user_id',  Auth::id())->get();
-        } else {
-            $Peminjaman = PeminjamanRuangan::all();
+            $Peminjaman = $Peminjaman->where('user_id',  Auth::id())->get();
         }
-
         $PeminjamanRuangan = PeminjamanRuanganResource::collection($Peminjaman);
         return $this->successResponse($PeminjamanRuangan);
     }
