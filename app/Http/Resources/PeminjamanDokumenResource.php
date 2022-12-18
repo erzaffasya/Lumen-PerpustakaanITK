@@ -20,7 +20,7 @@ class PeminjamanDokumenResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => $this->user($this->user_id),
-            'gambar_dokumen' => url($this->getURL($this->dokumen_id)),
+            'gambar_dokumen' => url($this->getURL($this->dokumen_id))??null,
             'tgl_peminjaman' => date('d-m-Y', strtotime($this->tgl_peminjaman)),
             'tgl_pengembalian' => date('d-m-Y', strtotime($this->tgl_pengembalian)),
             'dokumen' => $this->dokumen($this->dokumen_id),
