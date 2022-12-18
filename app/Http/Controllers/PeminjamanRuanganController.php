@@ -23,7 +23,7 @@ class PeminjamanRuanganController extends Controller
         $Peminjaman = PeminjamanRuangan::latest()->get();
         // dd($Peminjaman);
         if (Auth::user()->role != "Admin") {
-            $Peminjaman = $Peminjaman->where('user_id',  Auth::id())->get();
+            $Peminjaman = $Peminjaman->where('user_id',  Auth::id());
         }
         $PeminjamanRuangan = PeminjamanRuanganResource::collection($Peminjaman);
         return $this->successResponse($PeminjamanRuangan);
