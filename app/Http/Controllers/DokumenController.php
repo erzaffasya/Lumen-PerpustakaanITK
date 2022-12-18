@@ -742,7 +742,16 @@ class DokumenController extends Controller
         $dataDokumen = Dokumen::where('status', 'Diterima')->get();
         if ($request->kategori) {
             $dataDokumen = $dataDokumen->where('kategori_id', $request->kategori);
-        }
+        }        
+
+        $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
+        return $this->successResponse($cekDokumen);
+    }
+
+    public function dataDokumenTerbaru(Request $request)
+    {
+        $dataDokumen = Dokumen::where('status', 'Diterima')->latest()->limit(10)->get();
+
         $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
         return $this->successResponse($cekDokumen);
     }
