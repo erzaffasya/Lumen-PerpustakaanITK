@@ -41,7 +41,7 @@ class PeminjamanDokumenResource extends JsonResource
     public function getURL($id)
     {
         $getDokumen = Dokumen::where('id',$id)->first();
-        return $getDokumen->gambar_dokumen;
+        return $getDokumen->gambar_dokumen??null;
     }
     public function user($id)
     {
