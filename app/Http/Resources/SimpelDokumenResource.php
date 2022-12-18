@@ -24,7 +24,7 @@ class SimpelDokumenResource extends JsonResource
         return [
             'id' => $this->id,
             'judul' => $this->judul,
-            'gambar_dokumen' => url($this->gambar_dokumen),
+            'gambar_dokumen' => url($this->gambar_dokumen)??null,
             'nama_pengarang' => $this->nama_pengarang,
             'kategori' => $this->Kategori($this->kategori_id),
             'penerbit' => $this->penerbit,

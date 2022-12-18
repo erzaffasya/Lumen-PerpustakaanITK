@@ -30,7 +30,7 @@ class DokumenResource extends JsonResource
             'tahun_terbit' => $this->tahun_terbit,
             'nama_pengarang' => $this->judul,
             'penerbit' => $this->penerbit,
-            'gambar_dokumen' => url($this->gambar_dokumen),
+            'gambar_dokumen' => url($this->gambar_dokumen)??null,
             'deskripsi' => $this->deskripsi,
             'user_id' => $this->users->name,
             'nim' => $this->users->nim,
