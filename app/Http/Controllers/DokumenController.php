@@ -755,4 +755,12 @@ class DokumenController extends Controller
         $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
         return $this->successResponse($cekDokumen);
     }
+
+    public function dataDokumenRekomendasi(Request $request)
+    {
+        $dataDokumen = Dokumen::where('status', 'Diterima')->latest()->limit(10)->get();
+
+        $cekDokumen = SimpelDokumenResource::collection($dataDokumen);
+        return $this->successResponse($cekDokumen);
+    }
 }
