@@ -730,9 +730,9 @@ class DokumenController extends Controller
             ->orWhere('dokumen.nama_pengarang', 'LIKE', "%{$kata}%")
             ->get();
 
-        // $cekDokumen = SimpelDokumenResource::collection();
         $cekDokumen = $cekDokumen
             ->where('status','Diterima');
+            $cekDokumen = SimpelDokumenResource::collection($cekDokumen);
 
         return $this->successResponse($cekDokumen);
     }
