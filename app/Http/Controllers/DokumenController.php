@@ -684,6 +684,7 @@ class DokumenController extends Controller
         if (!$Dokumen) {
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
+        $Dokumen->delete();
 
         //Peminjaman Dokumen
         if (PeminjamanDokumen::where('dokumen_id', $id)->exists()) {
@@ -694,13 +695,12 @@ class DokumenController extends Controller
         if (Pembimbing::where('dokumen_id', $id)->exists()) {
             Pembimbing::where('dokumen_id', $id)->get()->delete();
         }
-        
+
         //Bookmark  
         if (Bookmark::where('dokumen_id', $id)->exists()) {
             Bookmark::where('dokumen_id', $id)->get()->delete();
         }
 
-        $Dokumen->delete();
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }
 
