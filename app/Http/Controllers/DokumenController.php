@@ -686,20 +686,20 @@ class DokumenController extends Controller
         }
         $Dokumen->delete();
 
-        //Peminjaman Dokumen
-        if (PeminjamanDokumen::where('dokumen_id', $id)->exists()) {
-            PeminjamanDokumen::where('dokumen_id', $id)->get()->delete();
-        }
+        // //Peminjaman Dokumen
+        // if (PeminjamanDokumen::where('dokumen_id', $id)->exists()) {
+        //     PeminjamanDokumen::where('dokumen_id', $id)->get()->delete();
+        // }
 
-        //Pembimbing
-        if (Pembimbing::where('dokumen_id', $id)->exists()) {
-            Pembimbing::where('dokumen_id', $id)->get()->delete();
-        }
+        // //Pembimbing
+        // if (Pembimbing::where('dokumen_id', $id)->exists()) {
+        //     Pembimbing::where('dokumen_id', $id)->get()->delete();
+        // }
 
-        //Bookmark  
-        if (Bookmark::where('dokumen_id', $id)->exists()) {
-            Bookmark::where('dokumen_id', $id)->get()->delete();
-        }
+        // //Bookmark  
+        // if (Bookmark::where('dokumen_id', $id)->exists()) {
+        //     Bookmark::where('dokumen_id', $id)->get()->delete();
+        // }
 
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }
