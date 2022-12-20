@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DokumenResource;
 use App\Http\Resources\SimpelDokumenResource;
+use App\Models\Bookmark;
 use App\Models\Dokumen;
 use App\Models\Pembimbing;
 use App\Models\PeminjamanDokumen;
@@ -684,6 +685,24 @@ class DokumenController extends Controller
             return $this->errorResponse('Data tidak ditemukan', 422);
         }
 
+        //Peminjaman Dokumen
+        try {
+            PeminjamanDokumen::where('dokumen_id', $id)->get()->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        //Pembimbing
+        try {
+            Pembimbing::where('dokumen_id', $id)->get()->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        //Bookmark  
+        try {
+            Bookmark::where('dokumen_id', $id)->get()->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         $Dokumen->delete();
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }

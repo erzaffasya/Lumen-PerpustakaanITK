@@ -179,7 +179,7 @@ class StatistikController extends Controller
     }
     public function pengunjungTerbaru()
     {
-        $Pengunjung = PengunjungResource::collection(Pengunjung::limit(10)->latest()->get());
+        $Pengunjung = PengunjungResource::collection(Pengunjung::latest()->take(10)->get());
         return $this->successResponse($Pengunjung);
     }
 
