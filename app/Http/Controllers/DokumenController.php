@@ -686,23 +686,20 @@ class DokumenController extends Controller
         }
 
         //Peminjaman Dokumen
-        try {
+        if (PeminjamanDokumen::where('dokumen_id', $id)->exists()) {
             PeminjamanDokumen::where('dokumen_id', $id)->get()->delete();
-        } catch (\Throwable $th) {
-            //throw $th;
         }
+
         //Pembimbing
-        try {
+        if (Pembimbing::where('dokumen_id', $id)->exists()) {
             Pembimbing::where('dokumen_id', $id)->get()->delete();
-        } catch (\Throwable $th) {
-            //throw $th;
         }
+        
         //Bookmark  
-        try {
+        if (Bookmark::where('dokumen_id', $id)->exists()) {
             Bookmark::where('dokumen_id', $id)->get()->delete();
-        } catch (\Throwable $th) {
-            //throw $th;
         }
+
         $Dokumen->delete();
         return $this->successResponse(['status' => true, 'message' => 'Dokumen Berhasil Dihapus']);
     }
