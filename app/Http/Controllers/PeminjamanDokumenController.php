@@ -56,6 +56,15 @@ class PeminjamanDokumenController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        if (Auth::user()->role != 'Admin') {
+            $peminjaman = PeminjamanDokumen::where('dokumen_id', $request->dokumen_id)
+                ->where('tgl_pengembalian', '>', Carbon::now())->get();
+
+            if ($peminjaman->count() > 5) {
+                return $this->errorResponse('Anda sudah meminjaman lebih dari 5 dokumen', 422);
+            }
+        }
+
         if ($this->cek_batasan_dokumen($request->dokumen_id) == False) {
             return $this->errorResponse('Dokumen sudah penuh', 422);
         }
