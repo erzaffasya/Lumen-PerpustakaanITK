@@ -196,15 +196,15 @@ class PeminjamanRuanganController extends Controller
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
             $cekRuangan = PeminjamanRuangan::where(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                 $query
-                    ->whereTime('waktu_awal', '>=', $waktu_awal)
-                    ->whereTime('waktu_awal', '<=', $waktu_akhir)
+                    ->whereTime('waktu_awal', '>', $waktu_awal)
+                    ->whereTime('waktu_awal', '<', $waktu_akhir)
                     ->where('status', '=', 'Diterima')
                     ->whereDate('tanggal', $tanggal);
             })
                 ->orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                     $query
-                        ->whereTime('waktu_akhir', '>=', $waktu_awal)
-                        ->whereTime('waktu_akhir', '<=', $waktu_akhir)
+                        ->whereTime('waktu_akhir', '>', $waktu_awal)
+                        ->whereTime('waktu_akhir', '<', $waktu_akhir)
                         ->where('status', '=', 'Diterima')
                         ->whereDate('tanggal', $tanggal);
                 })->get();
