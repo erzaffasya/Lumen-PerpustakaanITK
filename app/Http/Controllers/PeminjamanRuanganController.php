@@ -194,7 +194,7 @@ class PeminjamanRuanganController extends Controller
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
-            $cekRuangan = PeminjamanRuangan::orWhere(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
+            $cekRuangan = PeminjamanRuangan::where(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                 $query
                     ->whereTime('waktu_awal', '>=', $waktu_awal)
                     ->whereTime('waktu_awal', '<=', $waktu_akhir)
