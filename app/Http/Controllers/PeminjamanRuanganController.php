@@ -193,6 +193,11 @@ class PeminjamanRuanganController extends Controller
         if ($waktu_awal > $waktu_akhir) {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
+
+        if ($waktu_awal < '08:00' || $waktu_akhir > '17:00') {
+            return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan, batas waktu peminjaman pukul 08:00 sampai 15:00', 422);
+        }
+
         if ($tanggal != 'undefined' && $waktu_awal != 'undefined' && $waktu_akhir != 'undefined') {
             $cekRuangan = PeminjamanRuangan::where(function ($query)  use ($waktu_awal, $waktu_akhir, $tanggal) {
                 $query

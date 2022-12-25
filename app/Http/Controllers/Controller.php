@@ -92,8 +92,8 @@ class Controller extends BaseController
 
     public static function cek_batasan_dokumen($id)
     {
-        $peminjaman = PeminjamanDokumen::where('dokumen_id', $id)->where('tgl_pengembalian', '>', Carbon::now())->get();
-        if ($peminjaman->count() > 10) {
+        $peminjaman = PeminjamanDokumen::where('dokumen_id', $id)->whereDate('tgl_pengembalian', '>', Carbon::now())->get();
+        if ($peminjaman->count() > 30) {
             return False;
         } else {
             return True;
