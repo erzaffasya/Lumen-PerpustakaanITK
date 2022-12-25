@@ -57,8 +57,7 @@ class PeminjamanDokumenController extends Controller
         }
 
         if (Auth::user()->role != 'Admin') {
-            $peminjaman = PeminjamanDokumen::where('dokumen_id', $request->dokumen_id)
-                ->where('tgl_pengembalian', '>', Carbon::now())
+            $peminjaman = PeminjamanDokumen::where('tgl_pengembalian', '>', Carbon::now())
                 ->where('user_id',Auth::user()->id)
                 ->get();
 
