@@ -255,6 +255,27 @@ class DokumenController extends Controller
             $request->all(),
             [
                 'kategori_id' => 'required',
+                'gambar_dokumen' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
+                'cover' => 'mimes:pdf|max:10000',
+                'lembar_pengesahan' => 'mimes:pdf|max:10000',
+                'kata_pengantar' => 'mimes:pdf|max:10000',
+                'ringkasan' => 'mimes:pdf|max:10000',
+                'daftar_isi' => 'mimes:pdf|max:10000',
+                'daftar_gambar' => 'mimes:pdf|max:10000',
+                'daftar_tabel' => 'mimes:pdf|max:10000',
+                'daftar_notasi' => 'mimes:pdf|max:10000',
+                'abstract_en' => 'mimes:pdf|max:10000',
+                'abstract_id' => 'mimes:pdf|max:10000',
+                'bab1' => 'mimes:pdf|max:10000',
+                'bab2' => 'mimes:pdf|max:10000',
+                'bab3' => 'mimes:pdf|max:10000',
+                'bab4' => 'mimes:pdf|max:10000',
+                'lampiran' => 'mimes:pdf|max:10000',
+                'kesimpulan' => 'mimes:pdf|max:10000',
+                'daftar_pustaka' => 'mimes:pdf|max:10000',
+                'paper' => 'mimes:pdf|max:10000',
+                'lembar_persetujuan' => 'mimes:pdf|max:10000',
+                'full_dokumen' => 'mimes:pdf|max:1000000',
             ]
         );
 
@@ -475,6 +496,38 @@ class DokumenController extends Controller
     public function update(Request $request, $id)
     {
 
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'kategori_id' => 'required',
+                'gambar_dokumen' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
+                'cover' => 'mimes:pdf|max:10000',
+                'lembar_pengesahan' => 'mimes:pdf|max:10000',
+                'kata_pengantar' => 'mimes:pdf|max:10000',
+                'ringkasan' => 'mimes:pdf|max:10000',
+                'daftar_isi' => 'mimes:pdf|max:10000',
+                'daftar_gambar' => 'mimes:pdf|max:10000',
+                'daftar_tabel' => 'mimes:pdf|max:10000',
+                'daftar_notasi' => 'mimes:pdf|max:10000',
+                'abstract_en' => 'mimes:pdf|max:10000',
+                'abstract_id' => 'mimes:pdf|max:10000',
+                'bab1' => 'mimes:pdf|max:10000',
+                'bab2' => 'mimes:pdf|max:10000',
+                'bab3' => 'mimes:pdf|max:10000',
+                'bab4' => 'mimes:pdf|max:10000',
+                'lampiran' => 'mimes:pdf|max:10000',
+                'kesimpulan' => 'mimes:pdf|max:10000',
+                'daftar_pustaka' => 'mimes:pdf|max:10000',
+                'paper' => 'mimes:pdf|max:10000',
+                'lembar_persetujuan' => 'mimes:pdf|max:10000',
+                'full_dokumen' => 'mimes:pdf|max:1000000',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $this->errorResponse($validator->errors(), 422);
+        }
+        
         $Dokumen = Dokumen::find($id);
         if (!$Dokumen) {
             return $this->errorResponse('Data tidak ditemukan', 422);
