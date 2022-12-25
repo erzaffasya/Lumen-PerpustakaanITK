@@ -53,6 +53,10 @@ class PeminjamanRuanganController extends Controller
         if ($waktu_awal > $waktu_akhir) {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
+        
+        if ($waktu_awal < '08:00' || $waktu_akhir > '17:00') {
+            return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan, batas waktu peminjaman pukul 08:00 sampai 15:00', 422);
+        }
         // cek mahasiswa apakah sudah booking/belum
         if (Auth::user()->role == 'Mahasiswa') {
             $cekPeminjaman = PeminjamanRuangan::where('tanggal', '>', Carbon::now()->subDays(1))
