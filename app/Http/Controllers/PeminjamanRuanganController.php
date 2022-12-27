@@ -269,7 +269,7 @@ class PeminjamanRuanganController extends Controller
             $event->endDateTime = Carbon::parse($tanggal . $waktuAkhir);
             $event->save();
         } catch (\Throwable $th) {
-            $this->errorResponse('Google Calendar sedang bermasalah, silahkan coba lagi!', 500);
+            return $this->errorResponse('Google Calendar sedang bermasalah, silahkan coba lagi!', 500);
         }
     }
 
@@ -289,5 +289,18 @@ class PeminjamanRuanganController extends Controller
     {
         // date('Y-m-d H:i:s', strtotime("$date $time"))
         // $cekPeminjamanRuangan = PeminjamanRuangan::where('tanggal' < Date().now());
+    }
+
+    public function peminjamanByRuangan(Request $request, $id)
+    {
+        $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->get();
+
+        if ($request->tanggal != 'undefined' || $request->tanggal != null) {
+            $peminjaman = PeminjamanRuanganResource::collection($peminjaman->whereDate('tanggal', $request->tanggal));
+        }
+
+        $responsePeminjaman = new PeminjamanRuanganResource($peminjaman);
+
+        return $this->successResponse($responsePeminjaman);
     }
 }
