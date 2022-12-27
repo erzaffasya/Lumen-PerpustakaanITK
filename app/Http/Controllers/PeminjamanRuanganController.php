@@ -18,15 +18,32 @@ use Spatie\GoogleCalendar\Event;
 
 class PeminjamanRuanganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $Peminjaman = PeminjamanRuangan::latest()->get();
-        // dd($Peminjaman);
+
         if (Auth::user()->role != "Admin") {
-            $Peminjaman = $Peminjaman->where('user_id',  Auth::id());
+            $Peminjaman = PeminjamanRuangan::where('user_id',  Auth::id())->latest()->get();
+        } else {
+            $Peminjaman = PeminjamanRuangan::latest()->get();
         }
-        $PeminjamanRuangan = PeminjamanRuanganResource::collection($Peminjaman);
-        return $this->successResponse($PeminjamanRuangan);
+
+        if ($request->filter) {
+            switch ($request->filter) {
+                case 'riwayat':
+                    $Peminjaman = PeminjamanRuanganResource::collection($Peminjaman->where('tanggal', '<', Carbon::now()));
+                    break;
+                case 'berlangsung':
+                    $Peminjaman = PeminjamanRuanganResource::collection($Peminjaman->where('tanggal', '>', Carbon::now()));
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $Peminjaman = PeminjamanRuanganResource::collection($Peminjaman);
+        }
+
+        // $PeminjamanRuangan = PeminjamanRuanganResource::collection($Peminjaman);
+        return $this->successResponse($Peminjaman);
     }
 
     public function store(Request $request)
@@ -53,7 +70,7 @@ class PeminjamanRuanganController extends Controller
         if ($waktu_awal > $waktu_akhir) {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan', 422);
         }
-        
+
         if ($waktu_awal < '08:00' || $waktu_akhir > '17:00') {
             return $this->errorResponse('Waktu akhir tidak sesuai dengan ketentuan, batas waktu peminjaman pukul 08:00 sampai 15:00', 422);
         }
@@ -107,7 +124,7 @@ class PeminjamanRuanganController extends Controller
                     // dd($user);
                     Notification::send($user, new NotifRevisi($dataNotif));
                     $this->gcalender($request->keperluan . " - Ruangan " . $Ruangan->nama_ruangan . "- Nama " . Auth::user()->name . " " . Auth::user()->nim, $request->tanggal, $request->waktu_awal, $request->waktu_akhir);
-                }                
+                }
                 $PeminjamanRuangan->save();
                 return  $this->successResponse([
                     'status' => true, 'message' => 'Ruangan Berhasil Ditambahkan',
