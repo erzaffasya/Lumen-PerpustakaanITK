@@ -293,14 +293,15 @@ class PeminjamanRuanganController extends Controller
 
     public function peminjamanByRuangan(Request $request, $id)
     {
-        $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->get();
 
         if ($request->tanggal != 'undefined' || $request->tanggal != null) {
-            $peminjaman = PeminjamanRuanganResource::collection($peminjaman->whereDate('tanggal', $request->tanggal));
+            $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->get();
+        } else {
+            $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->whereDate('tanggal', $request->tanggal)->get();
         }
 
-        $responsePeminjaman = new PeminjamanRuanganResource($peminjaman);
+        $peminjaman = PeminjamanRuanganResource::collection($peminjaman);
 
-        return $this->successResponse($responsePeminjaman);
+        return $this->successResponse($peminjaman);
     }
 }
