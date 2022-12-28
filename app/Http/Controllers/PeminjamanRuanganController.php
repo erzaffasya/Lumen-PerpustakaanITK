@@ -294,7 +294,7 @@ class PeminjamanRuanganController extends Controller
     public function peminjamanByRuangan(Request $request, $id)
     {
 
-        if ($request->tanggal != 'undefined' || $request->tanggal != null) {
+        if ($request->tanggal == 'undefined' || $request->tanggal == null) {
             $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->get();
         } else {
             $peminjaman = PeminjamanRuangan::where('ruangan_id', $id)->whereDate('tanggal', $request->tanggal)->get();
